@@ -11,7 +11,6 @@ FAIR Data Point Documentation
    :caption: Deployment
    :maxdepth: 2
 
-   deployment/overview
    deployment/installation
    deployment/configuration
 
