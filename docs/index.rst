@@ -18,7 +18,8 @@ FAIR Data Point Documentation
    :caption: OpenRefine Extension
    :maxdepth: 2
 
-   openrefine/about
+   openrefine/usage
+   openrefine/setup
 
 .. toctree::
    :caption: Development
