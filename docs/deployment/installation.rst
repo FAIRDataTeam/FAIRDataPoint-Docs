@@ -158,32 +158,4 @@ This is an example of running FDP as the root application on domain
         return 301 https://$host$request_uri;
     }
 
-Running FDP on a nested route
------------------------------
-
-Sometimes, you might want to run FDP alongside other applications on the
-same domain. Here is an example of running FDP on
-``example.com/faidatapoint``. If you run FDP in this configuration, you
-**have to set PUBLIC\_PATH ENV variable**, in this example to
-``/fairdatapoint``.
-
-.. code:: nginx
-
-    server {
-        # Configruation for the server, certificates, etc.
-
-        # Define the location FDP runs on
-        location ~ /fairdatapoint(/.*)?$ {
-            rewrite /fairdatapoint(/.*) $1 break;
-            rewrite /fairdatapoint / break;
-            proxy_pass http://<client_host>;
-            proxy_set_header Host $host;
-            proxy_pass_request_headers on;
-        }
-    }
-
-.. Attention::
-
-When running on nested route, don't forget to change paths to all
-custom assets referenced in SCSS files.
 
