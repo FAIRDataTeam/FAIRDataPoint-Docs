@@ -2,17 +2,20 @@ FAIR Data Point Documentation
 =============================
 
 .. toctree::
-   :caption: User Documentation
+   :caption: About
    :maxdepth: 2
 
-   user/about
+   about/about
+   about/users-and-roles
+   about/components
 
 .. toctree::
    :caption: Deployment
    :maxdepth: 2
 
-   deployment/installation
-   deployment/configuration
+   deployment/local-deployment
+   deployment/production-deployment
+   deployment/advanced-configuration
 
 .. toctree::
    :caption: OpenRefine Extension
