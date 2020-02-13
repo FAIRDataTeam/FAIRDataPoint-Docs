@@ -19,15 +19,15 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
     fdp-client:
         image: fairdata/fairdatapoint-client:1.0.0
         ports:
-        - 80:80
+            - 80:80
         environment:
-        - FDP_HOST=fdp-client
+            - FDP_HOST=fdp-client
 
     mongo:
         image: mongo:4.0.12
 
 
-Then you can run it using `docker-compose up -d`. It might take a while to start. You can run `docker-compose logs -f` to follow the output log. Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
+Then you can run it using ``docker-compose up -d``. It might take a while to start. You can run ``docker-compose logs -f`` to follow the output log. Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
 
 
 There are two default user accounts. See the Users and Roles section to read more about users and roles. The default accounts are
@@ -73,16 +73,16 @@ Here is the updated docker-compose file:
         fdp-client:
             image: fairdata/fairdatapoint-client:1.0.0
             ports:
-            - 80:80
+                - 80:80
             environment:
-            - FDP_HOST=fdp-client
+                - FDP_HOST=fdp-client
 
         mongo:
             image: mongo:4.0.12
             ports:
-            - 27017:27017
+                - 27017:27017
             volumes:
-            - ./mongo/data:/data/db
+                - ./mongo/data:/data/db
 
 
 Persistent Repository
@@ -92,7 +92,7 @@ FAIR Data Point uses repositories to store the metadata. By default, it uses the
 
 In this example, we will configure the native store (which stores the metadata into a folder on the file system) and use that folder as a volume so that the data will persist on our disk. See Advanced Configuration for other repository options.
 
-First of all, we need to create a new file `application-production.yml`. We will use this file to configure the repository and mount it as a read-only volume to the `fdp` container. This file can be used for other configuration, see Advanced Configuration for more details.
+First of all, we need to create a new file ``application-production.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see Advanced Configuration for more details.
 
 
 .. code :: yaml
@@ -104,7 +104,7 @@ First of all, we need to create a new file `application-production.yml`. We will
         native:
             dir: /rdfdata
 
-We now need to add two new volumes for the `fdp` container. One for the configuration file and the other one for the native store data.
+We now need to add two new volumes for the ``fdp`` container. One for the configuration file and the other one for the native store data.
 
 .. code :: yaml
 
@@ -116,20 +116,20 @@ We now need to add two new volumes for the `fdp` container. One for the configur
         fdp:
             image: fairdata/fairdatapoint:1.0.0
             volumes:
-            - ./application-production.yml:/fdp/application-production.yml:ro
-            - ./rdfdata:/rdfdata
+                - ./application-production.yml:/fdp/application-production.yml:ro
+                - ./rdfdata:/rdfdata
 
         fdp-client:
             image: fairdata/fairdatapoint-client:1.0.0
             ports:
-            - 80:80
+                - 80:80
             environment:
-            - FDP_HOST=fdp-client
+                - FDP_HOST=fdp
 
         mongo:
             image: mongo:4.0.12
             ports:
-            - 27017:27017
+                - 27017:27017
             volumes:
-            - ./mongo/data:/data/db
+                - ./mongo/data:/data/db
 

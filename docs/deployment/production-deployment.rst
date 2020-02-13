@@ -2,3 +2,123 @@
 Production Deployment
 *********************
 
+If you want to run the FAIR Data Point in production it is recommended to use HTTPS protocol with valid certificates. You can easily configure FDP to run behind a reverse proxy which takes care of the certificates.
+
+In this example, we will configure FDP to run on a domain `fdp.example.com`. We will see how to configure the reverse proxy in the same Docker Compose file. However, it is not necessary, and the proxy can be configured elsewhere.
+
+First of all, we need to generate the certificates on the server where we want to run the FDP. You can use `Let's Encrypt <https://letsencrypt.org>`__ and create the certificates with `certbot <https://certbot.eff.org>`__. The certificates are generated in a standard location, e.g., ``/etc/letsencrypt/live/fdp.example.com`` for ``fdp.example.com`` domain. We will mount the whole ``letsencrypt`` folder to the reverse proxy container later so that it can use the certificates.
+
+As a reverse proxy, we will use `nginx <http://nginx.org/en/>`__. We need to prepare some configuration, so create a new folder called ``nginx`` with the following structure and files:
+
+| nginx/
+| ├ nginx.conf
+| ├ sites-available
+| │  └ fdp.conf
+| └ sites-enabled
+|    └ fdp.conf -> ../sites-available/fdp.conf
+
+The file ``nginx.conf`` is the configuration of the whole nginx, and it includes all the files from ``sites-enabled`` which contains configuration for individual servers (we can use one nginx, for example, to handle multiple servers on different domains). All available configurations for different servers are in the ``sites-available``, but only those linked to ``sites-enabled`` are used.
+
+Let's see what should be the content of the configuration files.
+
+.. code :: nginx
+
+    # nginx/nginx.conf
+    
+    # Main nginx config
+    user www-data www-data;
+    worker_processes 5;
+
+    events {
+        worker_connections 4096;
+    }
+
+    http {
+        # Docker DNS resolver
+        # We can then use docker container names as hostnames in other configurations
+        resolver 127.0.0.11 valid=10s; 
+
+        # Include all the configurations files from sites-enabled
+        include /etc/nginx/sites-enabled/*.conf;
+    }
+
+Then, we need to configure the FDP server.
+
+.. code :: nginx
+
+    # nginx/sites-available/fdp.conf
+
+    server {
+        listen 443 ssl;
+
+        # Generated certificates using certbot, we will mount these in docker-compose.yml
+        ssl_certificate /etc/letsencrypt/live/fdp.example.com/fullchain.pem;
+        ssl_certificate_key /etc/letsencrypt/live/fdp.example.com/privkey.pem;
+
+        server_name fdp.example.com;
+
+        # We pass all the request to the fdp-client container, we can use HTTP in the internal network
+        # fdp-client_1 is the name of the client container in our configuration, we can use it as host
+        location / {
+            proxy_pass http://fdp-client_1;
+            proxy_set_header Host $host;
+            proxy_pass_request_headers on;
+        }
+    }
+
+    # We redirect all request from HTTP to HTTPS
+    server {
+        listen 80;
+        server_name fdp.example.com;
+        return 301 https://$host$request_uri;
+    }
+
+Finally, we need to create a soft link from sites-enabled to sites-available for the FDP configuration.
+
+::
+
+    $ cd nginx/sites-enabled && ln -s ../sites-available/fdp.conf
+
+We have certificates generated and configuration for proxy ready. Now we need to add the proxy to our docker-compose.yml file so we can run the whole FDP behind the proxy.
+
+.. code :: yaml
+    
+    # docker-compose.yml
+
+    version: '3'
+    services:
+        proxy:
+            image: "nginx:1.17.3"
+            ports:
+                - 80:80
+                - 443:443
+            volumes:
+                # Mount the nginx folder with the configuration
+                - ./nginx:/etc/nginx:ro
+                # Mount the letsencrypt certificates
+                - /etc/letsencrypt:/etc/letsencrypt:ro
+
+
+        fdp:
+            image: fairdata/fairdatapoint:1.0.0
+            volumes:
+                - ./application-production.yml:/fdp/application-production.yml:ro
+                - ./rdfdata:/rdfdata
+
+        fdp-client:
+            image: fairdata/fairdatapoint-client:1.0.0
+            environment:
+                - FDP_HOST=fdp
+
+        mongo:
+            image: mongo:4.0.12
+            volumes:
+                - ./mongo/data:/data/db
+
+
+At this point, we should be able to run all the containers using ``docker-compose up -d`` and after everything starts, we can access the FAIR Data Point at https://fdp.example.com. Of course, the domain you want to access the FDP on must be configured to the server where it runs.
+
+.. DANGER::
+
+    Don't forget to change the default user accounts as soon as your FAIR Data Point becomes publicly available.
+
