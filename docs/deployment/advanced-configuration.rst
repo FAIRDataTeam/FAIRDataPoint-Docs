@@ -1,6 +1,10 @@
+.. _advanced-configuration:
+
 **********************
 Advanced Configuration
 **********************
+
+.. _triple-stores:
 
 Triple Stores
 =============

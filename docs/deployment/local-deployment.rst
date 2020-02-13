@@ -2,7 +2,7 @@
 Local Deployment
 ****************
 
-FAIR Data Point is distributed in Docker images. For a simple local deployment, you need to run ``fairdatapoint``, ``fairdatapoint-client`` and ``mongo`` images. See the Components to read more about what each image is for.
+FAIR Data Point is distributed in Docker images. For a simple local deployment, you need to run ``fairdatapoint``, ``fairdatapoint-client`` and ``mongo`` images. See the :ref:`Components <components>` section to read more about what each image is for.
 
 Here is an example of the simplest `Docker Compose <https://docs.docker.com/compose/>`__ configuration to run FDP.
 
@@ -30,7 +30,7 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
 Then you can run it using ``docker-compose up -d``. It might take a while to start. You can run ``docker-compose logs -f`` to follow the output log. Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
 
 
-There are two default user accounts. See the Users and Roles section to read more about users and roles. The default accounts are
+There are two default user accounts. See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles. The default accounts are
 
 +-----------------------------+-------+----------+
 | User name                   | Role  | Password |
@@ -90,9 +90,9 @@ Persistent Repository
 
 FAIR Data Point uses repositories to store the metadata. By default, it uses the in-memory store, which means that the data is lost after the FDP is stopped.
 
-In this example, we will configure the native store (which stores the metadata into a folder on the file system) and use that folder as a volume so that the data will persist on our disk. See Advanced Configuration for other repository options.
+In this example, we will configure the native store (which stores the metadata into a folder on the file system) and use that folder as a volume so that the data will persist on our disk. See :ref:`Triple Stores <triple-stores>` for other repository options.
 
-First of all, we need to create a new file ``application.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see Advanced Configuration for more details.
+First of all, we need to create a new file ``application.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see :ref:`Advanced Configuration <advanced-configuration>` for more details.
 
 
 .. code :: yaml

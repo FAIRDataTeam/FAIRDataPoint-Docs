@@ -1,3 +1,5 @@
+.. _users-and-roles:
+
 ***************
 Users and Roles
 ***************

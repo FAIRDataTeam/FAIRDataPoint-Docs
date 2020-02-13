@@ -1,3 +1,5 @@
+.. _production-deployment:
+
 *********************
 Production Deployment
 *********************
@@ -79,7 +81,7 @@ Finally, we need to create a soft link from sites-enabled to sites-available for
 
     $ cd nginx/sites-enabled && ln -s ../sites-available/fdp.conf
 
-We have certificates generated and configuration for proxy ready. Now we need to add the proxy to our docker-compose.yml file so we can run the whole FDP behind the proxy.
+We have certificates generated and configuration for proxy ready. Now we need to add the proxy to our ``docker-compose.yml`` file so we can run the whole FDP behind the proxy.
 
 .. code :: yaml
     
@@ -122,3 +124,7 @@ At this point, we should be able to run all the containers using ``docker-compos
 
     Don't forget to change the default user accounts as soon as your FAIR Data Point becomes publicly available.
 
+
+.. DANGER::
+
+    Do not expose mongo port unless you secured the database with username and password.
