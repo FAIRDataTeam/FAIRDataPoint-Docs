@@ -102,7 +102,7 @@ We have certificates generated and configuration for proxy ready. Now we need to
         fdp:
             image: fairdata/fairdatapoint:1.0.0
             volumes:
-                - ./application-production.yml:/fdp/application-production.yml:ro
+                - ./application.yml:/fdp/application.yml:ro
                 - ./rdfdata:/rdfdata
 
         fdp-client:

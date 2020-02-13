@@ -2,7 +2,7 @@
 Local Deployment
 ****************
 
-FAIR Data Point is distributed in Docker images. For a simple local deployment, you need to run `fairdatapoint`, `fairdatapoint-client` and `mongo` images. See the Components to read more about what each image is for.
+FAIR Data Point is distributed in Docker images. For a simple local deployment, you need to run ``fairdatapoint``, ``fairdatapoint-client`` and ``mongo`` images. See the Components to read more about what each image is for.
 
 Here is an example of the simplest `Docker Compose <https://docs.docker.com/compose/>`__ configuration to run FDP.
 
@@ -92,12 +92,12 @@ FAIR Data Point uses repositories to store the metadata. By default, it uses the
 
 In this example, we will configure the native store (which stores the metadata into a folder on the file system) and use that folder as a volume so that the data will persist on our disk. See Advanced Configuration for other repository options.
 
-First of all, we need to create a new file ``application-production.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see Advanced Configuration for more details.
+First of all, we need to create a new file ``application.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see Advanced Configuration for more details.
 
 
 .. code :: yaml
 
-    # application-production.yml
+    # application.yml
 
     repository:
         type: 2
@@ -116,7 +116,7 @@ We now need to add two new volumes for the ``fdp`` container. One for the config
         fdp:
             image: fairdata/fairdatapoint:1.0.0
             volumes:
-                - ./application-production.yml:/fdp/application-production.yml:ro
+                - ./application.yml:/fdp/application.yml:ro
                 - ./rdfdata:/rdfdata
 
         fdp-client:

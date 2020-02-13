@@ -18,11 +18,11 @@ FDP uses InMemory triple store by default. In the Deployment example, there is a
 1. In-Memory Store
 ------------------
 
-There is no need to configure additional properties to run FDP with In-Memory Store because it's the default option. If you want to explicitly type in configuration provided in ``application-production.yml``, add following lines there:
+There is no need to configure additional properties to run FDP with In-Memory Store because it's the default option. If you want to explicitly type in configuration provided in ``application.yml``, add following lines there:
 
 .. code:: yaml
     
-    # application-production.yml
+    # application.yml
 
     repository:
         type: 1
@@ -30,11 +30,11 @@ There is no need to configure additional properties to run FDP with In-Memory St
 2. Native Store
 ---------------
 
-If you want to use the Native Store, make sure that you have these lines in your ``application-production.yml`` file:
+If you want to use the Native Store, make sure that you have these lines in your ``application.yml`` file:
 
 .. code:: yaml
     
-    # application-production.yml
+    # application.yml
 
     repository:
         type: 2
@@ -46,11 +46,11 @@ where ``/tmp/fdp-store`` is a path to a location where you want to keep your dat
 3. Allegro Graph
 ----------------
 
-For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need to first set up your Allegro Graph instance. Make sure that the FDP Docker container can ping the Allegro Graph Docker container. For configuring the connection from FDP, add these lines to your ``application-production.yml`` file:
+For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need to first set up your Allegro Graph instance. Make sure that the FDP Docker container can ping the Allegro Graph Docker container. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code:: yaml
     
-    # application-production.yml
+    # application.yml
 
     repository:
         type: 3
@@ -65,11 +65,11 @@ For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need 
 4. GraphDB
 ----------
 
-For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance. Make sure that the FDP Docker container can ping the GraphDB Docker container. For configuring the connection from FDP, add these lines to your ``application-production.yml`` file:
+For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance. Make sure that the FDP Docker container can ping the GraphDB Docker container. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code:: yaml
     
-    # application-production.yml
+    # application.yml
 
     repository:
         type: 4
@@ -84,11 +84,11 @@ For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up y
 5. Blazegraph
 -------------
 
-For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up your Blazegraph instance. Make sure that the FDP Docker container can ping the Blazegraph Docker container. For configuring the connection from FDP, add these lines to your ``application-production.yml`` file:
+For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up your Blazegraph instance. Make sure that the FDP Docker container can ping the Blazegraph Docker container. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code:: yaml
     
-    # application-production.yml
+    # application.yml
 
     repository:
         type: 5
@@ -102,11 +102,11 @@ For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up yo
 
 Mongo DB
 ========
-We store users, permissions, etc. in the `MongoDB database <https://www.mongodb.com/>`_. The default connection string is ``mongodb://mongo:27017/fdp``. If you want to modify it, add these lines to your ``application-production.yml`` file:
+We store users, permissions, etc. in the `MongoDB database <https://www.mongodb.com/>`_. The default connection string is ``mongodb://mongo:27017/fdp``. If you want to modify it, add these lines to your ``application.yml`` file:
 
 .. code:: yaml
     
-    # application-production.yml
+    # application.yml
 
     spring:
         data:
@@ -117,11 +117,11 @@ The ``uri`` should be adjusted by your actual MongoDB setup.
 
 Default attached metadata
 =========================
-There are several default values that are attached to each created metadata. If you want to modify it, add the lines below to your ``application-production.yml`` file. The default values are listed below, too:
+There are several default values that are attached to each created metadata. If you want to modify it, add the lines below to your ``application.yml`` file. The default values are listed below, too:
 
 .. code:: yaml
     
-    # application-production.yml
+    # application.yml
 
     metadataProperties:
         rootSpecs: https://www.purl.org/fairtools/fdp/schema/0.1/fdpMetadata
@@ -143,22 +143,22 @@ There are 2 basic PID systems - default PID system and ``purl.org`` PID system.
 
 1. Default PID System
 ---------------------
-You don't have to configure anything special to use the Default PID System. However, if you want to have an explicit usage in configuration, add following lines to your ``application-production.yml`` file:
+You don't have to configure anything special to use the Default PID System. However, if you want to have an explicit usage in configuration, add following lines to your ``application.yml`` file:
 
 .. code:: yaml
     
-    # application-production.yml
+    # application.yml
 
     pidSystem:
         type: 1
 
 2. `Purl.org` PID System
 ------------------------
-If you want to use `Purl.org` PID System, you have to configure it in ``application-production.yml`` file - add the following lines below and adjust the ``baseUrl``.
+If you want to use `Purl.org` PID System, you have to configure it in ``application.yml`` file - add the following lines below and adjust the ``baseUrl``.
 
 .. code:: yaml
     
-    # application-production.yml
+    # application.yml
 
     pidSystem:
         type: 2
