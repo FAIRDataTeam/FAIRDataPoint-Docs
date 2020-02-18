@@ -6,7 +6,7 @@ Production Deployment
 
 If you want to run the FAIR Data Point in production it is recommended to use HTTPS protocol with valid certificates. You can easily configure FDP to run behind a reverse proxy which takes care of the certificates.
 
-In this example, we will configure FDP to run on a domain `fdp.example.com`. We will see how to configure the reverse proxy in the same Docker Compose file. However, it is not necessary, and the proxy can be configured elsewhere.
+In this example, we will configure FDP to run on ``https://fdp.example.com``. We will see how to configure the reverse proxy in the same Docker Compose file. However, it is not necessary, and the proxy can be configured elsewhere.
 
 First of all, we need to generate the certificates on the server where we want to run the FDP. You can use `Let's Encrypt <https://letsencrypt.org>`__ and create the certificates with `certbot <https://certbot.eff.org>`__. The certificates are generated in a standard location, e.g., ``/etc/letsencrypt/live/fdp.example.com`` for ``fdp.example.com`` domain. We will mount the whole ``letsencrypt`` folder to the reverse proxy container later so that it can use the certificates.
 
@@ -62,9 +62,10 @@ Then, we need to configure the FDP server.
         # We pass all the request to the fdp-client container, we can use HTTP in the internal network
         # fdp-client_1 is the name of the client container in our configuration, we can use it as host
         location / {
-            proxy_pass http://fdp-client_1;
             proxy_set_header Host $host;
+	        proxy_set_header X-Forwarded-Proto $scheme;
             proxy_pass_request_headers on;
+            proxy_pass http://fdp-client_1;
         }
     }
 
@@ -116,6 +117,28 @@ We have certificates generated and configuration for proxy ready. Now we need to
             image: mongo:4.0.12
             volumes:
                 - ./mongo/data:/data/db
+
+
+The last thing to do is to update our ``application.yml`` file. We need to add instance URL so that FDP knows the actual URL even if hidden behind the reverse proxy. And we also need to set a random JWT token for security.
+
+.. code :: yaml
+
+    # application.yml
+
+    instance:
+        url: https://fdp.example.com
+
+    security:
+        jwt:
+            token:
+                secret-key: <random 128 characters string>
+
+    # repository settings (can be changed to different repository)
+    repository:
+        type: 2
+        native:
+            dir: /rdfdata
+
 
 
 At this point, we should be able to run all the containers using ``docker-compose up -d`` and after everything starts, we can access the FAIR Data Point at https://fdp.example.com. Of course, the domain you want to access the FDP on must be configured to the server where it runs.
