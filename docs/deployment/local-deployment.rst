@@ -21,7 +21,7 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
         ports:
             - 80:80
         environment:
-            - FDP_HOST=fdp-client
+            - FDP_HOST=fdp
 
     mongo:
         image: mongo:4.0.12
@@ -75,7 +75,7 @@ Here is the updated docker-compose file:
             ports:
                 - 80:80
             environment:
-                - FDP_HOST=fdp-client
+                - FDP_HOST=fdp
 
         mongo:
             image: mongo:4.0.12
