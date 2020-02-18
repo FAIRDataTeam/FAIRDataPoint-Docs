@@ -14,10 +14,10 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
     services:
 
     fdp:
-        image: fairdata/fairdatapoint:1.0.0
+        image: fairdata/fairdatapoint:1.1.0
 
     fdp-client:
-        image: fairdata/fairdatapoint-client:1.0.0
+        image: fairdata/fairdatapoint-client:1.1.0
         ports:
             - 80:80
         environment:
@@ -68,10 +68,10 @@ Here is the updated docker-compose file:
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.0.0
+            image: fairdata/fairdatapoint:1.1.0
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.0.0
+            image: fairdata/fairdatapoint-client:1.1.0
             ports:
                 - 80:80
             environment:
@@ -114,13 +114,13 @@ We now need to add two new volumes for the ``fdp`` container. One for the config
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.0.0
+            image: fairdata/fairdatapoint:1.1.0
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
                 - ./rdfdata:/rdfdata
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.0.0
+            image: fairdata/fairdatapoint-client:1.1.0
             ports:
                 - 80:80
             environment:

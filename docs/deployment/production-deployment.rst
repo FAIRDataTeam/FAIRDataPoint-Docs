@@ -103,13 +103,13 @@ We have certificates generated and configuration for proxy ready. Now we need to
 
 
         fdp:
-            image: fairdata/fairdatapoint:1.0.0
+            image: fairdata/fairdatapoint:1.1.0
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
                 - ./rdfdata:/rdfdata
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.0.0
+            image: fairdata/fairdatapoint-client:1.1.0
             environment:
                 - FDP_HOST=fdp
 
