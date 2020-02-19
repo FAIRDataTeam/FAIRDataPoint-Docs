@@ -13,18 +13,18 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
     version: '3'
     services:
 
-    fdp:
-        image: fairdata/fairdatapoint:1.1.0
+        fdp:
+            image: fairdata/fairdatapoint:1.1.0
 
-    fdp-client:
-        image: fairdata/fairdatapoint-client:1.1.0
-        ports:
-            - 80:80
-        environment:
-            - FDP_HOST=fdp
+        fdp-client:
+            image: fairdata/fairdatapoint-client:1.1.0
+            ports:
+                - 80:80
+            environment:
+                - FDP_HOST=fdp
 
-    mongo:
-        image: mongo:4.0.12
+        mongo:
+            image: mongo:4.0.12
 
 
 Then you can run it using ``docker-compose up -d``. It might take a while to start. You can run ``docker-compose logs -f`` to follow the output log. Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
