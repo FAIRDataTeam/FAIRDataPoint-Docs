@@ -15,12 +15,12 @@ Installed OpenRefine
 
 This option requires you to have installed compatible version of OpenRefine, please check :ref:`openrefine-compatibility`. In case you need to install OpenRefine first, visit their `documentation <https://github.com/OpenRefine/OpenRefine/wiki/Installation-Instructions>`_. 
 
-* Get the desired version of the **metadata** extension from `our GitHub releases page <https://github.com/FAIRDataTeam/OpenRefine-metadata-extension/releases>`_ by downloading tgz or zip archive, e.g., ``metadata-1.1.0-OpenRefine-3.2.zip``.
+* Get the desired version of the **metadata** extension from `our GitHub releases page <https://github.com/FAIRDataTeam/OpenRefine-metadata-extension/releases>`_ by downloading tgz or zip archive, e.g., ``metadata-1.2.0-OpenRefine-3.3.zip``.
 * Extract the archive to ``extensions`` folder of your OpenRefine (see `OpenRefine documentation <https://github.com/OpenRefine/OpenRefine/wiki/Installing-Extensions>`_).
 
 ::
 
-   unzip metadata-1.1.0-OpenRefine-3.2.zip path/to/openrefine-3.2/webapp/extensions
+   unzip metadata-X.Y.Z-OpenRefine-X.Y.zip path/to/openrefine-X.Y/webapp/extensions
 
 
 With Docker
@@ -87,6 +87,10 @@ Compatibility
 +---------------------+------------------------+------------------+
 |  metadata extension |             OpenRefine |  FAIR Data Point |
 +=====================+========================+==================+
-|         ``vX.Y.Z``  |  ``3.3-beta``, ``3.2`` |       ``vX.Y.Z`` |
+|         ``v1.2.0``  |       ``3.3``, ``3.2`` |         ``v1.2`` |
++---------------------+------------------------+------------------+
+|         ``v1.1.0``  |       ``3.3``, ``3.2`` |         ``v1.1`` |
++---------------------+------------------------+------------------+
+|         ``v1.0.0``  |  ``3.3-beta``, ``3.2`` |         ``v1.0`` |
 +---------------------+------------------------+------------------+
 
