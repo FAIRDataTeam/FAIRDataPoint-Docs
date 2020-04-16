@@ -1,4 +1,4 @@
-FAIR Data Point Documentation
+FAIR Data Point Reference Implementation Documentation
 =============================
 
 .. toctree::
