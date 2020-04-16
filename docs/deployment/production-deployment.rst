@@ -12,12 +12,14 @@ First of all, we need to generate the certificates on the server where we want t
 
 As a reverse proxy, we will use `nginx <http://nginx.org/en/>`__. We need to prepare some configuration, so create a new folder called ``nginx`` with the following structure and files:
 
-| nginx/
-| ├ nginx.conf
-| ├ sites-available
-| │  └ fdp.conf
-| └ sites-enabled
-|    └ fdp.conf -> ../sites-available/fdp.conf
+::
+
+  nginx/
+  ├ nginx.conf
+  ├ sites-available
+  │  └ fdp.conf
+  └ sites-enabled
+     └ fdp.conf -> ../sites-available/fdp.conf
 
 The file ``nginx.conf`` is the configuration of the whole nginx, and it includes all the files from ``sites-enabled`` which contains configuration for individual servers (we can use one nginx, for example, to handle multiple servers on different domains). All available configurations for different servers are in the ``sites-available``, but only those linked to ``sites-enabled`` are used.
 
@@ -62,9 +64,6 @@ Then, we need to configure the FDP server.
         # We pass all the request to the fdp-client container, we can use HTTP in the internal network
         # fdp-client_1 is the name of the client container in our configuration, we can use it as host
         location / {
-            proxy_set_header Host $host;
-	        proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_pass_request_headers on;
             proxy_pass http://fdp-client_1;
         }
     }
@@ -91,7 +90,7 @@ We have certificates generated and configuration for proxy ready. Now we need to
     version: '3'
     services:
         proxy:
-            image: "nginx:1.17.3"
+            image: nginx:1.17.3
             ports:
                 - 80:80
                 - 443:443
@@ -101,15 +100,13 @@ We have certificates generated and configuration for proxy ready. Now we need to
                 # Mount the letsencrypt certificates
                 - /etc/letsencrypt:/etc/letsencrypt:ro
 
-
         fdp:
-            image: fairdata/fairdatapoint:1.2.0
+            image: fairdata/fairdatapoint:1.2.1
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
-                - ./rdfdata:/rdfdata
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.0
+            image: fairdata/fairdatapoint-client:1.2.1
             environment:
                 - FDP_HOST=fdp
 
@@ -117,6 +114,11 @@ We have certificates generated and configuration for proxy ready. Now we need to
             image: mongo:4.0.12
             volumes:
                 - ./mongo/data:/data/db
+
+        blazegraph:
+            image: metaphacts/blazegraph-basic:2.2.0-20160908.003514-6
+            volumes:
+                - ./blazegraph:/blazegraph-data
 
 
 The last thing to do is to update our ``application.yml`` file. We need to add instance URL so that FDP knows the actual URL even if hidden behind the reverse proxy. And we also need to set a random JWT token for security.
@@ -135,9 +137,9 @@ The last thing to do is to update our ``application.yml`` file. We need to add i
 
     # repository settings (can be changed to different repository)
     repository:
-        type: 2
-        native:
-            dir: /rdfdata
+        type: 5
+        blazegraph:
+            url: http://blazegraph:8080/blazegraph
 
 
 
