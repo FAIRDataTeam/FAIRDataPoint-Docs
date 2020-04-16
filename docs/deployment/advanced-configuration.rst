@@ -9,7 +9,7 @@ Advanced Configuration
 Triple Stores
 =============
 
-FDP uses InMemory triple store by default. In the Deployment example, there is a native store used. However, you can choose from 3 additional options.
+FDP uses InMemory triple store by default. In previous examples, there is Blazegraph used. However, you can choose from 3 additional options.
 
 **List of possible triple stores:**
 
@@ -34,7 +34,7 @@ There is no need to configure additional properties to run FDP with In-Memory St
 2. Native Store
 ---------------
 
-If you want to use the Native Store, make sure that you have these lines in your ``application.yml`` file:
+With this option, FDP will simply save the data to the file system. If you want to use the Native Store, make sure that you have these lines in your ``application.yml`` file:
 
 .. code:: yaml
     
@@ -50,7 +50,7 @@ where ``/tmp/fdp-store`` is a path to a location where you want to keep your dat
 3. Allegro Graph
 ----------------
 
-For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need to first set up your Allegro Graph instance. Make sure that the FDP Docker container can ping the Allegro Graph Docker container. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
+For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need to first set up your Allegro Graph instance. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code:: yaml
     
@@ -64,12 +64,12 @@ For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need 
             password: password
 
 
-``URL``, ``username`` and ``password`` should be adjusted by your actual Allegro Graph setup.
+``URL``, ``username`` and ``password`` should be configured according to your actual Allegro Graph setup.
 
 4. GraphDB
 ----------
 
-For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance. Make sure that the FDP Docker container can ping the GraphDB Docker container. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
+For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance and **create the repository**. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code:: yaml
     
@@ -79,16 +79,16 @@ For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up y
         type: 4
         graphDb: 
             url: http://graphdb:7200
-            repository: test
+            repository: <repository-name>
 
 
-``URL`` and ``repository`` should be adjusted by your actual GraphDB setup.
+``URL`` and ``repository`` should be configured according to your actual GraphDB setup.
 
 
 5. Blazegraph
 -------------
 
-For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up your Blazegraph instance. Make sure that the FDP Docker container can ping the Blazegraph Docker container. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
+For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up your Blazegraph instance. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code:: yaml
     
@@ -97,11 +97,11 @@ For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up yo
     repository:
         type: 5
         blazegraph: 
-            url: http://blazegraph:8079/blazegraph
-            repository: test
+            url: http://blazegraph:8080/blazegraph
+            repository:
 
 
-``URL`` and ``repository`` should be adjusted by your actual Blazegraph setup.
+``URL`` and ``repository`` should be configured according to your actual Blazegraph setup. Repository should be set only if you don't use the default one.
 
 
 Mongo DB
@@ -128,9 +128,6 @@ There are several default values that are attached to each created metadata. If 
     # application.yml
 
     metadataProperties:
-        rootSpecs: https://www.purl.org/fairtools/fdp/schema/0.1/fdpMetadata
-        catalogSpecs: https://www.purl.org/fairtools/fdp/schema/0.1/catalogMetadata
-        datasetSpecs: https://www.purl.org/fairtools/fdp/schema/0.1/datasetMetadata
         publisherURI: http://localhost
         publisherName: localhost
         language: http://id.loc.gov/vocabulary/iso639-1/en
@@ -234,10 +231,10 @@ To change the logo, you need to do three steps:
 
     version: '3'
     services:
-        server:
+        fdp:
             # ... FDP configuration
 
-        client:
+        fdp-client:
             # ... FDP Client configuration
             volumes:
               # Mount new logo file to assets in the container
@@ -252,29 +249,38 @@ Running FDP on a nested route
 
 Sometimes, you might want to run FDP alongside other applications on the
 same domain. Here is an example of running FDP on
-``example.com/fairdatapoint``. If you run FDP in this configuration, you
-**have to set PUBLIC\_PATH ENV variable**, in this example to
-``/fairdatapoint``.
+``https://example.com/fairdatapoint``. If you run FDP in this configuration, you
+have to set ``PUBLIC\_PATH`` ENV variable, in this example to
+``/fairdatapoint``. Also, don't forget to set correct instance URL in the application config.
 
-.. code:: yaml
+.. code :: yaml
 
     # docker-compose.yml
 
     version: '3'
     services:
-        server:
-            image: fairdata/fairdatapoint
-            # ... FDP configuration
+        fdp:
+            image: fairdata/fairdatapoint:1.2.1
+            volumes:
+                - ./application.yml:/fdp/application.yml:ro
+                # ... other volumes
 
-        client:
-            image: fairdata/fairdatapoint-client
+        fdp-client:
+            image: fairdata/fairdatapoint-client:1.2.1
             ports:
                 - 80:80
             environment:
-            	- FDP_HOST=server
+            	- FDP_HOST=fdp
                 - PUBLIC_PATH=/fairdatapoint
 
-.. code:: nginx
+.. code :: yaml
+
+    # application.yml
+
+    instance:
+        url: https://example.com/fairdatapoint
+
+.. code :: nginx
 
     # Snippet for nginx configuration
 
@@ -286,8 +292,6 @@ same domain. Here is an example of running FDP on
             rewrite /fairdatapoint(/.*) $1 break;
             rewrite /fairdatapoint / break;
             proxy_pass http://<client_host>;
-            proxy_set_header Host $host;
-            proxy_pass_request_headers on;
         }
     }
 

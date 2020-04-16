@@ -14,10 +14,10 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.2.0
+            image: fairdata/fairdatapoint:1.2.1
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.0
+            image: fairdata/fairdatapoint-client:1.2.1
             ports:
                 - 80:80
             environment:
@@ -45,6 +45,43 @@ There are two default user accounts. See the :ref:`Users and Roles <users-and-ro
     Using the default accounts is alright if you run FDP on your machine, but you should change them if you want to run FDP publicly.
 
 
+Running locally on a different port
+===================================
+
+If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary. First, we need to create a new file ``application.yml`` and set the instance URL to the actual URL we want to use.
+
+.. code :: yaml
+
+    # application.yml
+
+    instance:
+        url: http://localhost:8080
+
+Then, we need to mount the application config into the FDP container and update the port which the FDP client runs on.
+
+.. code :: yaml
+
+    # docker-compose.yml
+
+    version: '3'
+    services:
+
+        fdp:
+            image: fairdata/fairdatapoint:1.2.1
+            volumes:
+                - ./application.yml:/fdp/application.yml:ro
+
+        fdp-client:
+            image: fairdata/fairdatapoint-client:1.2.1
+            ports:
+                - 8080:80
+            environment:
+                - FDP_HOST=fdp
+
+        mongo:
+            image: mongo:4.0.12
+
+
 Persistence
 ===========
 
@@ -56,7 +93,7 @@ MongoDB volume
 
 We use MongoDB to store information about user accounts and access permissions. We can configure a `volume <https://docs.docker.com/storage/volumes/>`__ so that the data keep on our disk even if we delete MongoDB container.
 
-We can also expose port `27017` so we can access MongoDB from our local computer using a client application like `Robo 3T <https://robomongo.org>`__.
+We can also expose port ``27017`` so we can access MongoDB from our local computer using a client application like `Robo 3T <https://robomongo.org>`__.
 
 Here is the updated docker-compose file:
 
@@ -68,10 +105,10 @@ Here is the updated docker-compose file:
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.2.0
+            image: fairdata/fairdatapoint:1.2.1
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.0
+            image: fairdata/fairdatapoint-client:1.2.1
             ports:
                 - 80:80
             environment:
@@ -90,21 +127,23 @@ Persistent Repository
 
 FAIR Data Point uses repositories to store the metadata. By default, it uses the in-memory store, which means that the data is lost after the FDP is stopped.
 
-In this example, we will configure the native store (which stores the metadata into a folder on the file system) and use that folder as a volume so that the data will persist on our disk. See :ref:`Triple Stores <triple-stores>` for other repository options.
+In this example, we will configure Blazegraph as a triple store. See :ref:`Triple Stores <triple-stores>` for other repository options.
 
-First of all, we need to create a new file ``application.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see :ref:`Advanced Configuration <advanced-configuration>` for more details.
+If we don't have it already, we need to create a new file ``application.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see :ref:`Advanced Configuration <advanced-configuration>` for more details.
 
 
 .. code :: yaml
 
     # application.yml
 
-    repository:
-        type: 2
-        native:
-            dir: /rdfdata
+    # ... other configuration
 
-We now need to add two new volumes for the ``fdp`` container. One for the configuration file and the other one for the native store data.
+    repository:
+        type: 5
+        blazegraph:
+            url: http://blazegraph:8080/blazegraph
+
+We now need to update our ``docker-compose.yml`` file, we add a new volume for the ``fdp`` and add ``blazegraph`` service. We can also expose port ``8080`` for Blazegraph so we can access its user interface.
 
 .. code :: yaml
 
@@ -114,13 +153,12 @@ We now need to add two new volumes for the ``fdp`` container. One for the config
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.2.0
+            image: fairdata/fairdatapoint:1.2.1
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
-                - ./rdfdata:/rdfdata
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.0
+            image: fairdata/fairdatapoint-client:1.2.1
             ports:
                 - 80:80
             environment:
@@ -132,3 +170,10 @@ We now need to add two new volumes for the ``fdp`` container. One for the config
                 - 27017:27017
             volumes:
                 - ./mongo/data:/data/db
+
+        blazegraph:
+            image: metaphacts/blazegraph-basic:2.2.0-20160908.003514-6
+            ports:
+                - 8080:8080
+            volumes:
+                - ./blazegraph:/blazegraph-data
