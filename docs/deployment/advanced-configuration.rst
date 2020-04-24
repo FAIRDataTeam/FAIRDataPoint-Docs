@@ -138,34 +138,6 @@ There are several default values that are attached to each created metadata. If 
         https://purl.org/fair-metrics/FM_F1A: https://www.ietf.org/rfc/rfc3986.txt
         https://purl.org/fair-metrics/FM_A1.1: https://www.wikidata.org/wiki/Q8777
 
-PID System
-==========
-There are 2 basic PID systems - default PID system and ``purl.org`` PID system.
-
-1. Default PID System
----------------------
-You don't have to configure anything special to use the Default PID System. However, if you want to have an explicit usage in configuration, add following lines to your ``application.yml`` file:
-
-.. code:: yaml
-    
-    # application.yml
-
-    pidSystem:
-        type: 1
-
-2. `Purl.org` PID System
-------------------------
-If you want to use `Purl.org` PID System, you have to configure it in ``application.yml`` file - add the following lines below and adjust the ``baseUrl``.
-
-.. code:: yaml
-    
-    # application.yml
-
-    pidSystem:
-        type: 2
-        purl:
-            baseUrl: http://purl.org/YOUR-PURL-DOMAIN/fdp
-
 Customizations
 ==============
 
@@ -251,7 +223,7 @@ Sometimes, you might want to run FDP alongside other applications on the
 same domain. Here is an example of running FDP on
 ``https://example.com/fairdatapoint``. If you run FDP in this configuration, you
 have to set ``PUBLIC\_PATH`` ENV variable, in this example to
-``/fairdatapoint``. Also, don't forget to set correct instance URL in the application config.
+``/fairdatapoint``. Also, don't forget to set correct client URL in the application config.
 
 .. code :: yaml
 
@@ -278,7 +250,7 @@ have to set ``PUBLIC\_PATH`` ENV variable, in this example to
     # application.yml
 
     instance:
-        url: https://example.com/fairdatapoint
+        clientUrl: https://example.com/fairdatapoint
 
 .. code :: nginx
 

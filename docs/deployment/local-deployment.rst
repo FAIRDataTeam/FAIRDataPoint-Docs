@@ -48,14 +48,14 @@ There are two default user accounts. See the :ref:`Users and Roles <users-and-ro
 Running locally on a different port
 ===================================
 
-If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary. First, we need to create a new file ``application.yml`` and set the instance URL to the actual URL we want to use.
+If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary. First, we need to create a new file ``application.yml`` and set the client URL to the actual URL we want to use.
 
 .. code :: yaml
 
     # application.yml
 
     instance:
-        url: http://localhost:8080
+        clientUrl: http://localhost:8080
 
 Then, we need to mount the application config into the FDP container and update the port which the FDP client runs on.
 
