@@ -154,3 +154,14 @@ At this point, we should be able to run all the containers using ``docker-compos
 .. DANGER::
 
     Do not expose mongo port unless you secured the database with username and password.
+
+.. WARNING::
+
+    In order to improve findability of itself and its content, the FAIR Data Point has a built-in feature that registers its URL into our server and pings it once a week. This feature facilitates the indexing of the metadata of each registered and active FAIR Data Point. If you do not want your FAIR Data Point to be included in this registry, add these lines to your application configuration:
+
+    .. code :: yaml
+
+        # application.yml
+
+        ping:
+            enabled: false
