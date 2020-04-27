@@ -232,13 +232,13 @@ have to set ``PUBLIC\_PATH`` ENV variable, in this example to
     version: '3'
     services:
         fdp:
-            image: fairdata/fairdatapoint:1.2.1
+            image: fairdata/fairdatapoint:1.3.0
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
                 # ... other volumes
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.1
+            image: fairdata/fairdatapoint-client:1.3.0
             ports:
                 - 80:80
             environment:
