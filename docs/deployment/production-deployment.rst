@@ -101,12 +101,12 @@ We have certificates generated and configuration for proxy ready. Now we need to
                 - /etc/letsencrypt:/etc/letsencrypt:ro
 
         fdp:
-            image: fairdata/fairdatapoint:1.2.1
+            image: fairdata/fairdatapoint:1.3.0
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.1
+            image: fairdata/fairdatapoint-client:1.3.0
             environment:
                 - FDP_HOST=fdp
 
@@ -121,14 +121,15 @@ We have certificates generated and configuration for proxy ready. Now we need to
                 - ./blazegraph:/blazegraph-data
 
 
-The last thing to do is to update our ``application.yml`` file. We need to add instance URL so that FDP knows the actual URL even if hidden behind the reverse proxy. And we also need to set a random JWT token for security.
+The last thing to do is to update our ``application.yml`` file. We need to add ``clientUrl`` so that FDP knows the actual URL even if hidden behind the reverse proxy. It's a good practice to set up a persistent URL for the metadata too. We recommend using ``https://purl.org``. If you don't specify ``persistentUrl``, the ``clientUrl`` will be used instead. And we also need to set a random JWT token for security.
 
 .. code :: yaml
 
     # application.yml
 
     instance:
-        url: https://fdp.example.com
+        clientUrl: https://fdp.example.com
+        persistentUrl: https://purl.org/fairdatapoint/example
 
     security:
         jwt:

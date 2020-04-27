@@ -14,10 +14,10 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.2.1
+            image: fairdata/fairdatapoint:1.3.0
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.1
+            image: fairdata/fairdatapoint-client:1.3.0
             ports:
                 - 80:80
             environment:
@@ -48,14 +48,14 @@ There are two default user accounts. See the :ref:`Users and Roles <users-and-ro
 Running locally on a different port
 ===================================
 
-If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary. First, we need to create a new file ``application.yml`` and set the instance URL to the actual URL we want to use.
+If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary. First, we need to create a new file ``application.yml`` and set the client URL to the actual URL we want to use.
 
 .. code :: yaml
 
     # application.yml
 
     instance:
-        url: http://localhost:8080
+        clientUrl: http://localhost:8080
 
 Then, we need to mount the application config into the FDP container and update the port which the FDP client runs on.
 
@@ -67,12 +67,12 @@ Then, we need to mount the application config into the FDP container and update 
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.2.1
+            image: fairdata/fairdatapoint:1.3.0
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.1
+            image: fairdata/fairdatapoint-client:1.3.0
             ports:
                 - 8080:80
             environment:
@@ -105,10 +105,10 @@ Here is the updated docker-compose file:
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.2.1
+            image: fairdata/fairdatapoint:1.3.0
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.1
+            image: fairdata/fairdatapoint-client:1.3.0
             ports:
                 - 80:80
             environment:
@@ -153,12 +153,12 @@ We now need to update our ``docker-compose.yml`` file, we add a new volume for t
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.2.1
+            image: fairdata/fairdatapoint:1.3.0
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.2.1
+            image: fairdata/fairdatapoint-client:1.3.0
             ports:
                 - 80:80
             environment:
