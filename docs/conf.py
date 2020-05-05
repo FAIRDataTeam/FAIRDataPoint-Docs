@@ -18,8 +18,8 @@
 # -- Project information -----------------------------------------------------
 
 project = 'FAIR Data Point'
-copyright = '2020, Dutch Techncentre for Life Sciences'
-author = 'Dutch Techncentre for Life Sciences'
+copyright = '2020, Dutch Techcentre for Life Sciences'
+author = 'Dutch Techcentre for Life Sciences'
 
 # The full version, including alpha/beta/rc tags
 release = '1.4.0'
