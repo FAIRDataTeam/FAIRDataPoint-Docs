@@ -22,7 +22,7 @@ copyright = '2020, Dutch Techcentre for Life Sciences'
 author = 'Dutch Techcentre for Life Sciences'
 
 # The full version, including alpha/beta/rc tags
-release = '1.4.0'
+release = '1.5.0'
 
 
 # -- General configuration ---------------------------------------------------
