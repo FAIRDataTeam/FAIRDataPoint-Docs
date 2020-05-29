@@ -128,8 +128,6 @@ There are several default values that are attached to each created metadata. If 
     # application.yml
 
     metadataProperties:
-        publisherURI: http://localhost
-        publisherName: localhost
         language: http://id.loc.gov/vocabulary/iso639-1/en
         license: http://rdflicense.appspot.com/rdflicense/cc-by-nc-nd3.0
         accessRightsDescription: This resource has no access restriction
