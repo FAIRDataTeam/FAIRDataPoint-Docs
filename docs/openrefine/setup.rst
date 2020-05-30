@@ -15,7 +15,7 @@ Installed OpenRefine
 
 This option requires you to have installed compatible version of OpenRefine, please check :ref:`openrefine-compatibility`. In case you need to install OpenRefine first, visit their `documentation <https://github.com/OpenRefine/OpenRefine/wiki/Installation-Instructions>`_. 
 
-* Get the desired version of the **metadata** extension from `our GitHub releases page <https://github.com/FAIRDataTeam/OpenRefine-metadata-extension/releases>`_ by downloading tgz or zip archive, e.g., ``metadata-1.2.0-OpenRefine-3.3.zip``.
+* Get the desired version of the **metadata** extension from `our GitHub releases page <https://github.com/FAIRDataTeam/OpenRefine-metadata-extension/releases>`_ by downloading tgz or zip archive, e.g., ``metadata-X.Y.Z-OpenRefine-X.Y.zip``.
 * Extract the archive to ``extensions`` folder of your OpenRefine (see `OpenRefine documentation <https://github.com/OpenRefine/OpenRefine/wiki/Installing-Extensions>`_).
 
 ::
@@ -62,6 +62,8 @@ Settings configuration file serves for generic configuration options that adjust
    * ``preselected`` (boolean, optional) = flag if should be pre-selected in the form (in case that more connections have this set to true, only first one is applied)
    * ``metadata`` (map, optional) = similar to instance-wide but only for specific connection
 
+For more information and further configuration options, see `examples <https://github.com/FAIRDataTeam/OpenRefine-metadata-extension/blob/master/src/main/resources/module/config/settings.example.yaml>`_.
+
 .. _openrefine-configuration-storages:
 
 Storages
@@ -71,11 +73,7 @@ Storages configuration file holds details about storages that are possible to us
 
 * ``name`` (string) = custom name identifying the storage
 * ``type`` (string) = one of the allowed types (others are ignored): ``ftp``, ``virtuso``, ``tripleStoreHTTP``
-* ``enabled`` (string) = flag if should be offered to the user
-* ``username`` (string, optional) = username for authentication
-* ``password`` (string, optional) = password for authentication
-* ``host`` (string) = :abbr:`URI (Uniform Resource Identifier)` of the storage server
-* ``directory`` (string) = directory or other location for storing the data
+* ``details`` (object) = configuration related to specific type of storage (see `examples <https://github.com/FAIRDataTeam/OpenRefine-metadata-extension/blob/master/src/main/resources/module/config/storages.example.yaml>`_)
 
 For :abbr:`FTP (File Transfer Protocol)` and Virtuoso, ``directory`` should containt absolute path where files should be stored. In case of triple stores, repository name is used to specify the target location.
 
@@ -84,13 +82,5 @@ For :abbr:`FTP (File Transfer Protocol)` and Virtuoso, ``directory`` should cont
 Compatibility
 =============
 
-+---------------------+------------------------+------------------+
-|  metadata extension |             OpenRefine |  FAIR Data Point |
-+=====================+========================+==================+
-|         ``v1.2.0``  |       ``3.3``, ``3.2`` |         ``v1.2`` |
-+---------------------+------------------------+------------------+
-|         ``v1.1.0``  |       ``3.3``, ``3.2`` |         ``v1.1`` |
-+---------------------+------------------------+------------------+
-|         ``v1.0.0``  |  ``3.3-beta``, ``3.2`` |         ``v1.0`` |
-+---------------------+------------------------+------------------+
+Check in-app "About" dialog for compatibility information.
 
