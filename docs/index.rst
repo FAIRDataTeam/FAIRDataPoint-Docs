@@ -21,6 +21,7 @@ FAIR Data Point Reference Implementation Documentation
    :caption: Usage
    :maxdepth: 2
 
+   usage/usage
    usage/api-usage
 
 .. toctree::
