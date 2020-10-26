@@ -52,7 +52,7 @@ Method   URL pattern            Functionality
 Retrieving metadata
 -------------------
 
-Retrieving metadata is open for GET requests without authorization.
+Retrieving metadata is open for GET requests without authorization. In the following example, we retrieve a ``Dataset`` resource by issuing a ``GET`` request to the ``/dataset`` prefix followed by its identifier (a UUID).
 
 .. code :: bash
 
