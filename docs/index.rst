@@ -29,4 +29,4 @@ FAIR Data Point Reference Implementation Documentation
    :maxdepth: 2
 
    development/contributing
-   development/roadmap
+   development/changelog
