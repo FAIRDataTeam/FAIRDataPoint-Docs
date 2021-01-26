@@ -64,6 +64,9 @@ Then, we need to configure the FDP server.
         # We pass all the request to the fdp-client container, we can use HTTP in the internal network
         # fdp-client_1 is the name of the client container in our configuration, we can use it as host
         location / {
+            proxy_set_header Host $host;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_pass_request_headers on;
             proxy_pass http://fdp-client_1;
         }
     }
@@ -112,6 +115,8 @@ We have certificates generated and configuration for proxy ready. Now we need to
 
         mongo:
             image: mongo:4.0.12
+            ports:
+              - "127.0.0.1:27017:27017"
             volumes:
                 - ./mongo/data:/data/db
 
