@@ -107,12 +107,12 @@ The `DASH <http://datashapes.org/dash>`_ vocabulary introduces extensions to the
         dash:editor dash:TextFieldEditor ;
     ]
 
-By adding a ``dash:viewer`` statement, the user interface is instructed to show the property value when the resource metadata is displayed. Removing a ``dash:viewer`` statement will instruct the user interface will not render the property value at all. The value will still be present in the metadata model. The supported set of viewers (version 1.6.0):
+By adding a ``dash:viewer`` statement, the user interface is instructed to show the property value when the resource metadata is displayed. Removing a ``dash:viewer`` statement will instruct the user interface will not render the property value at all. The value will still be present in the metadata model. The supported set of viewers:
 
 * ``sh:LabelViewer``
 * ``sh:URIViewer``
 
-By adding a ``dash:editor`` statement, the editor form in the user interface will show an edit field for the property. Removing a ``dash:editor`` statement will prevent the property from being edited. This could be intended behaviour for properties that are generated server side. The supported set of editors (version 1.6.0):
+By adding a ``dash:editor`` statement, the editor form in the user interface will show an edit field for the property. Removing a ``dash:editor`` statement will prevent the property from being edited. This could be intended behaviour for properties that are generated server side. The supported set of editors:
 
 * ``sh:TextFieldEditor``
 * ``sh:TextAreaEditor``
