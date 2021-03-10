@@ -1,5 +1,5 @@
 FAIR Data Point Reference Implementation Documentation
-=============================
+======================================================
 
 .. toctree::
    :caption: About
@@ -16,6 +16,13 @@ FAIR Data Point Reference Implementation Documentation
    deployment/local-deployment
    deployment/production-deployment
    deployment/advanced-configuration
+
+.. toctree::
+   :caption: Usage
+   :maxdepth: 2
+
+   usage/usage
+   usage/api-usage
 
 .. toctree::
    :caption: OpenRefine Extension
