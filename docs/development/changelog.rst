@@ -7,6 +7,12 @@ Overview
 
 Here we summarize the key features and changes for each FAIR Data Point release. For details including bugfixes and minor changes, see :ref:`detailed-changelog`.
 
+1.8.0
+-----
+
+- Added Admin UI to FDP Index with possibility to trigger metadata retrieval, change settings, or delete entry
+- Several bug fixes and dependencies updated (including Java 15)
+
 1.7.0
 -----
 
