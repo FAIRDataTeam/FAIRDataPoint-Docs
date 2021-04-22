@@ -121,6 +121,7 @@ The ``uri`` should be adjusted by your actual MongoDB setup.
 
 Default attached metadata
 =========================
+
 There are several default values that are attached to each created metadata. If you want to modify it, add the lines below to your ``application.yml`` file. The default values are listed below, too:
 
 .. code:: yaml
@@ -135,6 +136,67 @@ There are several default values that are attached to each created metadata. If 
     metadataMetrics:
         https://purl.org/fair-metrics/FM_F1A: https://www.ietf.org/rfc/rfc3986.txt
         https://purl.org/fair-metrics/FM_A1.1: https://www.wikidata.org/wiki/Q8777
+
+FDP Index
+=========
+
+You can turn your FAIR Data Point instance into a FDP Index that can be contacted by other FDPs and harvests metadata from them.
+
+Hosting FDP Index
+-----------------
+
+To enable FDP Index mode on your FDP server, just simply adjust your ``application.yml`` file:
+
+.. code:: yaml
+    
+    # application.yml
+
+    fdp-index:
+        enabled:  true
+
+
+Then for the FDP client, you need to use ``fairdata/fairdatapoint-index-client`` Docker image for browsing indexed FDPs and searching harvested metadata. In case you want to use your deployment both as FDP and FDP Index, you can deploy both FDP and FDP Index client applications. The configuration of both clients are identical.
+
+.. code:: yaml
+
+    # docker-compose.yml
+
+    version: '3'
+    services:
+
+    # ...
+
+    index_client:
+      image: fairdata/fairdatapoint-index-client:1.9.0
+      restart: always
+      # ...
+
+
+Connecting to FDP Index
+-----------------------
+
+By default, FDPs use https://home.fairdatapoint.org as their primary FDP Index that they ping every 7 days. You can adjust that in  your ``application.yml`` file if needed:
+
+.. code:: yaml
+    
+    # application.yml
+
+    ping:
+        endpoint: https://my-index.example.com
+        interval: 86400000 # milliseconds
+
+You can also set multiple endpoints if needed:
+
+.. code:: yaml
+    
+    # application.yml
+
+    ping:
+        endpoint: >
+            https://my-index1.example.com
+            https://my-index2.example.com
+            https://home.fairdatapoint.org
+
 
 Customizations
 ==============
