@@ -104,12 +104,12 @@ We have certificates generated and configuration for proxy ready. Now we need to
                 - /etc/letsencrypt:/etc/letsencrypt:ro
 
         fdp:
-            image: fairdata/fairdatapoint:1.8.0
+            image: fairdata/fairdatapoint:1.9.0
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.8.0
+            image: fairdata/fairdatapoint-client:1.9.0
             environment:
                 - FDP_HOST=fdp
 
