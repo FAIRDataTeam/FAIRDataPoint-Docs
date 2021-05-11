@@ -7,6 +7,14 @@ Overview
 
 Here we summarize the key features and changes for each FAIR Data Point release. For details including bugfixes and minor changes, see :ref:`detailed-changelog`.
 
+1.9.0
+-----
+
+- Publishing and sharing SHACL shapes between FDPs
+- Metadata children pagination
+- Generating OpenAPI based on resource definitions
+- Several dependencies updates including Spring Boot 2.4.5
+
 1.8.0
 -----
 
