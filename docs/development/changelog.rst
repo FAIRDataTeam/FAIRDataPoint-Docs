@@ -7,6 +7,14 @@ Overview
 
 Here we summarize the key features and changes for each FAIR Data Point release. For details including bugfixes and minor changes, see :ref:`detailed-changelog`.
 
+1.10.0
+-----
+
+- Reset to factory defaults (users, metadata, resource definitions)
+- Improved UX for browsing child metadata
+- Allow to change internal shapes (and delete dataset and distribution)
+- Several dependencies updated (including Java 16)
+
 1.9.0
 -----
 
