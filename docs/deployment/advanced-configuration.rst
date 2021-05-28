@@ -198,6 +198,22 @@ You can also set multiple endpoints if needed:
             https://home.fairdatapoint.org
 
 
+FDP Index behind proxy
+----------------------
+
+FDP Index uses IP-based rate limits to avoid excessive communication caused by bots or misconfigured FDPs. If the FDP Index is deployed behind a proxy, it must correctly set header, e.g., ``X-Forwarded-For``. Furthermore, you need to add this to ``application.yml``:
+
+.. code:: yaml
+    
+    # application.yml
+
+    server:
+        forward-headers-strategy: NATIVE
+
+
+There may be differences based on you specific deployment. You should check in logs, which IP address is used when ping is received.
+
+
 Customizations
 ==============
 
