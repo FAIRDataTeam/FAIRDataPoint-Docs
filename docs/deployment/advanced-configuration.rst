@@ -167,7 +167,7 @@ Then for the FDP client, you need to use ``fairdata/fairdatapoint-index-client``
     # ...
 
     index_client:
-      image: fairdata/fairdatapoint-index-client:1.10.0
+      image: fairdata/fairdatapoint-index-client:1.11.0
       restart: always
       # ...
 
@@ -196,6 +196,22 @@ You can also set multiple endpoints if needed:
             https://my-index1.example.com
             https://my-index2.example.com
             https://home.fairdatapoint.org
+
+
+FDP Index behind proxy
+----------------------
+
+FDP Index uses IP-based rate limits to avoid excessive communication caused by bots or misconfigured FDPs. If the FDP Index is deployed behind a proxy, it must correctly set header, e.g., ``X-Forwarded-For``. Furthermore, you need to add this to ``application.yml``:
+
+.. code:: yaml
+    
+    # application.yml
+
+    server:
+        forward-headers-strategy: NATIVE
+
+
+There may be differences based on you specific deployment. You should check in logs, which IP address is used when ping is received.
 
 
 Customizations
@@ -292,13 +308,13 @@ have to set ``PUBLIC\_PATH`` ENV variable, in this example to
     version: '3'
     services:
         fdp:
-            image: fairdata/fairdatapoint:1.10.0
+            image: fairdata/fairdatapoint:1.11.0
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
                 # ... other volumes
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.10.0
+            image: fairdata/fairdatapoint-client:1.11.0
             ports:
                 - 80:80
             environment:
