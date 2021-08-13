@@ -7,17 +7,26 @@ Overview
 
 Here we summarize the key features and changes for each FAIR Data Point release. For details including bugfixes and minor changes, see :ref:`detailed-changelog`.
 
-1.11.0
------
+1.12.0
+------
 
-- All metadata have dct:conformsTo with profile based on resource definition
+- Settings (metrics and ping) can be adjusted directly from UI
+- Default values can be specified using ``sh:defaultValue``
+- ``**/expanded`` endpoint marked as deprecated (may be removed in the following version)
+- Fixed bugs related to resource definition (same child relations, multiple parents)
+- Fixed computing cache on DB migration and reset to defaults and ordering or resource definitions
+
+1.11.0
+------
+
+- All metadata have ``dct:conformsTo`` with profile based on resource definition
 - Resolving labels for RDF resources
 - Registration of standard namespaces in RDF output
 - Resource definitions are now related directly to shapes
 - Fixed metadata with empty keywords and pagination
 
 1.10.0
------
+------
 
 - Reset to factory defaults (users, metadata, resource definitions)
 - Improved UX for browsing child metadata

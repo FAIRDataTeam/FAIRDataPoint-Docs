@@ -167,7 +167,7 @@ Then for the FDP client, you need to use ``fairdata/fairdatapoint-index-client``
     # ...
 
     index_client:
-      image: fairdata/fairdatapoint-index-client:1.11.0
+      image: fairdata/fairdatapoint-index-client:1.12.0
       restart: always
       # ...
 
@@ -308,13 +308,13 @@ have to set ``PUBLIC\_PATH`` ENV variable, in this example to
     version: '3'
     services:
         fdp:
-            image: fairdata/fairdatapoint:1.11.0
+            image: fairdata/fairdatapoint:1.12.0
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
                 # ... other volumes
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.11.0
+            image: fairdata/fairdatapoint-client:1.12.0
             ports:
                 - 80:80
             environment:
