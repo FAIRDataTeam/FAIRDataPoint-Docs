@@ -24,7 +24,7 @@ FDP uses InMemory triple store by default. In previous examples, there is Blazeg
 
 There is no need to configure additional properties to run FDP with In-Memory Store because it's the default option. If you want to explicitly type in configuration provided in ``application.yml``, add following lines there:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -36,7 +36,7 @@ There is no need to configure additional properties to run FDP with In-Memory St
 
 With this option, FDP will simply save the data to the file system. If you want to use the Native Store, make sure that you have these lines in your ``application.yml`` file:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -52,7 +52,7 @@ where ``/tmp/fdp-store`` is a path to a location where you want to keep your dat
 
 For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need to first set up your Allegro Graph instance. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -71,7 +71,7 @@ For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need 
 
 For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance and **create the repository**. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -90,7 +90,7 @@ For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up y
 
 For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up your Blazegraph instance. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -108,7 +108,7 @@ Mongo DB
 ========
 We store users, permissions, etc. in the `MongoDB database <https://www.mongodb.com/>`_. The default connection string is ``mongodb://mongo:27017/fdp``. If you want to modify it, add these lines to your ``application.yml`` file:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -124,7 +124,7 @@ Default attached metadata
 
 There are several default values that are attached to each created metadata. If you want to modify it, add the lines below to your ``application.yml`` file. The default values are listed below, too:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -147,7 +147,7 @@ Hosting FDP Index
 
 To enable FDP Index mode on your FDP server, just simply adjust your ``application.yml`` file:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -157,7 +157,8 @@ To enable FDP Index mode on your FDP server, just simply adjust your ``applicati
 
 Then for the FDP client, you need to use ``fairdata/fairdatapoint-index-client`` Docker image for browsing indexed FDPs and searching harvested metadata. In case you want to use your deployment both as FDP and FDP Index, you can deploy both FDP and FDP Index client applications. The configuration of both clients are identical.
 
-.. code:: yaml
+.. code-block:: yaml
+   :substitutions:
 
     # docker-compose.yml
 
@@ -167,7 +168,7 @@ Then for the FDP client, you need to use ``fairdata/fairdatapoint-index-client``
     # ...
 
     index_client:
-      image: fairdata/fairdatapoint-index-client:1.13
+      image: fairdata/fairdatapoint-index-client:|compose_ver|
       restart: always
       # ...
 
@@ -177,7 +178,7 @@ Connecting to FDP Index
 
 By default, FDPs use https://home.fairdatapoint.org as their primary FDP Index that they ping every 7 days. You can adjust that in  your ``application.yml`` file if needed:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -187,7 +188,7 @@ By default, FDPs use https://home.fairdatapoint.org as their primary FDP Index t
 
 You can also set multiple endpoints if needed:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -203,7 +204,7 @@ FDP Index behind proxy
 
 FDP Index uses IP-based rate limits to avoid excessive communication caused by bots or misconfigured FDPs. If the FDP Index is deployed behind a proxy, it must correctly set header, e.g., ``X-Forwarded-For``. Furthermore, you need to add this to ``application.yml``:
 
-.. code:: yaml
+.. code-block:: yaml
     
     # application.yml
 
@@ -235,7 +236,7 @@ you define the values that you want to change.
 
 Here is an example of changing the primary color.
 
-.. code:: scss
+.. code-block:: scss
 
     // _variables.scss
 
@@ -265,7 +266,7 @@ To change the logo, you need to do three steps:
 2. Mount the new logo to the assets folder
 3. Mount ``_variables.scss`` to SCSS custom folder
 
-.. code:: scss
+.. code-block:: scss
 
     // _variables.scss
 
@@ -273,7 +274,7 @@ To change the logo, you need to do three steps:
     $header-logo-width: 80px;  // width of the new logo 
     $header-logo-height: 40px;  // height of the new logo
 
-.. code:: yaml
+.. code-block:: yaml
 
     # docker-compose.yml
 
@@ -301,34 +302,35 @@ same domain. Here is an example of running FDP on
 have to set ``PUBLIC\_PATH`` ENV variable, in this example to
 ``/fairdatapoint``. Also, don't forget to set correct client URL in the application config.
 
-.. code :: yaml
+.. code-block:: yaml
+   :substitutions:
 
     # docker-compose.yml
 
     version: '3'
     services:
         fdp:
-            image: fairdata/fairdatapoint:1.13
+            image: fairdata/fairdatapoint:|compose_ver|
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
                 # ... other volumes
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.13
+            image: fairdata/fairdatapoint-client:|compose_ver|
             ports:
                 - 80:80
             environment:
             	- FDP_HOST=fdp
                 - PUBLIC_PATH=/fairdatapoint
 
-.. code :: yaml
+.. code-block:: yaml
 
     # application.yml
 
     instance:
         clientUrl: https://example.com/fairdatapoint
 
-.. code :: nginx
+.. code-block:: nginx
 
     # Snippet for nginx configuration
 
@@ -343,7 +345,8 @@ have to set ``PUBLIC\_PATH`` ENV variable, in this example to
         }
     }
 
-.. Attention::
 
-When running on nested route, don't forget to change paths to all
-custom assets referenced in SCSS files.
+.. HINT::
+
+   When running on nested route, don't forget to change paths to all
+   custom assets referenced in SCSS files.
