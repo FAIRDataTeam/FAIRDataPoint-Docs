@@ -6,7 +6,8 @@ FAIR Data Point is distributed in Docker images. For a simple local deployment, 
 
 Here is an example of the simplest `Docker Compose <https://docs.docker.com/compose/>`__ configuration to run FDP.
 
-.. code :: yaml
+.. code-block:: yaml
+   :substitutions:
 
     # docker-compose.yml
 
@@ -14,10 +15,17 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
     services:
 
         fdp:
+<<<<<<< HEAD
             image: fairdata/fairdatapoint:1.13
 
         fdp-client:
             image: fairdata/fairdatapoint-client:1.13
+=======
+            image: fairdata/fairdatapoint:|compose_ver|
+
+        fdp-client:
+            image: fairdata/fairdatapoint-client:|compose_ver|
+>>>>>>> 9847a0d (Release 1.14.0)
             ports:
                 - 80:80
             environment:
@@ -50,7 +58,7 @@ Running locally on a different port
 
 If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary. First, we need to create a new file ``application.yml`` and set the client URL to the actual URL we want to use.
 
-.. code :: yaml
+.. code-block:: yaml
 
     # application.yml
 
@@ -59,7 +67,8 @@ If you want to run the FAIR Data Point locally on a different port than the defa
 
 Then, we need to mount the application config into the FDP container and update the port which the FDP client runs on.
 
-.. code :: yaml
+.. code-block:: yaml
+   :substitutions:
 
     # docker-compose.yml
 
@@ -67,12 +76,20 @@ Then, we need to mount the application config into the FDP container and update 
     services:
 
         fdp:
+<<<<<<< HEAD
             image: fairdata/fairdatapoint:1.13
+=======
+            image: fairdata/fairdatapoint:|compose_ver|
+>>>>>>> 9847a0d (Release 1.14.0)
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
 
         fdp-client:
+<<<<<<< HEAD
             image: fairdata/fairdatapoint-client:1.13
+=======
+            image: fairdata/fairdatapoint-client:|compose_ver|
+>>>>>>> 9847a0d (Release 1.14.0)
             ports:
                 - 8080:80
             environment:
@@ -97,7 +114,8 @@ We can also expose port ``27017`` so we can access MongoDB from our local comput
 
 Here is the updated docker-compose file:
 
-.. code :: yaml
+.. code-block:: yaml
+   :substitutions:
 
     # docker-compose.yml
 
@@ -105,10 +123,10 @@ Here is the updated docker-compose file:
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.13
+            image: fairdata/fairdatapoint:|compose_ver|
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.13
+            image: fairdata/fairdatapoint-client:|compose_ver|
             ports:
                 - 80:80
             environment:
@@ -132,7 +150,7 @@ In this example, we will configure Blazegraph as a triple store. See :ref:`Tripl
 If we don't have it already, we need to create a new file ``application.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see :ref:`Advanced Configuration <advanced-configuration>` for more details.
 
 
-.. code :: yaml
+.. code-block:: yaml
 
     # application.yml
 
@@ -145,7 +163,8 @@ If we don't have it already, we need to create a new file ``application.yml``. W
 
 We now need to update our ``docker-compose.yml`` file, we add a new volume for the ``fdp`` and add ``blazegraph`` service. We can also expose port ``8080`` for Blazegraph so we can access its user interface.
 
-.. code :: yaml
+.. code-block:: yaml
+   :substitutions:
 
     # docker-compose.yml
 
@@ -153,12 +172,12 @@ We now need to update our ``docker-compose.yml`` file, we add a new volume for t
     services:
 
         fdp:
-            image: fairdata/fairdatapoint:1.13
+            image: fairdata/fairdatapoint:|compose_ver|
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.13
+            image: fairdata/fairdatapoint-client:|compose_ver|
             ports:
                 - 80:80
             environment:

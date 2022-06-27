@@ -7,10 +7,18 @@ Overview
 
 Here we summarize the key features and changes for each FAIR Data Point release. For details including bugfixes and minor changes, see :ref:`detailed-changelog`.
 
+1.14.0
+------
+
+- Security audit via GitHub Actions (Snyk and CodeQL)
+- Introduced metadata schemas (as replacement of shapes) including versioning and importing
+- Updated RDF4J to 4.0
+- Several dependencies updated
+
 1.13.0
 ------
 
-- Added restriction to URL prefixes of Resource Definitions ([a-zA-Z_-]*)
+- Added restriction to URL prefixes of Resource Definitions
 - Upgraded Java JDK from 16 to 17, updated SpringDoc OpenAPI UI and several other dependencies
 - Compliance with FDP-O ontology (fdp-o:FAIRDataPoint)
 - Added form preview to shape edit

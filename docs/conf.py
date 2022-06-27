@@ -22,7 +22,14 @@ copyright = '2021, Dutch Techcentre for Life Sciences'
 author = 'Dutch Techcentre for Life Sciences'
 
 # The full version, including alpha/beta/rc tags
-release = '1.13.0'
+release = '1.14'
+
+
+rst_prolog = f"""
+
+.. |compose_ver| replace:: {release}
+
+"""
 
 
 # -- General configuration ---------------------------------------------------
@@ -30,7 +37,9 @@ release = '1.13.0'
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
-extensions = []
+extensions = [
+    'sphinx_substitution_extensions',
+]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = []
