@@ -25,7 +25,7 @@ The file ``nginx.conf`` is the configuration of the whole nginx, and it includes
 
 Let's see what should be the content of the configuration files.
 
-.. code :: nginx
+.. code-block:: nginx
 
     # nginx/nginx.conf
     
@@ -48,7 +48,7 @@ Let's see what should be the content of the configuration files.
 
 Then, we need to configure the FDP server.
 
-.. code :: nginx
+.. code-block:: nginx
 
     # nginx/sites-available/fdp.conf
 
@@ -86,7 +86,8 @@ Finally, we need to create a soft link from sites-enabled to sites-available for
 
 We have certificates generated and configuration for proxy ready. Now we need to add the proxy to our ``docker-compose.yml`` file so we can run the whole FDP behind the proxy.
 
-.. code :: yaml
+.. code-block:: yaml
+   :substitutions:
     
     # docker-compose.yml
 
@@ -104,12 +105,12 @@ We have certificates generated and configuration for proxy ready. Now we need to
                 - /etc/letsencrypt:/etc/letsencrypt:ro
 
         fdp:
-            image: fairdata/fairdatapoint:1.13
+            image: fairdata/fairdatapoint:|compose_ver|
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
 
         fdp-client:
-            image: fairdata/fairdatapoint-client:1.13
+            image: fairdata/fairdatapoint-client:|compose_ver|
             environment:
                 - FDP_HOST=fdp
 
@@ -128,7 +129,7 @@ We have certificates generated and configuration for proxy ready. Now we need to
 
 The last thing to do is to update our ``application.yml`` file. We need to add ``clientUrl`` so that FDP knows the actual URL even if hidden behind the reverse proxy. It's a good practice to set up a persistent URL for the metadata too. We recommend using ``https://purl.org``. If you don't specify ``persistentUrl``, the ``clientUrl`` will be used instead. And we also need to set a random JWT token for security.
 
-.. code :: yaml
+.. code-block:: yaml
 
     # application.yml
 
@@ -164,7 +165,7 @@ At this point, we should be able to run all the containers using ``docker-compos
 
     In order to improve findability of itself and its content, the FAIR Data Point has a built-in feature that registers its URL into our server and pings it once a week. This feature facilitates the indexing of the metadata of each registered and active FAIR Data Point. If you do not want your FAIR Data Point to be included in this registry, add these lines to your application configuration:
 
-    .. code :: yaml
+    .. code-block:: yaml
 
         # application.yml
 
