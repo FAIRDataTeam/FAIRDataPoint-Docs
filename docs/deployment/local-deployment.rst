@@ -15,17 +15,10 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
     services:
 
         fdp:
-<<<<<<< HEAD
-            image: fairdata/fairdatapoint:1.13
-
-        fdp-client:
-            image: fairdata/fairdatapoint-client:1.13
-=======
             image: fairdata/fairdatapoint:|compose_ver|
 
         fdp-client:
             image: fairdata/fairdatapoint-client:|compose_ver|
->>>>>>> 9847a0d (Release 1.14.0)
             ports:
                 - 80:80
             environment:
@@ -76,20 +69,12 @@ Then, we need to mount the application config into the FDP container and update 
     services:
 
         fdp:
-<<<<<<< HEAD
-            image: fairdata/fairdatapoint:1.13
-=======
             image: fairdata/fairdatapoint:|compose_ver|
->>>>>>> 9847a0d (Release 1.14.0)
             volumes:
                 - ./application.yml:/fdp/application.yml:ro
 
         fdp-client:
-<<<<<<< HEAD
-            image: fairdata/fairdatapoint-client:1.13
-=======
             image: fairdata/fairdatapoint-client:|compose_ver|
->>>>>>> 9847a0d (Release 1.14.0)
             ports:
                 - 8080:80
             environment:
