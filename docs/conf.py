@@ -18,11 +18,11 @@
 # -- Project information -----------------------------------------------------
 
 project = 'FAIR Data Point'
-copyright = '2022, Dutch Techcentre for Life Sciences'
+copyright = '2023, Dutch Techcentre for Life Sciences'
 author = 'Dutch Techcentre for Life Sciences'
 
 # The full version, including alpha/beta/rc tags
-release = '1.15'
+release = '1.16'
 
 
 rst_prolog = f"""
