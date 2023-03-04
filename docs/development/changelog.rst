@@ -7,6 +7,32 @@ Overview
 
 Here we summarize the key features and changes for each FAIR Data Point release. For details including bugfixes and minor changes, see :ref:`detailed-changelog`.
 
+1.16
+------
+
+- Application title and subtitle in config and settings
+- Possibility to configure ping endpoints in config file
+- SHACL preview for metadata schemas
+- (Index) Cleanup of harvested records before next harvesting
+- Add support for sh:order, sh:description, sh:minLength and sh:maxLength, sh:in, sh:group, dash:DateTimePickerEditor, dash:EnumSelectEditor
+- Add groups and order to entity metadata
+- Add form preview to resource definition and metadata schema
+- Add autocomplete widget
+- Add settings for autocomplete
+- Add extra class statement for fields with class
+- Rename search param from q to query
+- Remove hardcoded metadata timestamps
+- Fix search filters with too many values
+- Fix nested NodeShapes in form previews
+- Fix value validation for multiple values
+
+1.15
+------
+
+- Extended search (filters, simple and complex query)
+- Add saved search queries
+- Several dependencies updated
+
 1.14.0
 ------
 
