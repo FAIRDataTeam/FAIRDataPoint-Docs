@@ -121,11 +121,12 @@ We have certificates generated and configuration for proxy ready. Now we need to
             volumes:
                 - ./mongo/data:/data/db
 
-        blazegraph:
-            image: metaphacts/blazegraph-basic:2.2.0-20160908.003514-6
+        graphdb:
+            image: ontotext/graphdb:10.7.6
             volumes:
-                - ./blazegraph:/blazegraph-data
+                - ./graphdb:/opt/graphdb/home
 
+Don't forget to create the GraphDB repository as described in the :ref:`Persistent Repository <persistent-repository>` section.
 
 The last thing to do is to update our ``application.yml`` file. We need to add ``clientUrl`` so that FDP knows the actual URL even if hidden behind the reverse proxy. It's a good practice to set up a persistent URL for the metadata too. We recommend using ``https://purl.org``. If you don't specify ``persistentUrl``, the ``clientUrl`` will be used instead. And we also need to set a random JWT token for security.
 
@@ -144,9 +145,10 @@ The last thing to do is to update our ``application.yml`` file. We need to add `
 
     # repository settings (can be changed to different repository)
     repository:
-        type: 5
-        blazegraph:
-            url: http://blazegraph:8080/blazegraph
+        type: 4
+        graphDb:
+            url: http://graphdb:7200
+            repository: fdp
 
 
 

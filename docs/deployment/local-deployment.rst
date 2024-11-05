@@ -130,7 +130,7 @@ Persistent Repository
 
 FAIR Data Point uses repositories to store the metadata. By default, it uses the in-memory store, which means that the data is lost after the FDP is stopped.
 
-In this example, we will configure Blazegraph as a triple store. See :ref:`Triple Stores <triple-stores>` for other repository options.
+In this example, we will configure GraphDB as a triple store. See :ref:`Triple Stores <triple-stores>` for other repository options.
 
 If we don't have it already, we need to create a new file ``application.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see :ref:`Advanced Configuration <advanced-configuration>` for more details.
 
@@ -142,11 +142,12 @@ If we don't have it already, we need to create a new file ``application.yml``. W
     # ... other configuration
 
     repository:
-        type: 5
-        blazegraph:
-            url: http://blazegraph:8080/blazegraph
+        type: 4
+        graphDb:
+            url: http://graphdb:7200
+            repository: fdp
 
-We now need to update our ``docker-compose.yml`` file, we add a new volume for the ``fdp`` and add ``blazegraph`` service. We can also expose port ``8080`` for Blazegraph so we can access its user interface.
+We now need to update our ``docker-compose.yml`` file, we add a new volume for the ``fdp`` and add ``graphdb`` service. We can also expose port ``7200`` for GraphDB so we can access its user interface.
 
 .. code-block:: yaml
    :substitutions:
@@ -175,9 +176,76 @@ We now need to update our ``docker-compose.yml`` file, we add a new volume for t
             volumes:
                 - ./mongo/data:/data/db
 
-        blazegraph:
-            image: metaphacts/blazegraph-basic:2.2.0-20160908.003514-6
-            ports:
-                - 8080:8080
-            volumes:
-                - ./blazegraph:/blazegraph-data
+      graphdb:
+        image: ontotext/graphdb:10.7.6
+        ports:
+          - 7200:7200
+        volumes:
+          - ./graphdb:/opt/graphdb/home
+
+GraphDB needs to have a repository set up before the FDP can interact with it. This can be done manually through the user interface, following these steps:
+
+- Start only the GraphDB container: ``docker compose up -d graphdb``
+- Navigate to your `local GraphDB instance <http://localhost:7200>`__
+- Open the ``Setup`` menu on the left, and navigate to `Repositories <http://localhost:7200/repository>`__
+- Click the `Create new repository <http://localhost:7200/repository/create>`__ button
+- Select ``GraphDB Repository``
+- Enter ``fdp`` as the ``Repository ID`` value
+- You can leave all other values to their defaults
+- Click the ``Create`` button on the bottom of the form
+
+Alternatively, these steps can be automated with the following addition to the ``graphdb`` service in our ``docker-compose.yml`` file.
+
+.. code-block:: yaml
+
+      graphdb:
+        image: ontotext/graphdb:10.7.6
+        ports:
+          - 7200:7200
+        volumes:
+          - ./graphdb:/opt/graphdb/home
+          - ./repo.json:/tmp/repo.json:ro
+        entrypoint:
+          - bash
+          - -c
+          - |
+            # enable bash job control
+            set -m
+
+            # start graphdb and move it to the background
+            /opt/graphdb/dist/bin/graphdb &
+            
+            # wait for 10 sec
+            sleep 10
+            
+            # create the repository
+            curl -X POST http://localhost:7200/rest/repositories -H "Content-Type: application/json" -d "@repo.json"
+
+            # move graphdb job to foreground
+            fg
+
+The ``repo.json`` file contains the configuration for the newly created GraphDB repository. The following is a bare minimum example.
+
+.. code-block:: json
+
+    {
+        "id": "fdp",
+        "type": "graphdb",
+        "params": {
+            "title": {
+                "label": "Repository description",
+                "name": "",
+                "value": ""
+            },
+            "defaultNS": {
+                "label": "Default namespaces for imports(';' delimited)",
+                "name": "defaultNS",
+                "value": ""
+            },
+            "imports": {
+                "label": "Imported RDF files(';' delimited)",
+                "name": "imports",
+                "value": ""
+            }
+        }
+    }
