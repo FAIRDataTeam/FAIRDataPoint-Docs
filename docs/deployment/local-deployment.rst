@@ -9,9 +9,8 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
 .. code-block:: yaml
    :substitutions:
 
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
 
         fdp:
@@ -28,7 +27,7 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
             image: mongo:4.0.12
 
 
-Then you can run it using ``docker-compose up -d``. It might take a while to start. You can run ``docker-compose logs -f`` to follow the output log. Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
+Then you can run it using ``docker compose up -d``. It might take a while to start. You can run ``docker compose logs -f`` to follow the output log. Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
 
 
 There are two default user accounts. See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles. The default accounts are
@@ -63,9 +62,8 @@ Then, we need to mount the application config into the FDP container and update 
 .. code-block:: yaml
    :substitutions:
 
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
 
         fdp:
@@ -97,14 +95,13 @@ We use MongoDB to store information about user accounts and access permissions. 
 
 We can also expose port ``27017`` so we can access MongoDB from our local computer using a client application like `Robo 3T <https://robomongo.org>`__.
 
-Here is the updated docker-compose file:
+Here is the updated docker compose file:
 
 .. code-block:: yaml
    :substitutions:
 
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
 
         fdp:
@@ -147,14 +144,13 @@ If we don't have it already, we need to create a new file ``application.yml``. W
             url: http://graphdb:7200
             repository: fdp
 
-We now need to update our ``docker-compose.yml`` file, we add a new volume for the ``fdp`` and add ``graphdb`` service. We can also expose port ``7200`` for GraphDB so we can access its user interface.
+We now need to update our ``compose.yml`` file, we add a new volume for the ``fdp`` and add ``graphdb`` service. We can also expose port ``7200`` for GraphDB so we can access its user interface.
 
 .. code-block:: yaml
    :substitutions:
 
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
 
         fdp:
@@ -176,12 +172,12 @@ We now need to update our ``docker-compose.yml`` file, we add a new volume for t
             volumes:
                 - ./mongo/data:/data/db
 
-      graphdb:
-        image: ontotext/graphdb:10.7.6
-        ports:
-          - 7200:7200
-        volumes:
-          - ./graphdb:/opt/graphdb/home
+        graphdb:
+            image: ontotext/graphdb:10.7.6
+            ports:
+                - 7200:7200
+            volumes:
+                - ./graphdb:/opt/graphdb/home
 
 GraphDB needs to have a repository set up before the FDP can interact with it. This can be done manually through the user interface, following these steps:
 

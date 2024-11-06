@@ -55,7 +55,7 @@ Then, we need to configure the FDP server.
     server {
         listen 443 ssl;
 
-        # Generated certificates using certbot, we will mount these in docker-compose.yml
+        # Generated certificates using certbot, we will mount these in compose.yml
         ssl_certificate /etc/letsencrypt/live/fdp.example.com/fullchain.pem;
         ssl_certificate_key /etc/letsencrypt/live/fdp.example.com/privkey.pem;
 
@@ -84,14 +84,13 @@ Finally, we need to create a soft link from sites-enabled to sites-available for
 
     $ cd nginx/sites-enabled && ln -s ../sites-available/fdp.conf
 
-We have certificates generated and configuration for proxy ready. Now we need to add the proxy to our ``docker-compose.yml`` file so we can run the whole FDP behind the proxy.
+We have certificates generated and configuration for proxy ready. Now we need to add the proxy to our ``compose.yml`` file so we can run the whole FDP behind the proxy.
 
 .. code-block:: yaml
    :substitutions:
     
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
         proxy:
             image: nginx:1.17.3
@@ -152,7 +151,7 @@ The last thing to do is to update our ``application.yml`` file. We need to add `
 
 
 
-At this point, we should be able to run all the containers using ``docker-compose up -d`` and after everything starts, we can access the FAIR Data Point at https://fdp.example.com. Of course, the domain you want to access the FDP on must be configured to the server where it runs.
+At this point, we should be able to run all the containers using ``docker compose up -d`` and after everything starts, we can access the FAIR Data Point at https://fdp.example.com. Of course, the domain you want to access the FDP on must be configured to the server where it runs.
 
 .. DANGER::
 
