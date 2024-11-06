@@ -194,35 +194,48 @@ GraphDB needs to have a repository set up before the FDP can interact with it. T
 - You can leave all other values to their defaults
 - Click the ``Create`` button on the bottom of the form
 
-Alternatively, these steps can be automated with the following addition to the ``graphdb`` service in our ``docker-compose.yml`` file.
+Alternatively, these steps can be automated with the following addition to the ``graphdb`` service in our ``compose.yml`` file.
 
 .. code-block:: yaml
 
-      graphdb:
-        image: ontotext/graphdb:10.7.6
-        ports:
-          - 7200:7200
-        volumes:
-          - ./graphdb:/opt/graphdb/home
-          - ./repo.json:/tmp/repo.json:ro
-        entrypoint:
-          - bash
-          - -c
-          - |
-            # enable bash job control
-            set -m
+        fdp:
+            image: fairdata/fairdatapoint:|compose_ver|
+            volumes:
+                - ./application.yml:/fdp/application.yml:ro
+            depends_on:
+                graphdb:
+                    condition: service_healthy
 
-            # start graphdb and move it to the background
-            /opt/graphdb/dist/bin/graphdb &
-            
-            # wait for 10 sec
-            sleep 10
-            
-            # create the repository
-            curl -X POST http://localhost:7200/rest/repositories -H "Content-Type: application/json" -d "@repo.json"
+        # ...
 
-            # move graphdb job to foreground
-            fg
+        graphdb:
+            image: ontotext/graphdb:10.7.6
+            ports:
+                - 7200:7200
+            volumes:
+                - ./graphdb:/opt/graphdb/home
+                - ./repo.json:/tmp/repo.json:ro
+            entrypoint:
+                - bash
+                - -c
+                - |
+                  # enable bash job control
+                  set -m
+
+                  # start graphdb and move it to the background
+                  /opt/graphdb/dist/bin/graphdb &
+            
+                  # wait for 10 sec
+                  sleep 10
+            
+                  # create the repository
+                  curl -X POST http://localhost:7200/rest/repositories -H "Content-Type: application/json" -d "@repo.json"
+
+                  # move graphdb job to foreground
+                  fg
+            healthcheck:
+                test: curl http://localhost:7200/rest/repositories/fdp
+                interval: 5s
 
 The ``repo.json`` file contains the configuration for the newly created GraphDB repository. The following is a bare minimum example.
 
