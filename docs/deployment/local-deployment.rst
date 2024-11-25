@@ -230,7 +230,8 @@ Alternatively, these steps can be automated with the following addition to the `
                   # move graphdb job to foreground
                   fg
             healthcheck:
-                test: curl http://localhost:7200/rest/repositories/fdp
+                # https://graphdb.ontotext.com/documentation/10.7/database-health-checks.html
+                test: curl --fail-with-body http://localhost:7200/repositories/fdp/health || exit 1
                 interval: 5s
 
 The ``repo.json`` file contains the configuration for the newly created GraphDB repository. The following is a bare minimum example.
