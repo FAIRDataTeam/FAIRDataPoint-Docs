@@ -55,7 +55,7 @@ Then, we need to configure the FDP server.
     server {
         listen 443 ssl;
 
-        # Generated certificates using certbot, we will mount these in docker-compose.yml
+        # Generated certificates using certbot, we will mount these in compose.yml
         ssl_certificate /etc/letsencrypt/live/fdp.example.com/fullchain.pem;
         ssl_certificate_key /etc/letsencrypt/live/fdp.example.com/privkey.pem;
 
@@ -84,14 +84,13 @@ Finally, we need to create a soft link from sites-enabled to sites-available for
 
     $ cd nginx/sites-enabled && ln -s ../sites-available/fdp.conf
 
-We have certificates generated and configuration for proxy ready. Now we need to add the proxy to our ``docker-compose.yml`` file so we can run the whole FDP behind the proxy.
+We have certificates generated and configuration for proxy ready. Now we need to add the proxy to our ``compose.yml`` file so we can run the whole FDP behind the proxy.
 
 .. code-block:: yaml
    :substitutions:
     
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
         proxy:
             image: nginx:1.17.3
@@ -121,11 +120,12 @@ We have certificates generated and configuration for proxy ready. Now we need to
             volumes:
                 - ./mongo/data:/data/db
 
-        blazegraph:
-            image: metaphacts/blazegraph-basic:2.2.0-20160908.003514-6
+        graphdb:
+            image: ontotext/graphdb:10.7.6
             volumes:
-                - ./blazegraph:/blazegraph-data
+                - ./graphdb:/opt/graphdb/home
 
+Don't forget to create the GraphDB repository as described in the :ref:`Persistent Repository <persistent-repository>` section.
 
 The last thing to do is to update our ``application.yml`` file. We need to add ``clientUrl`` so that FDP knows the actual URL even if hidden behind the reverse proxy. It's a good practice to set up a persistent URL for the metadata too. We recommend using ``https://purl.org``. If you don't specify ``persistentUrl``, the ``clientUrl`` will be used instead. And we also need to set a random JWT token for security.
 
@@ -144,13 +144,17 @@ The last thing to do is to update our ``application.yml`` file. We need to add `
 
     # repository settings (can be changed to different repository)
     repository:
-        type: 5
-        blazegraph:
-            url: http://blazegraph:8080/blazegraph
+        type: 4
+        graphDb:
+            url: http://graphdb:7200
+            repository: fdp
+            # if your graphdb has the security feature enabled, configure the credentials below
+            username: ...
+            password: ...
 
 
 
-At this point, we should be able to run all the containers using ``docker-compose up -d`` and after everything starts, we can access the FAIR Data Point at https://fdp.example.com. Of course, the domain you want to access the FDP on must be configured to the server where it runs.
+At this point, we should be able to run all the containers using ``docker compose up -d`` and after everything starts, we can access the FAIR Data Point at https://fdp.example.com. Of course, the domain you want to access the FDP on must be configured to the server where it runs.
 
 .. DANGER::
 
