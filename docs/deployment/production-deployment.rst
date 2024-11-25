@@ -148,6 +148,9 @@ The last thing to do is to update our ``application.yml`` file. We need to add `
         graphDb:
             url: http://graphdb:7200
             repository: fdp
+            # if your graphdb has the security feature enabled, configure the credentials below
+            username: ...
+            password: ...
 
 
 
