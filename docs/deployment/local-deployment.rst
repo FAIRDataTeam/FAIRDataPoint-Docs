@@ -122,6 +122,8 @@ Here is the updated docker compose file:
                 - ./mongo/data:/data/db
 
 
+.. _persistent-repository:
+
 Persistent Repository
 -----------------------
 
