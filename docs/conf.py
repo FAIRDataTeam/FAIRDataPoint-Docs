@@ -64,7 +64,7 @@ html_static_path = ['_static']
 
 html_favicon = '_static/favicon.ico'
 html_theme_options = {
-    'display_version': True,
+    'version_selector': True,
 }
 
 def setup(app):
