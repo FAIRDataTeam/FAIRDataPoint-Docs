@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'FAIR Data Point'
-copyright = '2024, FAIR Data Team'
+copyright = '2025, FAIR Data Team'
 author = 'FAIR Data Team'
 
 # The full version, including alpha/beta/rc tags
