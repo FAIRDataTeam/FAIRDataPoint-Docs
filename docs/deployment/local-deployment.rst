@@ -9,9 +9,8 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
 .. code-block:: yaml
    :substitutions:
 
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
 
         fdp:
@@ -28,7 +27,7 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
             image: mongo:4.0.12
 
 
-Then you can run it using ``docker-compose up -d``. It might take a while to start. You can run ``docker-compose logs -f`` to follow the output log. Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
+Then you can run it using ``docker compose up -d``. It might take a while to start. You can run ``docker compose logs -f`` to follow the output log. Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
 
 
 There are two default user accounts. See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles. The default accounts are
@@ -63,9 +62,8 @@ Then, we need to mount the application config into the FDP container and update 
 .. code-block:: yaml
    :substitutions:
 
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
 
         fdp:
@@ -97,14 +95,13 @@ We use MongoDB to store information about user accounts and access permissions. 
 
 We can also expose port ``27017`` so we can access MongoDB from our local computer using a client application like `Robo 3T <https://robomongo.org>`__.
 
-Here is the updated docker-compose file:
+Here is the updated docker compose file:
 
 .. code-block:: yaml
    :substitutions:
 
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
 
         fdp:
@@ -130,7 +127,7 @@ Persistent Repository
 
 FAIR Data Point uses repositories to store the metadata. By default, it uses the in-memory store, which means that the data is lost after the FDP is stopped.
 
-In this example, we will configure Blazegraph as a triple store. See :ref:`Triple Stores <triple-stores>` for other repository options.
+In this example, we will configure GraphDB as a triple store. See :ref:`Triple Stores <triple-stores>` for other repository options.
 
 If we don't have it already, we need to create a new file ``application.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see :ref:`Advanced Configuration <advanced-configuration>` for more details.
 
@@ -142,18 +139,18 @@ If we don't have it already, we need to create a new file ``application.yml``. W
     # ... other configuration
 
     repository:
-        type: 5
-        blazegraph:
-            url: http://blazegraph:8080/blazegraph
+        type: 4
+        graphDb:
+            url: http://graphdb:7200
+            repository: fdp
 
-We now need to update our ``docker-compose.yml`` file, we add a new volume for the ``fdp`` and add ``blazegraph`` service. We can also expose port ``8080`` for Blazegraph so we can access its user interface.
+We now need to update our ``compose.yml`` file, we add a new volume for the ``fdp`` and add ``graphdb`` service. We can also expose port ``7200`` for GraphDB so we can access its user interface.
 
 .. code-block:: yaml
    :substitutions:
 
-    # docker-compose.yml
+    # compose.yml
 
-    version: '3'
     services:
 
         fdp:
@@ -175,9 +172,90 @@ We now need to update our ``docker-compose.yml`` file, we add a new volume for t
             volumes:
                 - ./mongo/data:/data/db
 
-        blazegraph:
-            image: metaphacts/blazegraph-basic:2.2.0-20160908.003514-6
+        graphdb:
+            image: ontotext/graphdb:10.7.6
             ports:
-                - 8080:8080
+                - 7200:7200
             volumes:
-                - ./blazegraph:/blazegraph-data
+                - ./graphdb:/opt/graphdb/home
+
+GraphDB needs to have a repository set up before the FDP can interact with it. This can be done manually through the user interface, following these steps:
+
+- Start only the GraphDB container: ``docker compose up -d graphdb``
+- Navigate to your `local GraphDB instance <http://localhost:7200>`__
+- Open the ``Setup`` menu on the left, and navigate to `Repositories <http://localhost:7200/repository>`__
+- Click the `Create new repository <http://localhost:7200/repository/create>`__ button
+- Select ``GraphDB Repository``
+- Enter ``fdp`` as the ``Repository ID`` value
+- You can leave all other values to their defaults
+- Click the ``Create`` button on the bottom of the form
+
+Alternatively, these steps can be automated with the following addition to the ``graphdb`` service in our ``compose.yml`` file.
+
+.. code-block:: yaml
+
+        fdp:
+            image: fairdata/fairdatapoint:|compose_ver|
+            volumes:
+                - ./application.yml:/fdp/application.yml:ro
+            depends_on:
+                graphdb:
+                    condition: service_healthy
+
+        # ...
+
+        graphdb:
+            image: ontotext/graphdb:10.7.6
+            ports:
+                - 7200:7200
+            volumes:
+                - ./graphdb:/opt/graphdb/home
+                - ./repo.json:/tmp/repo.json:ro
+            entrypoint:
+                - bash
+                - -c
+                - |
+                  # enable bash job control
+                  set -m
+
+                  # start graphdb and move it to the background
+                  /opt/graphdb/dist/bin/graphdb &
+            
+                  # wait for 10 sec
+                  sleep 10
+            
+                  # create the repository
+                  curl -X POST http://localhost:7200/rest/repositories -H "Content-Type: application/json" -d "@repo.json"
+
+                  # move graphdb job to foreground
+                  fg
+            healthcheck:
+                # https://graphdb.ontotext.com/documentation/10.7/database-health-checks.html
+                test: curl --fail-with-body http://localhost:7200/repositories/fdp/health || exit 1
+                interval: 5s
+
+The ``repo.json`` file contains the configuration for the newly created GraphDB repository. The following is a bare minimum example.
+
+.. code-block:: json
+
+    {
+        "id": "fdp",
+        "type": "graphdb",
+        "params": {
+            "title": {
+                "label": "Repository description",
+                "name": "",
+                "value": ""
+            },
+            "defaultNS": {
+                "label": "Default namespaces for imports(';' delimited)",
+                "name": "defaultNS",
+                "value": ""
+            },
+            "imports": {
+                "label": "Imported RDF files(';' delimited)",
+                "name": "imports",
+                "value": ""
+            }
+        }
+    }
