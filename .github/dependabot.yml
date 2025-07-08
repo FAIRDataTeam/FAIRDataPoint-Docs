@@ -1,0 +1,15 @@
+version: 2
+updates:
+  - package-ecosystem: "pip"
+    # Look for `requirements.*` files in the `root` directory
+    directory: "/"
+    # Check the registry for updates every week
+    schedule:
+      interval: "weekly"
+    # Group minor and patch dependencies, but create separate PRs for updates that do not match any grouping rule.
+    groups:
+      minor-or-patch:
+        applies-to: version-updates
+        update-types:
+          - "minor"
+          - "patch"
