@@ -1,6 +1,6 @@
 # This file contains the top-level dependencies.
-# These can be installed using `pip install -r requirements`.
+# These can be installed using `pip install --upgrade -r requirements`.
 # For reproducible installations use `requirements.txt`, which contains the output of `pip freeze`.
-Sphinx == 8.2.*
-sphinx-rtd-theme == 3.0.*
-sphinx-substitution-extensions == 2025.6.*
+Sphinx == 8.*
+sphinx-rtd-theme == 3.*
+sphinx-substitution-extensions == 2025.*
