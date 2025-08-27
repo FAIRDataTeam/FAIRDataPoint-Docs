@@ -249,7 +249,7 @@ Alternatively, these steps can be automated with the following addition to the `
                   # move graphdb job to foreground
                   fg
             healthcheck:
-                # https://graphdb.ontotext.com/documentation/10.7/database-health-checks.html
+                # https://graphdb.ontotext.com/documentation/11.1/database-health-checks.html
                 test: curl --fail-with-body http://localhost:7200/repositories/fdp/health || exit 1
                 interval: 5s
 
