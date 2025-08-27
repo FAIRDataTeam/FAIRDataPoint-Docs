@@ -7,7 +7,8 @@ Here you can read how to use the **metadata** extension for OpenRefine to store 
 About metadata extension
 ========================
 
-The **metadata** extension for OpenRefine promotes FAIRness of the data by its integration with FAIR Data Point. With the extension you can easily FAIRify your data that you work on in directly in OpenRefine in two steps:
+The **metadata** extension for OpenRefine promotes FAIRness of the data by its integration with FAIR Data Point.
+With the extension you can easily FAIRify your data that you work on in directly in OpenRefine in two steps:
 
 1. :ref:`openrefine-store-data` in configured storage.
 2. :ref:`openrefine-create-metadata` in selected FAIR Data Point.
