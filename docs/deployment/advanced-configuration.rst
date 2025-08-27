@@ -54,7 +54,7 @@ where ``/tmp/fdp-store`` is a path to a location where you want to keep your dat
 3. Allegro Graph
 ----------------
 
-For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need to first set up your Allegro Graph instance.
+For running `Allegro Graph <https://allegrograph.com/products/allegrograph/>`_, you need to first set up your Allegro Graph instance.
 For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code-block:: yaml
