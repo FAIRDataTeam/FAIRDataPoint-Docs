@@ -3,7 +3,7 @@ About FAIR Data Point
 *********************
 
 **FAIRDataPoint** is a REST API and Web Client for creating, storing, and serving **FAIR metadata**.
-The metadata contents are generated **semi-automatically** according to the `FAIR Data Point software specification <https://github.com/FAIRDataTeam/FAIRDataPoint-Spec>`__ document.
+The metadata contents are generated **semi-automatically** according to the `FAIR Data Point software specification <https://github.com/fdp-specs/fdp-specs.github.io>`__ document.
 
 Features
 --------

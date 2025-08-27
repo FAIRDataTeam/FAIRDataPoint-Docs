@@ -54,7 +54,7 @@ where ``/tmp/fdp-store`` is a path to a location where you want to keep your dat
 3. Allegro Graph
 ----------------
 
-For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need to first set up your Allegro Graph instance.
+For running `Allegro Graph <https://allegrograph.com/products/allegrograph/>`_, you need to first set up your Allegro Graph instance.
 For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code-block:: yaml
@@ -74,7 +74,7 @@ For configuring the connection from FDP, add these lines to your ``application.y
 4. GraphDB
 ----------
 
-For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance and **create the repository**.
+For running `GraphDB <https://www.ontotext.com/products/graphdb/>`_, you need to first set up your GraphDB instance and **create the repository**.
 For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code-block:: yaml
@@ -142,7 +142,7 @@ The default values are listed below, too:
 
     metadataProperties:
         language: http://id.loc.gov/vocabulary/iso639-1/en
-        license: http://rdflicense.appspot.com/rdflicense/cc-by-nc-nd3.0
+        license: http://purl.org/NET/rdflicense/cc-zero1.0
         accessRightsDescription: This resource has no access restriction
 
     metadataMetrics:

@@ -30,7 +30,7 @@ Issueing a request with the authorization token
 ------------------------------------------------
 
 Subsequent requests should use this token in the `Authorization` header.
-The authorization type is a `Bearer <https://tools.ietf.org/html/rfc6750>`_ token.
+The authorization type is a `Bearer <https://datatracker.ietf.org/doc/html/rfc6750>`_ token.
 
 .. code :: bash
 
