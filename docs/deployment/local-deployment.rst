@@ -2,7 +2,9 @@
 Local Deployment
 ****************
 
-FAIR Data Point is distributed in Docker images. For a simple local deployment, you need to run ``fairdatapoint``, ``fairdatapoint-client`` and ``mongo`` images. See the :ref:`Components <components>` section to read more about what each image is for.
+FAIR Data Point is distributed in Docker images.
+For a simple local deployment, you need to run ``fairdatapoint``, ``fairdatapoint-client`` and ``mongo`` images.
+See the :ref:`Components <components>` section to read more about what each image is for.
 
 Here is an example of the simplest `Docker Compose <https://docs.docker.com/compose/>`__ configuration to run FDP.
 
@@ -27,10 +29,15 @@ Here is an example of the simplest `Docker Compose <https://docs.docker.com/comp
             image: mongo:4.0.12
 
 
-Then you can run it using ``docker compose up -d``. It might take a while to start. You can run ``docker compose logs -f`` to follow the output log. Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
+Then you can run it using ``docker compose up -d``.
+It might take a while to start.
+You can run ``docker compose logs -f`` to follow the output log.
+Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
 
 
-There are two default user accounts. See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles. The default accounts are
+There are two default user accounts.
+See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles.
+The default accounts are
 
 +-----------------------------+-------+----------+
 | User name                   | Role  | Password |
@@ -48,7 +55,8 @@ There are two default user accounts. See the :ref:`Users and Roles <users-and-ro
 Running locally on a different port
 ===================================
 
-If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary. First, we need to create a new file ``application.yml`` and set the client URL to the actual URL we want to use.
+If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary.
+First, we need to create a new file ``application.yml`` and set the client URL to the actual URL we want to use.
 
 .. code-block:: yaml
 
@@ -85,13 +93,16 @@ Then, we need to mount the application config into the FDP container and update 
 Persistence
 ===========
 
-We don't have any data persistence with the previous configuration. Once we remove the containers, all the data will be lost. To keep it, we need to configure MongoDB volume and persistent triple store.
+We don't have any data persistence with the previous configuration.
+Once we remove the containers, all the data will be lost.
+To keep it, we need to configure MongoDB volume and persistent triple store.
 
 
 MongoDB volume
 --------------
 
-We use MongoDB to store information about user accounts and access permissions. We can configure a `volume <https://docs.docker.com/storage/volumes/>`__ so that the data keep on our disk even if we delete MongoDB container.
+We use MongoDB to store information about user accounts and access permissions.
+We can configure a `volume <https://docs.docker.com/storage/volumes/>`__ so that the data keep on our disk even if we delete MongoDB container.
 
 We can also expose port ``27017`` so we can access MongoDB from our local computer using a client application like `Robo 3T <https://robomongo.org>`__.
 
@@ -127,11 +138,15 @@ Here is the updated docker compose file:
 Persistent Repository
 -----------------------
 
-FAIR Data Point uses repositories to store the metadata. By default, it uses the in-memory store, which means that the data is lost after the FDP is stopped.
+FAIR Data Point uses repositories to store the metadata.
+By default, it uses the in-memory store, which means that the data is lost after the FDP is stopped.
 
-In this example, we will configure GraphDB as a triple store. See :ref:`Triple Stores <triple-stores>` for other repository options.
+In this example, we will configure GraphDB as a triple store.
+See :ref:`Triple Stores <triple-stores>` for other repository options.
 
-If we don't have it already, we need to create a new file ``application.yml``. We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container. This file can be used for other configuration, see :ref:`Advanced Configuration <advanced-configuration>` for more details.
+If we don't have it already, we need to create a new file ``application.yml``.
+We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container.
+This file can be used for other configuration, see :ref:`Advanced Configuration <advanced-configuration>` for more details.
 
 
 .. code-block:: yaml
@@ -146,7 +161,8 @@ If we don't have it already, we need to create a new file ``application.yml``. W
             url: http://graphdb:7200
             repository: fdp
 
-We now need to update our ``compose.yml`` file, we add a new volume for the ``fdp`` and add ``graphdb`` service. We can also expose port ``7200`` for GraphDB so we can access its user interface.
+We now need to update our ``compose.yml`` file, we add a new volume for the ``fdp`` and add ``graphdb`` service.
+We can also expose port ``7200`` for GraphDB so we can access its user interface.
 
 .. code-block:: yaml
    :substitutions:
@@ -181,7 +197,8 @@ We now need to update our ``compose.yml`` file, we add a new volume for the ``fd
             volumes:
                 - ./graphdb:/opt/graphdb/home
 
-GraphDB needs to have a repository set up before the FDP can interact with it. This can be done manually through the user interface, following these steps:
+GraphDB needs to have a repository set up before the FDP can interact with it.
+This can be done manually through the user interface, following these steps:
 
 - Start only the GraphDB container: ``docker compose up -d graphdb``
 - Navigate to your `local GraphDB instance <http://localhost:7200>`__
@@ -236,7 +253,8 @@ Alternatively, these steps can be automated with the following addition to the `
                 test: curl --fail-with-body http://localhost:7200/repositories/fdp/health || exit 1
                 interval: 5s
 
-The ``repo.json`` file contains the configuration for the newly created GraphDB repository. The following is a bare minimum example.
+The ``repo.json`` file contains the configuration for the newly created GraphDB repository.
+The following is a bare minimum example.
 
 .. code-block:: json
 
