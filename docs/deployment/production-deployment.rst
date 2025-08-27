@@ -4,13 +4,20 @@
 Production Deployment
 *********************
 
-If you want to run the FAIR Data Point in production it is recommended to use HTTPS protocol with valid certificates. You can easily configure FDP to run behind a reverse proxy which takes care of the certificates.
+If you want to run the FAIR Data Point in production it is recommended to use HTTPS protocol with valid certificates.
+You can easily configure FDP to run behind a reverse proxy which takes care of the certificates.
 
-In this example, we will configure FDP to run on ``https://fdp.example.com``. We will see how to configure the reverse proxy in the same Docker Compose file. However, it is not necessary, and the proxy can be configured elsewhere.
+In this example, we will configure FDP to run on ``https://fdp.example.com``.
+We will see how to configure the reverse proxy in the same Docker Compose file.
+However, it is not necessary, and the proxy can be configured elsewhere.
 
-First of all, we need to generate the certificates on the server where we want to run the FDP. You can use `Let's Encrypt <https://letsencrypt.org>`__ and create the certificates with `certbot <https://certbot.eff.org>`__. The certificates are generated in a standard location, e.g., ``/etc/letsencrypt/live/fdp.example.com`` for ``fdp.example.com`` domain. We will mount the whole ``letsencrypt`` folder to the reverse proxy container later so that it can use the certificates.
+First of all, we need to generate the certificates on the server where we want to run the FDP.
+You can use `Let's Encrypt <https://letsencrypt.org>`__ and create the certificates with `certbot <https://certbot.eff.org>`__.
+The certificates are generated in a standard location, e.g., ``/etc/letsencrypt/live/fdp.example.com`` for ``fdp.example.com`` domain.
+We will mount the whole ``letsencrypt`` folder to the reverse proxy container later so that it can use the certificates.
 
-As a reverse proxy, we will use `nginx <http://nginx.org/en/>`__. We need to prepare some configuration, so create a new folder called ``nginx`` with the following structure and files:
+As a reverse proxy, we will use `nginx <http://nginx.org/en/>`__.
+We need to prepare some configuration, so create a new folder called ``nginx`` with the following structure and files:
 
 ::
 
@@ -21,7 +28,8 @@ As a reverse proxy, we will use `nginx <http://nginx.org/en/>`__. We need to pre
   └ sites-enabled
      └ fdp.conf -> ../sites-available/fdp.conf
 
-The file ``nginx.conf`` is the configuration of the whole nginx, and it includes all the files from ``sites-enabled`` which contains configuration for individual servers (we can use one nginx, for example, to handle multiple servers on different domains). All available configurations for different servers are in the ``sites-available``, but only those linked to ``sites-enabled`` are used.
+The file ``nginx.conf`` is the configuration of the whole nginx, and it includes all the files from ``sites-enabled`` which contains configuration for individual servers (we can use one nginx, for example, to handle multiple servers on different domains).
+All available configurations for different servers are in the ``sites-available``, but only those linked to ``sites-enabled`` are used.
 
 Let's see what should be the content of the configuration files.
 
@@ -84,7 +92,8 @@ Finally, we need to create a soft link from sites-enabled to sites-available for
 
     $ cd nginx/sites-enabled && ln -s ../sites-available/fdp.conf
 
-We have certificates generated and configuration for proxy ready. Now we need to add the proxy to our ``compose.yml`` file so we can run the whole FDP behind the proxy.
+We have certificates generated and configuration for proxy ready.
+Now we need to add the proxy to our ``compose.yml`` file so we can run the whole FDP behind the proxy.
 
 .. code-block:: yaml
    :substitutions:
@@ -127,7 +136,12 @@ We have certificates generated and configuration for proxy ready. Now we need to
 
 Don't forget to create the GraphDB repository as described in the :ref:`Persistent Repository <persistent-repository>` section.
 
-The last thing to do is to update our ``application.yml`` file. We need to add ``clientUrl`` so that FDP knows the actual URL even if hidden behind the reverse proxy. It's a good practice to set up a persistent URL for the metadata too. We recommend using ``https://purl.org``. If you don't specify ``persistentUrl``, the ``clientUrl`` will be used instead. And we also need to set a random JWT token for security.
+The last thing to do is to update our ``application.yml`` file.
+We need to add ``clientUrl`` so that FDP knows the actual URL even if hidden behind the reverse proxy.
+It's a good practice to set up a persistent URL for the metadata too.
+We recommend using ``https://purl.org``.
+If you don't specify ``persistentUrl``, the ``clientUrl`` will be used instead.
+And we also need to set a random JWT token for security.
 
 .. code-block:: yaml
 
@@ -154,7 +168,8 @@ The last thing to do is to update our ``application.yml`` file. We need to add `
 
 
 
-At this point, we should be able to run all the containers using ``docker compose up -d`` and after everything starts, we can access the FAIR Data Point at https://fdp.example.com. Of course, the domain you want to access the FDP on must be configured to the server where it runs.
+At this point, we should be able to run all the containers using ``docker compose up -d`` and after everything starts, we can access the FAIR Data Point at https://fdp.example.com.
+Of course, the domain you want to access the FDP on must be configured to the server where it runs.
 
 .. DANGER::
 
@@ -167,7 +182,9 @@ At this point, we should be able to run all the containers using ``docker compos
 
 .. WARNING::
 
-    In order to improve findability of itself and its content, the FAIR Data Point has a built-in feature that registers its URL into our server and pings it once a week. This feature facilitates the indexing of the metadata of each registered and active FAIR Data Point. If you do not want your FAIR Data Point to be included in this registry, add these lines to your application configuration:
+    In order to improve findability of itself and its content, the FAIR Data Point has a built-in feature that registers its URL into our server and pings it once a week.
+    This feature facilitates the indexing of the metadata of each registered and active FAIR Data Point.
+    If you do not want your FAIR Data Point to be included in this registry, add these lines to your application configuration:
 
     .. code-block:: yaml
 

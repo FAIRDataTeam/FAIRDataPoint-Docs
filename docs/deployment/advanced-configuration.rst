@@ -9,7 +9,9 @@ Advanced Configuration
 Triple Stores
 =============
 
-FDP uses InMemory triple store by default. In previous examples, there is Blazegraph used. However, you can choose from 3 additional options.
+FDP uses InMemory triple store by default.
+In previous examples, there is Blazegraph used.
+However, you can choose from 3 additional options.
 
 **List of possible triple stores:**
 
@@ -22,7 +24,8 @@ FDP uses InMemory triple store by default. In previous examples, there is Blazeg
 1. In-Memory Store
 ------------------
 
-There is no need to configure additional properties to run FDP with In-Memory Store because it's the default option. If you want to explicitly type in configuration provided in ``application.yml``, add following lines there:
+There is no need to configure additional properties to run FDP with In-Memory Store because it's the default option.
+If you want to explicitly type in configuration provided in ``application.yml``, add following lines there:
 
 .. code-block:: yaml
     
@@ -34,7 +37,8 @@ There is no need to configure additional properties to run FDP with In-Memory St
 2. Native Store
 ---------------
 
-With this option, FDP will simply save the data to the file system. If you want to use the Native Store, make sure that you have these lines in your ``application.yml`` file:
+With this option, FDP will simply save the data to the file system.
+If you want to use the Native Store, make sure that you have these lines in your ``application.yml`` file:
 
 .. code-block:: yaml
     
@@ -50,7 +54,8 @@ where ``/tmp/fdp-store`` is a path to a location where you want to keep your dat
 3. Allegro Graph
 ----------------
 
-For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need to first set up your Allegro Graph instance. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
+For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need to first set up your Allegro Graph instance.
+For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code-block:: yaml
     
@@ -69,7 +74,8 @@ For running `Allegro Graph <https://franz.com/agraph/allegrograph/>`_, you need 
 4. GraphDB
 ----------
 
-For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance and **create the repository**. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
+For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance and **create the repository**.
+For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code-block:: yaml
     
@@ -84,11 +90,11 @@ For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up y
 
 ``URL`` and ``repository`` should be configured according to your actual GraphDB setup.
 
-
 5. Blazegraph
 -------------
 
-For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up your Blazegraph instance. For configuring the connection from FDP, add these lines to your ``application.yml`` file:
+For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up your Blazegraph instance.
+For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code-block:: yaml
     
@@ -101,12 +107,15 @@ For running `Blazegraph <https://blazegraph.com/>`_, you need to first set up yo
             repository:
 
 
-``URL`` and ``repository`` should be configured according to your actual Blazegraph setup. Repository should be set only if you don't use the default one.
+``URL`` and ``repository`` should be configured according to your actual Blazegraph setup.
+Repository should be set only if you don't use the default one.
 
 
 Mongo DB
 ========
-We store users, permissions, etc. in the `MongoDB database <https://www.mongodb.com/>`_. The default connection string is ``mongodb://mongo:27017/fdp``. If you want to modify it, add these lines to your ``application.yml`` file:
+We store users, permissions, etc. in the `MongoDB database <https://www.mongodb.com/>`_.
+The default connection string is ``mongodb://mongo:27017/fdp``.
+If you want to modify it, add these lines to your ``application.yml`` file:
 
 .. code-block:: yaml
     
@@ -119,10 +128,13 @@ We store users, permissions, etc. in the `MongoDB database <https://www.mongodb.
 
 The ``uri`` should be adjusted by your actual MongoDB setup.
 
+
 Default attached metadata
 =========================
 
-There are several default values that are attached to each created metadata. If you want to modify it, add the lines below to your ``application.yml`` file. The default values are listed below, too:
+There are several default values that are attached to each created metadata.
+If you want to modify it, add the lines below to your ``application.yml`` file.
+The default values are listed below, too:
 
 .. code-block:: yaml
     
@@ -136,6 +148,7 @@ There are several default values that are attached to each created metadata. If 
     metadataMetrics:
         https://purl.org/fair-metrics/FM_F1A: https://www.ietf.org/rfc/rfc3986.txt
         https://purl.org/fair-metrics/FM_A1.1: https://www.wikidata.org/wiki/Q8777
+
 
 FDP Index
 =========
@@ -155,7 +168,9 @@ To enable FDP Index mode on your FDP server, just simply adjust your ``applicati
         index:  true
 
 
-Then for the FDP client, you need to use ``fairdata/fairdatapoint-index-client`` Docker image for browsing indexed FDPs and searching harvested metadata. In case you want to use your deployment both as FDP and FDP Index, you can deploy both FDP and FDP Index client applications. The configuration of both clients are identical.
+Then for the FDP client, you need to use ``fairdata/fairdatapoint-index-client`` Docker image for browsing indexed FDPs and searching harvested metadata.
+In case you want to use your deployment both as FDP and FDP Index, you can deploy both FDP and FDP Index client applications.
+The configuration of both clients are identical.
 
 .. code-block:: yaml
    :substitutions:
@@ -176,7 +191,8 @@ Then for the FDP client, you need to use ``fairdata/fairdatapoint-index-client``
 Connecting to FDP Index
 -----------------------
 
-By default, FDPs use https://home.fairdatapoint.org as their primary FDP Index that they ping every 7 days. You can adjust that in  your ``application.yml`` file if needed:
+By default, FDPs use https://home.fairdatapoint.org as their primary FDP Index that they ping every 7 days.
+You can adjust that in  your ``application.yml`` file if needed:
 
 .. code-block:: yaml
     
@@ -202,7 +218,9 @@ You can also set multiple endpoints if needed:
 FDP Index behind proxy
 ----------------------
 
-FDP Index uses IP-based rate limits to avoid excessive communication caused by bots or misconfigured FDPs. If the FDP Index is deployed behind a proxy, it must correctly set header, e.g., ``X-Forwarded-For``. Furthermore, you need to add this to ``application.yml``:
+FDP Index uses IP-based rate limits to avoid excessive communication caused by bots or misconfigured FDPs.
+If the FDP Index is deployed behind a proxy, it must correctly set header, e.g., ``X-Forwarded-For``.
+Furthermore, you need to add this to ``application.yml``:
 
 .. code-block:: yaml
     
@@ -212,16 +230,16 @@ FDP Index uses IP-based rate limits to avoid excessive communication caused by b
         forward-headers-strategy: NATIVE
 
 
-There may be differences based on you specific deployment. You should check in logs, which IP address is used when ping is received.
+There may be differences based on you specific deployment.
+You should check in logs, which IP address is used when ping is received.
 
 
 Customizations
 ==============
 
-You can customize the look and feel of FDP Client using
-`SCSS <https://sass-lang.com>`__. There are three files you can mount to
-``/src/scss/custom``. If there are any changes in these files, the
-styles will be regenerated when FDP Client starts.
+You can customize the look and feel of FDP Client using `SCSS <https://sass-lang.com>`__.
+There are three files you can mount to ``/src/scss/custom``.
+If there are any changes in these files, the styles will be regenerated when FDP Client starts.
 
 Customization files
 -------------------
@@ -229,10 +247,9 @@ Customization files
 _variables.scss
 ~~~~~~~~~~~~~~~
 
-A lot of values related to styles are defined as variables. The easiest
-way to customize the FDP Client is to define new values for these
-variables. To do so, you create a file called ``_variables.scss`` where
-you define the values that you want to change.
+A lot of values related to styles are defined as variables.
+The easiest way to customize the FDP Client is to define new values for these variables.
+To do so, you create a file called ``_variables.scss`` where you define the values that you want to change.
 
 Here is an example of changing the primary color.
 
@@ -248,14 +265,14 @@ to see all the variables you can change.
 _extra.scss
 ~~~~~~~~~~~
 
-This file is loaded before all other styles. You can use it, for
-example, to define new styles or import fonts.
+This file is loaded before all other styles.
+You can use it, for example, to define new styles or import fonts.
 
 _overrides.scss
 ~~~~~~~~~~~~~~~
 
-This file is loaded after all other styles. You can use it to override
-existing styles.
+This file is loaded after all other styles.
+You can use it to override existing styles.
 
 Example of setting a custom logo
 --------------------------------
@@ -296,11 +313,10 @@ To change the logo, you need to do three steps:
 Running FDP on a nested route
 ==============================
 
-Sometimes, you might want to run FDP alongside other applications on the
-same domain. Here is an example of running FDP on
-``https://example.com/fairdatapoint``. If you run FDP in this configuration, you
-have to set ``PUBLIC\_PATH`` ENV variable, in this example to
-``/fairdatapoint``. Also, don't forget to set correct client URL in the application config.
+Sometimes, you might want to run FDP alongside other applications on the same domain.
+Here is an example of running FDP on ``https://example.com/fairdatapoint``.
+If you run FDP in this configuration, you have to set ``PUBLIC\_PATH`` ENV variable, in this example to ``/fairdatapoint``.
+Also, don't forget to set correct client URL in the application config.
 
 .. code-block:: yaml
    :substitutions:
@@ -320,7 +336,7 @@ have to set ``PUBLIC\_PATH`` ENV variable, in this example to
             ports:
                 - 80:80
             environment:
-            	- FDP_HOST=fdp
+                - FDP_HOST=fdp
                 - PUBLIC_PATH=/fairdatapoint
 
 .. code-block:: yaml
