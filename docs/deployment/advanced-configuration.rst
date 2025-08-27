@@ -142,7 +142,7 @@ The default values are listed below, too:
 
     metadataProperties:
         language: http://id.loc.gov/vocabulary/iso639-1/en
-        license: http://rdflicense.appspot.com/rdflicense/cc-by-nc-nd3.0
+        license: http://purl.org/NET/rdflicense/cc-zero1.0
         accessRightsDescription: This resource has no access restriction
 
     metadataMetrics:
