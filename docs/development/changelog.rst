@@ -5,7 +5,8 @@ Changelog
 Overview
 ========
 
-Here we summarize the key features and changes for each FAIR Data Point release. For details including bugfixes and minor changes, see :ref:`detailed-changelog`.
+Here we summarize the key features and changes for each FAIR Data Point release.
+For details including bugfixes and minor changes, see :ref:`detailed-changelog`.
 
 1.16
 ------
@@ -147,9 +148,8 @@ Here we summarize the key features and changes for each FAIR Data Point release.
 Detailed changelog
 ==================
 
-Each of components developed has its own Changelog based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`_,
-and our projects adhere to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_. It is recommended to use matching
-versions of all components.
+Each of components developed has its own Changelog based on `Keep a Changelog <https://keepachangelog.com/en/1.0.0/>`_, and our projects adhere to `Semantic Versioning <https://semver.org/spec/v2.0.0.html>`_.
+It is recommended to use matching versions of all components.
 
 - `FAIR Data Point Changelog <https://github.com/FAIRDataTeam/FAIRDataPoint/blob/develop/CHANGELOG.md>`_
 - `FAIR Data Point Client Changelog <https://github.com/FAIRDataTeam/FAIRDataPoint-client/blob/develop/CHANGELOG.md>`_
