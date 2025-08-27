@@ -16,7 +16,7 @@ You can use `Let's Encrypt <https://letsencrypt.org>`__ and create the certifica
 The certificates are generated in a standard location, e.g., ``/etc/letsencrypt/live/fdp.example.com`` for ``fdp.example.com`` domain.
 We will mount the whole ``letsencrypt`` folder to the reverse proxy container later so that it can use the certificates.
 
-As a reverse proxy, we will use `nginx <http://nginx.org/en/>`__.
+As a reverse proxy, we will use `nginx <https://nginx.org/index.html>`__.
 We need to prepare some configuration, so create a new folder called ``nginx`` with the following structure and files:
 
 ::
