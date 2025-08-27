@@ -114,7 +114,7 @@ A typical resource shape contains the following key elements:
 User interface directives
 -------------------------
 
-The `DASH <http://datashapes.org/dash>`_ vocabulary introduces extensions to the core SHACL model.
+The `DASH <https://datashapes.org/dash>`_ vocabulary introduces extensions to the core SHACL model.
 One of the extensions is focused on providing user interface hints for shape properties.
 Introducing or removing a ``dash:viewer`` or ``dash:editor`` property to a ``sh:PropertyShape`` instance influences how the user interface displays the property value.
 

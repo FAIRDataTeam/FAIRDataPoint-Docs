@@ -118,7 +118,7 @@ For details including bugfixes and minor changes, see :ref:`detailed-changelog`.
 1.3.0
 -----
 
-- Introduced `DASH <http://datashapes.org/dash>`_ and dynamic SHACL shapes 
+- Introduced `DASH <https://datashapes.org/dash>`_ and dynamic SHACL shapes
 - Audit log in OpenRefine extension to keep track of actions performed
 
 1.2.0
