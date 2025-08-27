@@ -25,13 +25,6 @@ FAIR Data Point Reference Implementation Documentation
    usage/api-usage
 
 .. toctree::
-   :caption: OpenRefine Extension
-   :maxdepth: 2
-
-   openrefine/usage
-   openrefine/setup
-
-.. toctree::
    :caption: Development
    :maxdepth: 2
 
