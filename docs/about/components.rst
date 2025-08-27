@@ -7,7 +7,7 @@ Components
 The deployment of the FAIR Data Point consists of a couple of components.
 See the following image for the overview:
 
-.. image:: structure-overview.png
+.. image:: structure-overview.svg
    :alt: Structure Overview
    :align: center
 
