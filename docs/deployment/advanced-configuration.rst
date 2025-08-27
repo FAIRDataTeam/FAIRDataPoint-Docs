@@ -74,7 +74,7 @@ For configuring the connection from FDP, add these lines to your ``application.y
 4. GraphDB
 ----------
 
-For running `GraphDB <http://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance and **create the repository**.
+For running `GraphDB <https://www.ontotext.com/products/graphdb/>`_, you need to first set up your GraphDB instance and **create the repository**.
 For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code-block:: yaml
