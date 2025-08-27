@@ -4,7 +4,9 @@
 API Usage
 *********
 
-The **FAIR Data Point** exposes API endpoints that allow consumers to interact with the metadata. Some of the endpoints are available for all users, while others require an API token for authorization.
+The **FAIR Data Point** exposes API endpoints that allow consumers to interact with the metadata.
+Some of the endpoints are available for all users, while others require an API token for authorization.
+
 
 Obtaining an API token
 ======================
@@ -27,17 +29,20 @@ A successful call will return a ``JSON`` object with a token.
 Issueing a request with the authorization token
 ------------------------------------------------
 
-Subsequent requests should use this token in the `Authorization` header. The authorization type is a `Bearer <https://tools.ietf.org/html/rfc6750>`_ token.
+Subsequent requests should use this token in the `Authorization` header.
+The authorization type is a `Bearer <https://tools.ietf.org/html/rfc6750>`_ token.
 
 .. code :: bash
 
     curl -H "Authorization: Bearer efIobn394nvJJFJ30..." \
         -H "Accept: application/json" https://fdp.example.com/users
 
+
 Interacting with metadata
 =========================
 
-The metadata layers as defined by the :ref:`resource-definitions` are exposed through their respective endpoints. The general approach is that each layer, defined by its ``prefix``, supports a number of read and write HTTP methods.
+The metadata layers as defined by the :ref:`resource-definitions` are exposed through their respective endpoints.
+The general approach is that each layer, defined by its ``prefix``, supports a number of read and write HTTP methods.
 
 ======== ====================== ========================
 Method   URL pattern            Functionality
@@ -52,7 +57,8 @@ Method   URL pattern            Functionality
 Retrieving metadata
 -------------------
 
-Retrieving metadata is open for GET requests without authorization. In the following example, we retrieve a ``Dataset`` resource by issuing a ``GET`` request to the ``/dataset`` prefix followed by its identifier (a UUID).
+Retrieving metadata is open for GET requests without authorization.
+In the following example, we retrieve a ``Dataset`` resource by issuing a ``GET`` request to the ``/dataset`` prefix followed by its identifier (a UUID).
 
 .. code :: bash
 
@@ -63,7 +69,8 @@ Retrieving metadata is open for GET requests without authorization. In the follo
 Creating metadata
 -----------------
 
-New metadata can be created by ``POST``-ing the content to the appropriate endpoint. First we will create a file called ``metadata.ttl`` to store our new metadata.
+New metadata can be created by ``POST``-ing the content to the appropriate endpoint.
+First we will create a file called ``metadata.ttl`` to store our new metadata.
 
 .. code :: turtle
 
@@ -86,7 +93,8 @@ This metadata can be created by the following ``POST`` request.
         -H "Content-Type: text/turtle" \
         -d @metadata.ttl https://fdp.example.com/dataset
 
-When created, the metadata is initially in a ``DRAFT`` state. To publish the metadata using the API you can issue the following ``PUT`` request to transistion the metadata from the ``DRAFT`` state to the ``PUBLISHED`` state.
+When created, the metadata is initially in a ``DRAFT`` state.
+To publish the metadata using the API you can issue the following ``PUT`` request to transistion the metadata from the ``DRAFT`` state to the ``PUBLISHED`` state.
 
 .. code :: bash
 
@@ -109,7 +117,9 @@ Existing metadata can be updated by issuing a ``PUT`` request with the request b
         -H "Content-Type: text/turtle" \
         -d @metadata.ttl https://fdp.example.com/dataset/79508287-a2a7-4ae2-95b3-3f595e3088cc
 
+
 API endpoint listing
 ====================
 
-The available APIs are documented using `OpenAPI <https://www.openapis.org/>`_. In the ``/swagger-ui.html`` endpoint the APIs are visualized through `Swagger UI <https://swagger.io/tools/swagger-ui/>`_.
+The available APIs are documented using `OpenAPI <https://www.openapis.org/>`_.
+In the ``/swagger-ui.html`` endpoint the APIs are visualized through `Swagger UI <https://swagger.io/tools/swagger-ui/>`_.
