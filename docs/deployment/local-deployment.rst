@@ -2,42 +2,48 @@
 Local Deployment
 ****************
 
-FAIR Data Point is distributed in Docker images.
-For a simple local deployment, you need to run ``fairdatapoint``, ``fairdatapoint-client`` and ``mongo`` images.
-See the :ref:`Components <components>` section to read more about what each image is for.
+The quickest way to set up an FDP for local testing is by using `Docker Compose`_ to run the desired :ref:`components`.
+If you don't have docker compose, follow the `Docker installation instructions`_ first.
 
-Here is an example of the simplest `Docker Compose <https://docs.docker.com/compose/>`__ configuration to run FDP.
+.. _quickstart:
+Quickstart
+==========
 
-.. code-block:: yaml
-   :substitutions:
+Set up the stack
+----------------
 
-    # compose.yml
+The absolute minimal FDP stack consists of just the ``fairdatapoint`` and ``mongo`` containers.
+However, we also include the ``fairdatapoint-client`` to get a convenient browser interface.
+See the :ref:`components` section to read more about what each image is for.
 
-    services:
+The following compose file represents a minimal stack for local testing:
 
-        fdp:
-            image: fairdata/fairdatapoint:|compose_ver|
+.. literalinclude:: compose.yml
+   :name: minimal compose file
+   :caption: compose.yml
+   :language: yaml
 
-        fdp-client:
-            image: fairdata/fairdatapoint-client:|compose_ver|
-            ports:
-                - 80:80
-            environment:
-                - FDP_HOST=fdp
+.. warning:: This is an ephemeral stack, so there is no `Persistence`_.
+   All data from the mongo container and in-memory triple store are lost when the stack is torn down.
 
-        mongo:
-            image: mongo:4.0.12
+You can set this up using ``docker compose up -d``, and tear it back down, when you're done, using ``docker compose down``.
+If necessary, container logs can be viewed using ``docker compose logs -f``.
 
+The stack might take a while to start because of the health checks that are used to enforce the proper startup order.
+Once started, you can visit http://localhost in your web browser.
 
-Then you can run it using ``docker compose up -d``.
-It might take a while to start.
-You can run ``docker compose logs -f`` to follow the output log.
-Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
+API docs
+--------
 
+If you're planning to add metadata in bulk, you can write a script to use the FDP API.
+Check out the API docs at http://localhost/swagger-ui/index.html.
 
-There are two default user accounts.
-See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles.
-The default accounts are
+Logging in
+----------
+
+Although unauthenticated users can view FDP content, you'll need to log in to add content.
+
+The default demo accounts are:
 
 +-----------------------------+-------+----------+
 | User name                   | Role  | Password |
@@ -47,47 +53,10 @@ The default accounts are
 | nikola.tesla@example.com    | user  | password |
 +-----------------------------+-------+----------+
 
-.. DANGER::
+See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles.
 
-    Using the default accounts is alright if you run FDP on your machine, but you should change them if you want to run FDP publicly.
-
-
-Running locally on a different port
-===================================
-
-If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary.
-First, we need to create a new file ``application.yml`` and set the client URL to the actual URL we want to use.
-
-.. code-block:: yaml
-
-    # application.yml
-
-    instance:
-        clientUrl: http://localhost:8080
-
-Then, we need to mount the application config into the FDP container and update the port which the FDP client runs on.
-
-.. code-block:: yaml
-   :substitutions:
-
-    # compose.yml
-
-    services:
-
-        fdp:
-            image: fairdata/fairdatapoint:|compose_ver|
-            volumes:
-                - ./application.yml:/fdp/application.yml:ro
-
-        fdp-client:
-            image: fairdata/fairdatapoint-client:|compose_ver|
-            ports:
-                - 8080:80
-            environment:
-                - FDP_HOST=fdp
-
-        mongo:
-            image: mongo:4.0.12
+.. danger::
+   Using the default accounts is alright for testing on your local machine, but you should definitely change them before exposing your FDP to the public internet.
 
 
 Persistence
@@ -279,3 +248,6 @@ The following is a bare minimum example.
             }
         }
     }
+
+.. _Docker Compose: https://docs.docker.com/compose/
+.. _Docker installation instructions: https://docs.docker.com/engine/install/

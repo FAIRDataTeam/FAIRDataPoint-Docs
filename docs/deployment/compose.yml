@@ -1,0 +1,57 @@
+name: minimal_fdp
+services:
+  mongo:
+    # check if mongo is ready to accept connections
+    healthcheck:
+      # runs in the container, so uses the container loopback ip instead of the service name
+      test: |
+        [ $(mongosh --quiet --host 127.0.0.1:27017 --eval "db.runCommand('ping').ok") = 1 ] || exit 1
+      start_interval: 3s
+      start_period: 30s
+    # adapt the image version if necessary
+    image: mongo:8.0
+    # for local deployment, do not restart automatically
+    restart: no
+
+  fdp:
+    # wait for mongo healthcheck
+    depends_on:
+      mongo:
+        condition: service_healthy
+    # configure the fdp using environment variables (spring configuration)
+    environment:
+      # container port used by the app server
+      SERVER_PORT: 8080
+      # public urls of the client (outside the docker network)
+      INSTANCE_CLIENTURL: http://localhost
+      INSTANCE_PERSISTENTURL: http://localhost
+    # check if fdp is ready to accept requests
+    healthcheck:
+      # use wget because curl is not available in alpine images
+      test: wget --quiet --spider http://127.0.0.1:8080 || exit 1
+      start_interval: 3s
+      start_period: 30s
+    image: fairdata/fairdatapoint:1.17
+    restart: no
+
+  fdp-client:
+    # wait for fdp healthcheck
+    depends_on:
+      fdp:
+        condition: service_healthy
+    environment:
+      # fdp-client uses nginx to forward requests to fdp over the docker network
+      # (make sure the port matches the fdp SERVER_PORT)
+      FDP_HOST: fdp:8080
+    # check if fdp-client is ready to accept requests (only used for container status)
+    healthcheck:
+      test: wget --quiet --spider http://127.0.0.1 || exit 1
+      start_interval: 3s
+      start_period: 30s
+    image: fairdata/fairdatapoint-client:1.17
+    # all traffic from the docker host runs through the fdp-client
+    ports:
+      - host_ip: 127.0.0.1
+        published: "80"
+        target: 80
+    restart: no

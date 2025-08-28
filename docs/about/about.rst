@@ -12,6 +12,11 @@ Features
 -  Define custom metadata resources, based on schemas
 -  Manage user accounts and access
 
+Quickstart
+----------
+
+Want to try it out? Set up a local test FAIR Data Point following the instructions in the :ref:`quickstart` section.
+
 Security
 --------
 
