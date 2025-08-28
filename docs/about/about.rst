@@ -2,27 +2,20 @@
 About FAIR Data Point
 *********************
 
-**FAIRDataPoint** is a REST API and Web Client for creating, storing, and serving **FAIR metadata**.
-The metadata contents are generated **semi-automatically** according to the `FAIR Data Point software specification <https://github.com/fdp-specs/fdp-specs.github.io>`__ document.
+The **FAIRDataPoint** (**FDP**) consists of a REST API and a Web Client for creating, storing, and serving **FAIR metadata**.
+The metadata content is generated **semi-automatically** according to the `FAIR Data Point software specification <https://github.com/fdp-specs/fdp-specs.github.io>`__ document.
 
 Features
 --------
 
--  Store catalogs, datasets, and distributions
--  Manage users
--  Manage access rights to your catalogs, datasets, and distributions
+-  Store metadata resources, like catalogs, datasets, and distributions
+-  Define custom metadata resources, based on schemas
+-  Manage user accounts and access
 
 Security
 --------
 
-We have two levels of accessibility in FDP.
-All resources (e.g., catalogs, datasets,...) are publicly accessible.
-You don't need to be logged in to browse them.
-If you want to upload your own resources, you need to be logged in.
-To get an account, you need to contact an administrator of the FDP.
-By default, all uploaded resources are publicly accessible by anyone.
-But if you want to allow someone to manage your resources (edit/delete), you need to allow it in the resource settings.
-
-We have two types of roles in FDP - an administrator and a user.
-The administrator is allowed to manage users and all resources.
-The user can manage just the resources which he owns.
+Everyone can read all published metadata resources, such as catalogs, datasets, and so on.
+Only authenticated users can make changes to any of the FDP content.
+Two roles are available for authenticated users: ``user`` and ``admin``.
+Details are discussed in :ref:`Users and Roles <users-and-roles>`.
