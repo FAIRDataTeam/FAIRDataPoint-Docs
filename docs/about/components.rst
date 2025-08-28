@@ -48,6 +48,8 @@ MongoDB
 
 The FAIRDataPoint component depends on a `MongoDB <https://www.mongodb.com>`__ database to store application data, i.e. data required for the application to function properly, such as settings, user accounts, roles, metadata schemas, and so on.
 
+This component is available as Docker image `mongo`_.
+
 Triple Store
 ------------
 
@@ -55,12 +57,19 @@ The FAIRDataPoint component depends on a triple store to store its semantic data
 A variety of triple stores are supported, as described in :ref:`Triple Stores configuration <triple-stores>`.
 If no external triple store is configured, the FDP will fall back on an in-memory triple store.
 
+For example, GraphDB is available as Docker image `ontotext/graphdb`_.
+
 Reverse Proxy
 -------------
 
 In a production deployment, there is usually a reverse proxy that handles HTTPS certificates (SSL/TLS), so the connection to the FAIR Data Point is secured.
 See :ref:`production deployment <production-deployment>` to learn how to configure one.
 
+For example, nginx is available as Docker image `nginx <nginx-image_>`_.
+
 .. _fairdata/fairdatapoint: https://hub.docker.com/r/fairdata/fairdatapoint
 .. _fairdata/fairdatapoint-client: https://hub.docker.com/r/fairdata/fairdatapoint-client
+.. _mongo: https://hub.docker.com/_/mongo
 .. _nginx: https://nginx.org/index.html
+.. _nginx-image: https://hub.docker.com/_/nginx
+.. _ontotext/graphdb: https://hub.docker.com/r/ontotext/graphdb/
