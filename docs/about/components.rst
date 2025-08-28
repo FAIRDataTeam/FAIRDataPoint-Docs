@@ -46,12 +46,12 @@ The FAIR Data Point relies on several third-party components
 MongoDB
 -------
 
-The FDP uses a `MongoDB <https://www.mongodb.com>`__ database to store application data, i.e. data required for the application to function properly, such as settings, user accounts, roles, metadata schemas, and so on.
+The FAIRDataPoint component depends on a `MongoDB <https://www.mongodb.com>`__ database to store application data, i.e. data required for the application to function properly, such as settings, user accounts, roles, metadata schemas, and so on.
 
 Triple Store
 ------------
 
-The FAIR Data Point needs a triple store to store its semantic data.
+The FAIRDataPoint component depends on a triple store to store its semantic data.
 A variety of triple stores are supported, as described in :ref:`Triple Stores configuration <triple-stores>`.
 If no external triple store is configured, the FDP will fall back on an in-memory triple store.
 
