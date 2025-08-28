@@ -14,9 +14,9 @@ Two roles are available for authenticated users: ``user`` and ``admin``
 Detailed user privileges are described in the table below:
 
 ========================== =============== ====== =======
-.                          unauthenticated authenticated
+\                          unauthenticated authenticated
 -------------------------- --------------- --------------
-privilege                  .                user   admin
+privilege                                   user   admin
 ========================== =============== ====== =======
 read metadata resources          yes         yes    yes
 read resource definitions        yes         yes    yes
