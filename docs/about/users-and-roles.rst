@@ -9,15 +9,22 @@ There are different roles for different levels in the FAIR Data Point.
 FAIR Data Point Roles
 =====================
 
-Admin
------
+Two roles are available for authenticated users: ``user`` and ``admin``
 
-Admin can manage other user accounts and access everything in the FAIR Data Point.
+Detailed user privileges are described in the table below:
 
-User
-----
-
-User can create new catalogs and access existing catalogs where she was added.
+========================== =============== ====== =======
+.                          unauthenticated authenticated
+-------------------------- --------------- --------------
+privilege                  .                user   admin
+========================== =============== ====== =======
+read metadata resources          yes         yes    yes
+read resource definitions        yes         yes    yes
+write metadata resources         no          yes    yes
+write resource definitions       no          no     yes
+manage users                     no          no     yes
+manage settings                  no          no     yes
+========================== =============== ====== =======
 
 
 Catalog Roles
