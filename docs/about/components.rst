@@ -4,7 +4,7 @@
 Components
 **********
 
-A typical deployment of a FAIR Data Point consists of five components, as depicted in the following image:
+The software stack for a typical FAIR Data Point deployment consists of five components, as depicted in the following image:
 
 .. image:: structure-overview.svg
    :alt: Structure Overview
