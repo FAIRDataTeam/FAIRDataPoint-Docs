@@ -62,7 +62,7 @@ Here's how to get started quickly with a minimal FDP stack that has no data pers
    For example:
 
    - Use ``curl http://localhost`` to see the machine readable FDP metadata
-   - Visit http://localhost in your favorite web browser to try the FDP client interface
+   - Visit http://localhost in your favorite web browser to try the FDP client interface (also see `Logging in`_)
    - Visit http://localhost/swagger-ui/index.html in the browser to inspect the API documentation
 
 Tear down
@@ -85,6 +85,7 @@ Once you're done playing with your FDP, here's how to remove every trace:
 3. If you really want to remove *every* trace of the FDP, you'll need to `remove the containers`_ and corresponding `images`_ as well.
    If not, you can leave them in place for the next time.
 
+A more detailed description of minimal ephemeral and persistent configurations can be found in the sections below.
 
 Minimal stack
 =============
