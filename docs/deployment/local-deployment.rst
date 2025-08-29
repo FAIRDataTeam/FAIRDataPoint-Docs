@@ -104,100 +104,44 @@ Once you're done playing with your FDP, here's how to remove every trace:
 3. If you really want to remove *every* trace of the FDP, you'll need to `remove the containers`_ and corresponding `images`_ as well.
    If not, you can leave them in place for the next time.
 
-A more detailed description of minimal ephemeral and persistent configurations can be found in the sections below.
+Deep dive
+=========
 
-Minimal stack
-=============
+A more detailed description of minimal compose configurations can be found in the `Ephemeral stack`_ and `Persistent stack`_ examples below.
+Although these examples correspond closely to the configurations used in `FAIRDataTeam/compose`_, it is best to refer to that repository for the latest recommendations.
+You can use ``docker compose config`` (`config docs`_) to inspect each configuration in the repo.
+
+Ephemeral stack
+---------------
 
 The absolute minimal FDP stack consists of just the ``fairdatapoint`` and ``mongo`` containers.
-However, we also include the ``fairdatapoint-client`` to get a convenient browser interface.
-See the :ref:`components` section to read more about what each image is for.
+However, we also include a ``fairdatapoint-client`` container to get a convenient browser interface.
+See the :ref:`components` section to learn more about these three components.
 
-The following compose file represents a minimal stack for local testing:
+The following compose file represents a minimal ephemeral stack for local testing:
 
 .. literalinclude:: compose.ephemeral.yaml
    :name: ephemeral compose file
    :caption: compose.yml
    :language: yaml
 
-.. warning:: This is an ephemeral stack, so there is no `Persistence`_.
-   All data from the mongo container and in-memory triple store are lost when the stack is torn down.
+This is an ephemeral stack, so all data from the ``mongo`` container and in-memory triple store are lost when the stack is torn down.
 
-You can set this up using ``docker compose up -d``, and tear it back down, when you're done, using ``docker compose down``.
-If necessary, container logs can be viewed using ``docker compose logs -f``.
+The next section shows one approach to making your data prsistent.
 
-The stack might take a while to start because of the health checks that are used to enforce the proper startup order.
-Once started, you can visit http://localhost in your web browser.
+Persistent stack
+----------------
 
-API docs
---------
+...
 
-If you're planning to add metadata in bulk, you can write a script to use the FDP API.
-Check out the API docs at http://localhost/swagger-ui/index.html.
+The following compose file represents a minimal persistent stack for local testing:
 
-Logging in
-----------
+.. literalinclude:: compose.persistent.yaml
+   :name: persistent compose file
+   :caption: compose.yml
+   :language: yaml
 
-Although unauthenticated users can view FDP content, you'll need to log in to add content.
-
-The default demo accounts are:
-
-+-----------------------------+-------+----------+
-| User name                   | Role  | Password |
-+=============================+=======+==========+
-| albert.einstein@example.com | admin | password |
-+-----------------------------+-------+----------+
-| nikola.tesla@example.com    | user  | password |
-+-----------------------------+-------+----------+
-
-See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles.
-
-.. danger::
-   Using the default accounts is alright for testing on your local machine, but you should definitely change them before exposing your FDP to the public internet.
-
-
-Persistence
-===========
-
-We don't have any data persistence with the previous configuration.
-Once we remove the containers, all the data will be lost.
-To keep it, we need to configure MongoDB volume and persistent triple store.
-
-
-MongoDB volume
---------------
-
-We use MongoDB to store information about user accounts and access permissions.
-We can configure a `volume <https://docs.docker.com/storage/volumes/>`__ so that the data keep on our disk even if we delete MongoDB container.
-
-We can also expose port ``27017`` so we can access MongoDB from our local computer using a client application like `Robo 3T <https://robomongo.org>`__.
-
-Here is the updated docker compose file:
-
-.. code-block:: yaml
-   :substitutions:
-
-    # compose.yml
-
-    services:
-
-        fdp:
-            image: fairdata/fairdatapoint:|compose_ver|
-
-        fdp-client:
-            image: fairdata/fairdatapoint-client:|compose_ver|
-            ports:
-                - 80:80
-            environment:
-                - FDP_HOST=fdp
-
-        mongo:
-            image: mongo:4.0.12
-            ports:
-                - 27017:27017
-            volumes:
-                - ./mongo/data:/data/db
-
+...
 
 .. _persistent-repository:
 
@@ -347,6 +291,7 @@ The following is a bare minimum example.
     }
 
 .. _compose specification: https://compose-spec.io/
+.. _config docs: https://docs.docker.com/reference/cli/docker/compose/config/
 .. _Docker Compose: https://docs.docker.com/compose/
 .. _Docker installation instructions: https://docs.docker.com/engine/install/
 .. _FAIRDataTeam/compose: https://github.com/FAIRDataTeam/compose

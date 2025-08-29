@@ -1,0 +1,92 @@
+services:
+  fdp:
+    depends_on:
+      # wait for graphdb-init to complete (graphdb repo creation)
+      graphdb-init:
+        condition: service_completed_successfully
+      mongo:
+        condition: service_healthy
+    environment:
+      INSTANCE_CLIENTURL: http://localhost
+      INSTANCE_PERSISTENTURL: http://localhost
+      # configure fdp to use graphdb
+      REPOSITORY_GRAPHDB_REPOSITORY: fdp
+      REPOSITORY_GRAPHDB_URL: http://graphdb:7200
+      REPOSITORY_TYPE: "4"
+      SERVER_PORT: "8080"
+    healthcheck:
+      test: wget --quiet --spider http://127.0.0.1:8080 || exit 1
+      start_interval: 3s
+      start_period: 30s
+    image: fairdata/fairdatapoint:1.17
+    restart: "no"
+
+  fdp-client:
+    depends_on:
+      fdp:
+        condition: service_healthy
+    environment:
+      FDP_HOST: fdp:8080
+    healthcheck:
+      test: wget --quiet --spider http://127.0.0.1 || exit 1
+      start_interval: 3s
+      start_period: 30s
+    image: fairdata/fairdatapoint-client:1.17
+    ports:
+      - host_ip: 127.0.0.1
+        target: 80
+        published: "80"
+    restart: "no"
+
+  graphdb:
+    healthcheck:
+      test: "curl http://localhost:7200/rest/monitor/infrastructure --silent --fail || exit 1"
+      start_interval: 3s
+      start_period: 30s
+    image: ontotext/graphdb:10.8.10
+    ports:
+      - host_ip: 127.0.0.1
+        target: 7200
+        published: "7200"
+    restart: "no"
+    volumes:
+      - graphdbdata:/opt/graphdb/home
+
+  graphdb-init:
+    command:
+      - sh
+      - -c
+      - |
+        for name in $$REPO_NAMES
+        do
+        # substitute "repo-name" by variable name in graphdb repo template
+        data=$$(sed s/repo-name/$$name/g /templates/graphdb-repo-template.json)
+        # post repo definition to graphdb rest api
+        curl http://graphdb:7200/rest/repositories --verbose --silent --header "Content-Type: application/json" --data "$$data"
+        done
+    depends_on:
+      graphdb:
+        condition: service_healthy
+    environment:
+      REPO_NAMES: fdp
+    image: curlimages/curl:latest
+    networks:
+      default: null
+    restart: "no"
+    volumes:
+      - ".:/templates"
+
+  mongo:
+    healthcheck:
+      test: |
+        [ $(mongosh --quiet --host localhost:27017 --eval "db.runCommand('ping').ok") = 1 ] || exit 1
+      start_interval: 3s
+      start_period: 30s
+    image: mongo:8.0
+    restart: "no"
+    volumes:
+      - mongodbdata:/data/db
+
+volumes:
+  graphdbdata:
+  mongodbdata:
