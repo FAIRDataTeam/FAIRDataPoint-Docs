@@ -6,8 +6,8 @@ FAIR Data Point Reference Implementation Documentation
    :maxdepth: 2
 
    about/about
-   about/users-and-roles
    about/components
+   about/users-and-roles
 
 .. toctree::
    :caption: Deployment
