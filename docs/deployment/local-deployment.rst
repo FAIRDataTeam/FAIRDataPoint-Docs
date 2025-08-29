@@ -167,6 +167,7 @@ For example, the following compose file defines the minimal ephemeral FDP stack 
    :name: ephemeral/v1
    :caption: ephemeral/v1/compose.yml
    :language: yaml
+   :lines: 2-
 
 Persistent
 ~~~~~~~~~~
@@ -178,6 +179,7 @@ In this case we add ``graphdb`` as an external triple store:
    :name: persistent/v1
    :caption: persistent/v1/compose.yml
    :language: yaml
+   :lines: 2-
 
 In addition, we need to extend and/or override the configuration of the basic components.
 This is achieved using a `compose.override.yml` file, as explained in the `compose-file merge docs`_:
