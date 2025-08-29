@@ -17,3 +17,11 @@ sphinx:
   configuration: docs/conf.py
 
 formats: all
+
+# include the FAIRDataTeam/compose repo as submodule, for DRY examples
+# https://docs.readthedocs.com/platform/stable/config-file/v2.html#submodules
+# https://git-scm.com/docs/gitsubmodules
+# https://git-scm.com/docs/git-submodule
+# https://git-scm.com/book/en/v2/Git-Tools-Submodules
+submodules:
+  include: all
