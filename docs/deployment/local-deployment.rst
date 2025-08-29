@@ -2,15 +2,92 @@
 Local Deployment
 ****************
 
-The quickest way to set up an FDP for local testing is by using `Docker Compose`_ to run the desired :ref:`components`.
-If you don't have docker compose, follow the `Docker installation instructions`_ first.
+This section describes how to set up a local deployment of the FAIR Data Point on your development system.
+This local deployment is intended for testing, allowing you to play around with the FDP and try out different configurations.
+
+
+Prerequisites
+=============
+
+To set up an FDP stack, using containers described in the :ref:`components` section, we use `Docker Compose`_ or an equivalent tool.
+If you don't have Docker Compose yet, follow the `Docker installation instructions`_ first.
+Alternatively, you could install another tool that supports the `compose specification`_.
+
 
 .. _quickstart:
+
 Quickstart
 ==========
 
-Set up the stack
-----------------
+Set up
+------
+
+Here's how to get started quickly with a minimal FDP stack that has no data persistence (ephemeral):
+
+1. Clone the `FAIRDataTeam/compose`_ repository from GitHub:
+
+   .. code-block:: bash
+
+      git clone https://github.com/FAIRDataTeam/compose.git
+
+   The `FAIRDataTeam/compose`_ repository contains the latest compose files for a variety of FDP configurations and versions, such as ``persistent`` and ``ephemeral`` (i.e. non-persistent) configurations.
+   These compose files are used by our development team for testing FDP deployments.
+   As such, they represent a good starting point for reproducing any issues that you may encounter.
+   See the `FAIRDataTeam/compose readme`_ for more information.
+
+2. Change into the directory for the ``ephemeral/v1`` stack:
+
+   .. code-block:: bash
+
+      cd compose/fdp/ephemeral/v1
+
+   This directory contains a compose configuration that defines a minimal stack consisting of the ``mongo``, ``fdp``, and ``fdp-client`` containers.
+   Here  ``ephemeral`` implies *"non-persistent data"* and ``v1`` refers to the latest major version of the ``fdp`` and ``fdp-client`` components.
+   The ``fdp`` is configured to use an in-memory triple store, and ``mongo`` data is stored only in the container.
+   There are no persistent `volumes`_ or `bind mounts`_, so all data is lost when the stack is torn down.
+
+   If you need persistent data storage, you can try the ``persistent/v1`` configuration instead.
+   This configuration includes a ``graphdb`` triple store and uses `volumes`_ for persistence of all data.
+
+3. Set up the stack:
+
+   .. code-block:: bash
+
+      docker compose up -d
+
+   This downloads the required Docker images, if necessary, and starts the containers in the proper order.
+
+4. Once all containers are up, and healthy, you can start playing around with the FDP.
+
+   For example:
+
+   - Use ``curl http://localhost`` to see the machine readable FDP metadata
+   - Visit http://localhost in your favorite web browser to try the FDP client interface
+   - Visit http://localhost/swagger-ui/index.html in the browser to inspect the API documentation
+
+Tear down
+---------
+
+Once you're done playing with your FDP, here's how to remove every trace:
+
+1. Make sure you are (still) in the directory corresponding to the running stack, in our case ``ephemeral/v1``.
+
+2. Tear down the stack:
+
+   .. code-block:: bash
+
+      docker compose down
+
+   If you're running a ``persistent`` configuration, this command does *not* remove the persistent volumes.
+   If you *do* want to remove the persistent volumes, it is most convenient to use ``docker compose down --volumes``.
+   Alternatively you could use ``docker volume rm <volume-name>``.
+
+3. If you really want to remove *every* trace of the FDP, you'll need to `remove the containers`_ and corresponding `images`_ as well.
+   If not, you can leave them in place for the next time.
+
+
+Minimal stack
+=============
 
 The absolute minimal FDP stack consists of just the ``fairdatapoint`` and ``mongo`` containers.
 However, we also include the ``fairdatapoint-client`` to get a convenient browser interface.
@@ -249,5 +326,12 @@ The following is a bare minimum example.
         }
     }
 
+.. _compose specification: https://compose-spec.io/
 .. _Docker Compose: https://docs.docker.com/compose/
 .. _Docker installation instructions: https://docs.docker.com/engine/install/
+.. _FAIRDataTeam/compose: https://github.com/FAIRDataTeam/compose
+.. _FAIRDataTeam/compose readme: https://github.com/FAIRDataTeam/compose/blob/master/readme.md
+.. _volumes: https://docs.docker.com/engine/storage/volumes/
+.. _bind mounts: https://docs.docker.com/engine/storage/bind-mounts/
+.. _remove the containers: https://docs.docker.com/reference/cli/docker/container/rm/
+.. _images: https://docs.docker.com/reference/cli/docker/image/rm/
