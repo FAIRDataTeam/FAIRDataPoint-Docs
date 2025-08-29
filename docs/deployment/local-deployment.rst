@@ -115,8 +115,8 @@ See the :ref:`components` section to read more about what each image is for.
 
 The following compose file represents a minimal stack for local testing:
 
-.. literalinclude:: compose.yml
-   :name: minimal compose file
+.. literalinclude:: compose.ephemeral.yaml
+   :name: ephemeral compose file
    :caption: compose.yml
    :language: yaml
 
