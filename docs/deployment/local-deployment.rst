@@ -2,7 +2,7 @@
 Local Deployment
 ****************
 
-This section describes how to set up a local deployment of the FAIR Data Point on your development system.
+Here you'll learn how to set up a local deployment of the FAIR Data Point on your development system.
 This local deployment is intended for testing, allowing you to play around with the FDP and try out different configurations.
 
 
@@ -31,7 +31,7 @@ Here's how to get started quickly with a minimal FDP stack that has no data pers
       git clone https://github.com/FAIRDataTeam/compose.git
 
    The `FAIRDataTeam/compose`_ repository contains the latest compose files for a variety of FDP configurations and versions, such as ``persistent`` and ``ephemeral`` (i.e. non-persistent) configurations.
-   These compose files are used by our development team for testing FDP deployments.
+   These compose files are used by our development team for testing FDP deployments locally.
    As such, they represent a good starting point for reproducing any issues that you may encounter.
    See the `FAIRDataTeam/compose readme`_ for more information.
 
@@ -46,8 +46,8 @@ Here's how to get started quickly with a minimal FDP stack that has no data pers
    The ``fdp`` is configured to use an in-memory triple store, and ``mongo`` data is stored only in the container.
    There are no persistent `volumes`_ or `bind mounts`_, so all data is lost when the stack is torn down.
 
-   If you need persistent data storage, you can try the ``persistent/v1`` configuration instead.
-   This configuration includes a ``graphdb`` triple store and uses `volumes`_ for persistence of all data.
+   If you do need persistent data storage, you can try the ``persistent/v1`` configuration instead.
+   That configuration includes a ``graphdb`` triple store and uses `volumes`_ for persistence of all data.
 
 3. Set up the stack:
 
@@ -62,8 +62,27 @@ Here's how to get started quickly with a minimal FDP stack that has no data pers
    For example:
 
    - Use ``curl http://localhost`` to see the machine readable FDP metadata
-   - Visit http://localhost in your favorite web browser to try the FDP client interface (also see `Logging in`_)
+   - Visit http://localhost in your favorite web browser to try the FDP client interface (also see `Authentication`_)
    - Visit http://localhost/swagger-ui/index.html in the browser to inspect the API documentation
+
+Authentication
+--------------
+
+Although unauthenticated users can view all published FDP content, only authenticated users can modify FDP content.
+
+To log in to your local test FDP, you can use one of the default user accounts:
+
+===== =============================== ============
+Role  Username                        Password
+===== =============================== ============
+admin ``albert.einstein@example.com`` ``password``
+user  ``nikola.tesla@example.com``    ``password``
+===== =============================== ============
+
+See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles.
+
+.. danger::
+   Using the default user accounts is fine for testing on your local machine, but you should definitely change or remove them before exposing your FDP to the public internet.
 
 Tear down
 ---------
