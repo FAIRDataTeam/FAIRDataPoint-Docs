@@ -108,7 +108,7 @@ Deep dive
 =========
 
 A more detailed description of the compose configurations from the `FAIRDataTeam/compose`_ repo can be found below.
-You can use ``docker compose config`` (`docs`_) to inspect individual configurations in the repo.
+First we describe the basic `stack components`_, then we show you how to use them in `composing a stack`_.
 
 Stack components
 ----------------
@@ -169,6 +169,14 @@ For example, the following compose file defines the minimal ephemeral FDP stack 
    :language: yaml
    :lines: 2-
 
+By itself, this file is not very informative.
+In order to inspect the complete configuration resulting from the above, you can use the `config command`_:
+
+.. code-block:: bash
+
+   docker compose config
+
+
 Persistent
 ~~~~~~~~~~
 
@@ -217,9 +225,9 @@ To do this we need to mount our custom `application.yml` file as follows:
 .. _compose-file include: https://docs.docker.com/reference/compose-file/include/
 .. _compose-file merge docs: https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/
 .. _compose specification: https://compose-spec.io/
+.. _config command: https://docs.docker.com/reference/cli/docker/compose/config/
 .. _Docker Compose: https://docs.docker.com/compose/
 .. _Docker installation instructions: https://docs.docker.com/engine/install/
-.. _docs: https://docs.docker.com/reference/cli/docker/compose/config/
 .. _externalized configuration: https://docs.spring.io/spring-boot/reference/features/external-config.html
 .. _FAIRDataTeam/compose: https://github.com/FAIRDataTeam/compose
 .. _FAIRDataTeam/compose readme: https://github.com/FAIRDataTeam/compose/blob/master/readme.md
