@@ -43,10 +43,11 @@ Here's how to get started quickly with a minimal FDP stack that has no data pers
 
    This directory contains a compose configuration that defines a minimal stack consisting of the ``mongo``, ``fdp``, and ``fdp-client`` containers.
    Here  ``ephemeral`` implies *"non-persistent data"* and ``v1`` refers to the latest major version of the ``fdp`` and ``fdp-client`` components.
+
    The ``fdp`` is configured to use an in-memory triple store, and ``mongo`` data is stored only in the container.
    There are no persistent `volumes`_ or `bind mounts`_, so all data is lost when the stack is torn down.
 
-   If you do need persistent data storage, you can try the ``persistent/v1`` configuration instead.
+   If you *do* need persistent data storage, you can try the ``persistent/v1`` configuration instead.
    That configuration includes a ``graphdb`` triple store and uses `volumes`_ for persistence of all data.
 
 3. Set up the stack:
@@ -63,12 +64,15 @@ Here's how to get started quickly with a minimal FDP stack that has no data pers
 
    - Use ``curl http://localhost`` to see the machine readable FDP metadata
    - Visit http://localhost in your favorite web browser to try the FDP client interface (also see `Authentication`_)
-   - Visit http://localhost/swagger-ui/index.html in the browser to inspect the API documentation
+   - Visit http://localhost/swagger-ui/index.html in the browser to inspect the interactive API documentation
 
 Authentication
 --------------
 
 Although unauthenticated users can view all published FDP content, only authenticated users can modify FDP content.
+
+Default credentials
+~~~~~~~~~~~~~~~~~~~
 
 To log in to your local test FDP, you can use one of the default user accounts:
 
@@ -83,6 +87,15 @@ See the :ref:`Users and Roles <users-and-roles>` section to read more about user
 
 .. danger::
    Using the default user accounts is fine for testing on your local machine, but you should definitely change or remove them before exposing your FDP to the public internet.
+
+API tokens
+~~~~~~~~~~
+
+The FDP API uses token authentication.
+You can obtain a token by posting your credentials to the ``/tokens`` endpoint, as described in your FDP's `API authentication docs`_.
+You'll find the token in the response body.
+This token can be included in the ``Authorization`` header for subsequent API requests that require authentication, as in ``'Authorization: Bearer <your-token>'``.
+For convenience, the interactive API docs have an ``Authorize`` button at the top where you can paste your token to authenticate for the session.
 
 Tear down
 ---------
@@ -176,6 +189,9 @@ In order to inspect the complete configuration resulting from the above, you can
 
    docker compose config
 
+..
+
+    It merges the Compose files set by ``-f`` flags, resolves variables in the Compose file, and expands short-notation into the canonical format.
 
 Persistent
 ~~~~~~~~~~
@@ -221,6 +237,7 @@ To do this we need to mount our custom `application.yml` file as follows:
             ...
 
 
+.. _API authentication docs: http://localhost/swagger-ui/index.html#/Authentication%20and%20Authorization/generateToken
 .. _bind mounts: https://docs.docker.com/engine/storage/bind-mounts/
 .. _compose-file include: https://docs.docker.com/reference/compose-file/include/
 .. _compose-file merge docs: https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/
