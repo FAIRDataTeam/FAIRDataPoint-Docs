@@ -4,6 +4,7 @@ FAIR Data Point Reference Implementation Documentation
 .. toctree::
    :caption: About
    :maxdepth: 2
+   :numbered: 2
 
    about/about
    about/components
@@ -12,6 +13,7 @@ FAIR Data Point Reference Implementation Documentation
 .. toctree::
    :caption: Deployment
    :maxdepth: 2
+   :numbered: 2
 
    deployment/local-deployment
    deployment/production-deployment
@@ -20,6 +22,7 @@ FAIR Data Point Reference Implementation Documentation
 .. toctree::
    :caption: Usage
    :maxdepth: 2
+   :numbered: 2
 
    usage/usage
    usage/api-usage
@@ -27,6 +30,7 @@ FAIR Data Point Reference Implementation Documentation
 .. toctree::
    :caption: Development
    :maxdepth: 2
+   :numbered: 2
 
    development/contributing
    development/changelog
