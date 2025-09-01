@@ -12,11 +12,6 @@ Features
 -  Define custom metadata resources, based on schemas
 -  Manage user accounts and access
 
-Quickstart
-----------
-
-Want to try it out? Set up a local test FAIR Data Point following the instructions in the :ref:`quickstart` section.
-
 Security
 --------
 
@@ -24,3 +19,8 @@ Everyone can read all published metadata resources, such as catalogs, datasets, 
 Only authenticated users can make changes to any of the FDP content.
 Two roles are available for authenticated users: ``user`` and ``admin``.
 Details are discussed in :ref:`Users and Roles <users-and-roles>`.
+
+Getting started
+---------------
+
+Want to try it out? Set up a local test FAIR Data Point following the instructions in the :ref:`quickstart` section.

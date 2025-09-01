@@ -58,44 +58,16 @@ Here's how to get started quickly with a minimal FDP stack that has no data pers
 
    This downloads the required Docker images, if necessary, and starts the containers in the proper order.
 
-4. Once all containers are up, and healthy, you can start playing around with the FDP.
+Play around
+-----------
 
-   For example:
+Once all containers are up, and healthy, you can start playing around with the FDP.
 
-   - Use ``curl http://localhost`` to see the machine readable FDP metadata
-   - Visit http://localhost in your favorite web browser to try the FDP client interface (also see `Authentication`_)
-   - Visit http://localhost/swagger-ui/index.html in the browser to inspect the interactive API documentation
+For example:
 
-Authentication
---------------
-
-Although unauthenticated users can view all published FDP content, only authenticated users can modify FDP content.
-
-Default credentials
-~~~~~~~~~~~~~~~~~~~
-
-To log in to your local test FDP, you can use one of the default user accounts:
-
-===== =============================== ============
-Role  Username                        Password
-===== =============================== ============
-admin ``albert.einstein@example.com`` ``password``
-user  ``nikola.tesla@example.com``    ``password``
-===== =============================== ============
-
-See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles.
-
-.. warning::
-   Using the default user accounts is fine for testing on your local machine, but you should definitely change or remove them *before* exposing your FDP to the public internet.
-
-API tokens
-~~~~~~~~~~
-
-The FDP API uses token authentication.
-You can obtain a token by posting your credentials to the ``/tokens`` endpoint, as described in your FDP's `API authentication docs`_.
-You'll find the token in the response body.
-This token can be included in the ``Authorization`` header for subsequent API requests that require authentication, as in ``'Authorization: Bearer <your-token>'``.
-For convenience, the interactive API docs have an ``Authorize`` button at the top where you can paste your token to authenticate for the session.
+- Use ``curl http://localhost`` to see the machine readable FDP metadata
+- Visit http://localhost in your favorite web browser to try the FDP client interface (also see :ref:`authentication`)
+- Visit http://localhost/swagger-ui/index.html in the browser to inspect the interactive API documentation
 
 Tear down
 ---------
@@ -237,7 +209,6 @@ To do this we need to mount our custom `application.yml` file as follows:
             ...
 
 
-.. _API authentication docs: http://localhost/swagger-ui/index.html#/Authentication%20and%20Authorization/generateToken
 .. _bind mounts: https://docs.docker.com/engine/storage/bind-mounts/
 .. _compose-file include: https://docs.docker.com/reference/compose-file/include/
 .. _compose-file merge docs: https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/
