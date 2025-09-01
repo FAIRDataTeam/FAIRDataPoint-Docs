@@ -30,28 +30,42 @@ However, we can provide some pointers and suggestions to help you get started.
 Assuming basic infrastructure hardening is already in place (see e.g. `OWASP cheat sheets`_), we'll look at a few things:
 
 - HTTPS (encrypted communication based on TLS)
-- database authentication
-
+- database security
+- database backups
 
 Encrypted communication
 =======================
 
 One of the first requirements for a production deployment is to set up Transport Layer Security (TLS) to provide encrypted communication, better known as HTTPS (HTTP over TLS).
 
-Database authentication
-=======================
+Database security
+=================
 
-`database security cheat sheet`_
+- `database security cheat sheet`_
+- `mongodb security cecklist`_
 
+Secrets
+=======
 
+List of secrets:
+
+- jwt token secret key
+- default user accounts
+- mongodb credentials
+- triple store credentials
+
+Backups
+=======
+
+(...)
 
 .. _OWASP cheat sheets: https://cheatsheetseries.owasp.org
-.. _: https://cheatsheetseries.owasp.org/cheatsheets/Web_Service_Security_Cheat_Sheet.html
+.. .. _: https://cheatsheetseries.owasp.org/cheatsheets/Web_Service_Security_Cheat_Sheet.html
 .. _database security cheat sheet: https://cheatsheetseries.owasp.org/cheatsheets/Database_Security_Cheat_Sheet.html
-.. _: https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
-.. _: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
-.. _: https://ubuntu.com/blog/what-is-system-hardening-definition-and-best-practices
-
+.. .. _: https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+.. .. _: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+.. .. _: https://ubuntu.com/blog/what-is-system-hardening-definition-and-best-practices
+.. _mongodb security cecklist: https://www.mongodb.com/docs/manual/administration/security-checklist/
 
 
 TODO: update the text below
