@@ -85,8 +85,8 @@ user  ``nikola.tesla@example.com``    ``password``
 
 See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles.
 
-.. danger::
-   Using the default user accounts is fine for testing on your local machine, but you should definitely change or remove them before exposing your FDP to the public internet.
+.. warning::
+   Using the default user accounts is fine for testing on your local machine, but you should definitely change or remove them *before* exposing your FDP to the public internet.
 
 API tokens
 ~~~~~~~~~~
