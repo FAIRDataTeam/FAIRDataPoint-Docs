@@ -4,14 +4,66 @@
 Production Deployment
 *********************
 
-If you want to run the FAIR Data Point in production it is recommended to use HTTPS protocol with valid certificates.
-You can easily configure FDP to run behind a reverse proxy which takes care of the certificates.
+Disclaimer
+==========
 
-In this example, we will configure FDP to run on ``https://fdp.example.com``.
-We will see how to configure the reverse proxy in the same Docker Compose file.
-However, it is not necessary, and the proxy can be configured elsewhere.
+Running a FAIR Data Point in production is a bit more involved than running one offline on your development machine.
+The configuration details of a production deployments depend on many factors, such as available resources and security requirements.
+Whether you're setting up your own bare metal server or using a cloud provider that offers all kinds of managed services, you'll need to think about many of the same topics.
 
-First of all, we need to generate the certificates on the server where we want to run the FDP.
+Here's just a few topics that come to mind, in no particular order:
+
+- network security
+- secrets storage
+- identity and access management (IAM)
+- data management (security, privacy, replication, backups)
+- service availability (e.g. container orchestration)
+- performance
+- audit logging
+- infrastructure as code
+- and so on and so forth...
+
+Obviously this list is far from exhaustive.
+
+Due to this complexity we cannot provide a generic solution for a production deployment.
+However, we can provide some pointers and suggestions to help you get started.
+Assuming basic infrastructure hardening is already in place (see e.g. `OWASP cheat sheets`_), we'll look at a few things:
+
+- HTTPS (encrypted communication based on TLS)
+- database authentication
+
+
+Encrypted communication
+=======================
+
+One of the first requirements for a production deployment is to set up Transport Layer Security (TLS) to provide encrypted communication, better known as HTTPS (HTTP over TLS).
+
+Database authentication
+=======================
+
+`database security cheat sheet`_
+
+
+
+.. _OWASP cheat sheets: https://cheatsheetseries.owasp.org
+.. _: https://cheatsheetseries.owasp.org/cheatsheets/Web_Service_Security_Cheat_Sheet.html
+.. _database security cheat sheet: https://cheatsheetseries.owasp.org/cheatsheets/Database_Security_Cheat_Sheet.html
+.. _: https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+.. _: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+.. _: https://ubuntu.com/blog/what-is-system-hardening-definition-and-best-practices
+
+
+
+TODO: update the text below
+
+
+If you want to run the FAIR Data Point (FDP) in production we recommend setting up TLS so you can serve all traffic over HTTPS.
+It is convenient to configure the FDP to run behind a reverse proxy which takes care of the TLS certificates.
+
+In this example, we will configure the FDP to run on the domain ``fdp.example.com``.
+In this example, we configure the reverse proxy in the same Docker Compose file, but this is not required.
+
+First of all, we need to generate the TLS certificates on the server that will run the FDP.
 You can use `Let's Encrypt <https://letsencrypt.org>`__ and create the certificates with `certbot <https://certbot.eff.org>`__.
 The certificates are generated in a standard location, e.g., ``/etc/letsencrypt/live/fdp.example.com`` for ``fdp.example.com`` domain.
 We will mount the whole ``letsencrypt`` folder to the reverse proxy container later so that it can use the certificates.
