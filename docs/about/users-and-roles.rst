@@ -27,7 +27,7 @@ user  ``nikola.tesla@example.com``    ``password``
 ===== =============================== ============
 
 .. warning::
-   These default user accounts are only intended for off-line testing on your local machine.
+   These default user accounts are only intended for *offline* testing on your local machine.
    Make sure to change or remove the default user credentials *before* exposing your FDP to the public internet.
 
 API tokens

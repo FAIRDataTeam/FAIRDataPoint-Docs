@@ -2,8 +2,13 @@
 Local Deployment
 ****************
 
-Here you'll learn how to set up a local deployment of the FAIR Data Point on your development system.
-This local deployment is intended for testing, allowing you to play around with the FDP and try out different configurations.
+Here you'll learn how to quickly set up a local deployment of the FAIR Data Point on your development system.
+This will allow you to play around with the FDP and try out different configurations, without needing to worry about too many details.
+
+.. warning::
+
+   This local deployment is intended for *offline* testing only.
+   If you are going to expose your FDP to the public internet, please have a look at the :ref:`production-deployment` section.
 
 
 Prerequisites
@@ -66,7 +71,7 @@ Once all containers are up, and healthy, you can start playing around with the F
 For example:
 
 - Use ``curl http://localhost`` to see the machine readable FDP metadata
-- Visit http://localhost in your favorite web browser to try the FDP client interface (also see :ref:`authentication`)
+- Visit http://localhost in your favorite web browser to try the FDP client interface (also see the :ref:`authentication` and :ref:`usage` sections)
 - Visit http://localhost/swagger-ui/index.html in the browser to inspect the interactive API documentation
 
 Tear down
