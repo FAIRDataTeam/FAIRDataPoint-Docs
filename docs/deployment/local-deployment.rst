@@ -191,7 +191,7 @@ In order to inspect the complete configuration resulting from the above, you can
 
 ..
 
-    It merges the Compose files set by ``-f`` flags, resolves variables in the Compose file, and expands short-notation into the canonical format.
+    It merges the Compose files set by -f flags, resolves variables in the Compose file, and expands short-notation into the canonical format.
 
 Persistent
 ~~~~~~~~~~
