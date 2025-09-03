@@ -91,14 +91,14 @@ Here's a minimal example of an nginx server configuration that does the followin
 - pass ``https`` requests for ``fdp.example.com`` on to the upstream ``fdp-client`` container (over ``http``)
 - catch any other requests
 
-..  literalinclude:: nginx/server.conf
+..  literalinclude:: nginx/server.conf.template
     :name: nginx server config
-    :caption: server.conf
+    :caption: server.conf template
     :language: none
 
 ..  note::
 
-    The `official nginx image`_ has the ability to render templated configuration files with environment variables.
+    The `official nginx image`_ has the ability to render configuration file templates with environment variables.
     Any ``*.template`` files from the ``/etc/nginx/templates`` directory are rendered into ``/etc/nginx/conf.d``.
     The image's default ``/etc/nginx/nginx.conf`` then automatically includes ``*.conf`` files from ``/etc/nginx/conf.d`` in the ``http`` block.
 
