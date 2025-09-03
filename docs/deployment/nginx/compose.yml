@@ -1,5 +1,7 @@
 services:
   nginx:
+    environment:
+      FDP_HOST: fdp.example.com
     image: nginx
     ports:
       - "80:80"

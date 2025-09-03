@@ -61,6 +61,7 @@ Nginx compose service
 
 A minimal compose service definition for nginx is described below.
 Bind mounts are used to make the nginx configuration files and certificates from the Docker host available in the ``nginx`` container.
+The ``FDP_HOST`` environment variable is used in the ``server.conf`` config file described in the next section.
 
 ..  literalinclude:: nginx/compose.yml
     :name: nginx compose config
