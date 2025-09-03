@@ -81,6 +81,20 @@ This is just a minimal example, so you may want to  specify an image version, ad
         :language: yaml
         :lines: 2,5-6
 
+Nginx server configuration
+--------------------------
+
+Here's a minimal example of an nginx server configuration that does the following:
+
+- redirect ``http`` to ``https``
+- pass ``https`` requests for ``fdp.example.com`` on to the upstream ``fdp-client`` container (over ``http``)
+- catch any other requests
+
+..  literalinclude:: nginx/server.conf
+    :name: nginx server config
+    :caption: server.conf
+    :language: none
+
 ..  note::
 
     The default ``/etc/nginx/nginx.conf`` in the `official nginx image`_ automatically includes ``*.conf`` files from ``/etc/nginx/conf.d`` in the ``http`` block.
@@ -94,14 +108,6 @@ This is just a minimal example, so you may want to  specify an image version, ad
             ...
             include /etc/nginx/conf.d/*.conf;
         }
-
-Nginx virtual server configuration
-----------------------------------
-
-..  literalinclude:: nginx/server.conf
-    :name: nginx server config
-    :caption: minimal nginx virtual server configuration
-    :language: none
 
 
 Database security
