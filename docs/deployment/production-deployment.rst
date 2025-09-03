@@ -69,7 +69,8 @@ The ``FDP_HOST`` environment variable is used in the ``server.conf`` config file
     :language: yaml
     :lines: 2-
 
-This is just a minimal example, so you may want to  specify an image version, adjust the paths where necessary, and/or add some addional config.
+This is just a minimal example, so you may want to  specify an image version, adjust the paths, where necessary, and/or add some addional config.
+There is also an ``nginxinc/nginx-unprivileged`` image, but that will require a bit more configuration.
 
 ..  note::
 
