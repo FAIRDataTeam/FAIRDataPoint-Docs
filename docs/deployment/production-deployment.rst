@@ -98,8 +98,9 @@ Here's a minimal example of an nginx server configuration that does the followin
 
 ..  note::
 
-    The default ``/etc/nginx/nginx.conf`` in the `official nginx image`_ automatically includes ``*.conf`` files from ``/etc/nginx/conf.d`` in the ``http`` block.
-    That's why we mount our config files to ``/etc/nginx/conf.d``.
+    The `official nginx image`_ has the ability to render templated configuration files with environment variables.
+    Any ``*.template`` files from the ``/etc/nginx/templates`` directory are rendered into ``/etc/nginx/conf.d``.
+    The image's default ``/etc/nginx/nginx.conf`` then automatically includes ``*.conf`` files from ``/etc/nginx/conf.d`` in the ``http`` block.
 
     ..  code-block::
         :caption: default nginx.conf http block includes files from conf.d
