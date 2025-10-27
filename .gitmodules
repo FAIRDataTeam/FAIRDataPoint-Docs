@@ -1,0 +1,3 @@
+[submodule "docs/deployment/compose"]
+	path = docs/deployment/compose
+	url = https://github.com/FAIRDataTeam/compose.git

@@ -2,280 +2,232 @@
 Local Deployment
 ****************
 
-FAIR Data Point is distributed in Docker images.
-For a simple local deployment, you need to run ``fairdatapoint``, ``fairdatapoint-client`` and ``mongo`` images.
-See the :ref:`Components <components>` section to read more about what each image is for.
+Here you'll learn how to quickly set up a local deployment of the FAIR Data Point on your development system.
+This will allow you to play around with the FDP and try out different configurations, without needing to worry about too many details.
 
-Here is an example of the simplest `Docker Compose <https://docs.docker.com/compose/>`__ configuration to run FDP.
+.. warning::
+
+   This local deployment is intended for *offline* testing only.
+   If you are going to expose your FDP to the public internet, please have a look at the :ref:`production-deployment` section.
+
+
+Prerequisites
+=============
+
+To set up an FDP stack, using containers described in the :ref:`components` section, we use `Docker Compose`_ or an equivalent tool.
+If you don't have Docker Compose yet, follow the `Docker installation instructions`_ first.
+Alternatively, you could install another tool that supports the `compose specification`_.
+
+
+.. _quickstart:
+
+Quickstart
+==========
+
+Set up
+------
+
+Here's how to get started quickly with a minimal FDP stack that has no data persistence (ephemeral):
+
+1. Clone the `FAIRDataTeam/compose`_ repository from GitHub:
+
+   .. code-block:: bash
+
+      git clone https://github.com/FAIRDataTeam/compose.git
+
+   The `FAIRDataTeam/compose`_ repository contains the latest compose files for a variety of FDP configurations and versions, such as ``persistent`` and ``ephemeral`` (i.e. non-persistent) configurations.
+   These compose files are used by our development team for testing FDP deployments locally.
+   As such, they represent a good starting point for reproducing any issues that you may encounter.
+   See the `FAIRDataTeam/compose readme`_ for more information.
+
+2. Change into the directory for the ``ephemeral/v1`` stack:
+
+   .. code-block:: bash
+
+      cd compose/fdp/ephemeral/v1
+
+   This directory contains a compose configuration that defines a minimal stack consisting of the ``mongo``, ``fdp``, and ``fdp-client`` containers.
+   Here  ``ephemeral`` implies *"non-persistent data"* and ``v1`` refers to the latest major version of the ``fdp`` and ``fdp-client`` components.
+
+   The ``fdp`` is configured to use an in-memory triple store, and ``mongo`` data is stored only in the container.
+   There are no persistent `volumes`_ or `bind mounts`_, so all data is lost when the stack is torn down.
+
+   If you *do* need persistent data storage, you can try the ``persistent/v1`` configuration instead.
+   That configuration includes a ``graphdb`` triple store and uses `volumes`_ for persistence of all data.
+
+3. Set up the stack:
+
+   .. code-block:: bash
+
+      docker compose up -d
+
+   This downloads the required Docker images, if necessary, and starts the containers in the proper order.
+
+Play around
+-----------
+
+Once all containers are up, and healthy, you can start playing around with the FDP.
+
+For example:
+
+- Use ``curl http://localhost`` to see the machine readable FDP metadata
+- Visit http://localhost in your favorite web browser to try the FDP client interface (also see the :ref:`authentication` and :ref:`usage` sections)
+- Visit http://localhost/swagger-ui/index.html in the browser to inspect the interactive API documentation
+
+Tear down
+---------
+
+Once you're done playing with your FDP, here's how to remove every trace:
+
+1. Make sure you are (still) in the directory corresponding to the running stack, in our case ``ephemeral/v1``.
+
+2. Tear down the stack:
+
+   .. code-block:: bash
+
+      docker compose down
+
+   If you're running a ``persistent`` configuration, this command does *not* remove the persistent volumes.
+   If you *do* want to remove the persistent volumes, it is most convenient to use ``docker compose down --volumes``.
+   Alternatively you could use ``docker volume rm <volume-name>``.
+
+3. If you really want to remove *every* trace of the FDP, you'll need to `remove the containers`_ and corresponding `images`_ as well.
+   If not, you can leave them in place for the next time.
+
+Deep dive
+=========
+
+A more detailed description of the compose configurations from the `FAIRDataTeam/compose`_ repo can be found below.
+First we describe the basic `stack components`_, then we show you how to use them in `composing a stack`_.
+
+Stack components
+----------------
+
+The compose repo ``fdp/components`` dir contains basic configurations for the components described in the :ref:`components` section.
+These components are listed below:
+
+.. literalinclude:: compose/fdp/components/v1/fdp.yml
+   :name: fdp compose
+   :caption: minimal fdp v1 config
+   :language: yaml
+   :lines: 2-
+
+.. literalinclude:: compose/fdp/components/v1/fdp-client.yml
+   :name: fdp-client compose
+   :caption: minimal fdp-client v1 config
+   :language: yaml
+   :lines: 2-
+
+.. literalinclude:: compose/fdp/components/db/mongo.yml
+   :name: mongo compose
+   :caption: minimal mongo config
+   :language: yaml
+   :lines: 2-
+
+.. literalinclude:: compose/fdp/components/db/graphdb.yml
+   :name: graphdb compose
+   :caption: minimal graphdb config
+   :language: yaml
+   :lines: 2-
+
+The ``graphdb-init`` service, defined above, requires a template file in order to create an initial GraphDB repository.
+Here's a minimal example based on the `GraphDB API docs`_:
+
+.. literalinclude:: compose/fdp/components/db/graphdb-repo-template.json
+   :name: minimal graphdb repo template
+   :caption: graphdb repo template
+   :language: json
+
+Alternatively, it is possible to remove the template file and the ``graphdb-init`` service, and create the required repository manually, using the GraphDB web interface.
+See `GraphDB instructions`_ for more info.
+Note that you would need to do this before starting the ``fdp`` container.
+
+Composing a stack
+-----------------
+
+The components described above are the basic building blocks for our compose stack.
+We use the `compose-file include`_ element to build our actual compose file.
+
+Ephemeral
+~~~~~~~~~
+
+For example, the following compose file defines the minimal ephemeral FDP stack used in the `quickstart`_:
+
+.. literalinclude:: compose/fdp/ephemeral/v1/compose.yml
+   :name: ephemeral/v1
+   :caption: ephemeral/v1/compose.yml
+   :language: yaml
+   :lines: 2-
+
+By itself, this file is not very informative.
+In order to inspect the complete configuration resulting from the above, you can use the `config command`_:
+
+.. code-block:: bash
+
+   docker compose config
+
+..
+
+    It merges the Compose files set by -f flags, resolves variables in the Compose file, and expands short-notation into the canonical format.
+
+Persistent
+~~~~~~~~~~
+
+A stack with persistent data requires a bit more configuration.
+In this case we add ``graphdb`` as an external triple store:
+
+.. literalinclude:: compose/fdp/persistent/v1/compose.yml
+   :name: persistent/v1
+   :caption: persistent/v1/compose.yml
+   :language: yaml
+   :lines: 2-
+
+In addition, we need to extend and/or override the configuration of the basic components.
+This is achieved using a `compose.override.yml` file, as explained in the `compose-file merge docs`_:
+
+.. literalinclude:: compose/fdp/persistent/v1/compose.override.yml
+   :name: persistent/v1 override
+   :caption: persistent/v1/compose.override.yml
+   :language: yaml
+
+
+FDP configuration options
+-------------------------
+
+The FAIRDataPoint backend is a Java application based on the `Spring framework`_.
+Spring applications can be configured in several ways, as described in the Spring Boot `externalized configuration`_ docs.
+The FAIRDataPoint app itself uses `application.yml` files for the default configuration.
+In the `FAIRDataTeam/compose`_ repo, we use environment variables to override and/or extend this default configuration for the ``fdp`` service.
+For example, the default ``server.port`` Spring configuration value is overridden using the ``SERVER_PORT`` environment variable.
+This is convenient because we don't need to include multiple files.
+
+Nevertheless, it is also possible to override ``fdp`` configuration using an `application.yml` file.
+To do this we need to mount our custom `application.yml` file as follows:
 
 .. code-block:: yaml
    :substitutions:
 
-    # compose.yml
-
-    services:
-
-        fdp:
-            image: fairdata/fairdatapoint:|compose_ver|
-
-        fdp-client:
-            image: fairdata/fairdatapoint-client:|compose_ver|
-            ports:
-                - 80:80
-            environment:
-                - FDP_HOST=fdp
-
-        mongo:
-            image: mongo:4.0.12
-
-
-Then you can run it using ``docker compose up -d``.
-It might take a while to start.
-You can run ``docker compose logs -f`` to follow the output log.
-Once you see a message, that the application started, the FAIR Data Point should be working, and you can open http://localhost.
-
-
-There are two default user accounts.
-See the :ref:`Users and Roles <users-and-roles>` section to read more about users and roles.
-The default accounts are
-
-+-----------------------------+-------+----------+
-| User name                   | Role  | Password |
-+=============================+=======+==========+
-| albert.einstein@example.com | admin | password |
-+-----------------------------+-------+----------+
-| nikola.tesla@example.com    | user  | password |
-+-----------------------------+-------+----------+
-
-.. DANGER::
-
-    Using the default accounts is alright if you run FDP on your machine, but you should change them if you want to run FDP publicly.
-
-
-Running locally on a different port
-===================================
-
-If you want to run the FAIR Data Point locally on a different port than the default ``80``, additional configuration is necessary.
-First, we need to create a new file ``application.yml`` and set the client URL to the actual URL we want to use.
-
-.. code-block:: yaml
-
-    # application.yml
-
-    instance:
-        clientUrl: http://localhost:8080
-
-Then, we need to mount the application config into the FDP container and update the port which the FDP client runs on.
-
-.. code-block:: yaml
-   :substitutions:
-
-    # compose.yml
-
-    services:
-
-        fdp:
-            image: fairdata/fairdatapoint:|compose_ver|
-            volumes:
-                - ./application.yml:/fdp/application.yml:ro
-
-        fdp-client:
-            image: fairdata/fairdatapoint-client:|compose_ver|
-            ports:
-                - 8080:80
-            environment:
-                - FDP_HOST=fdp
-
-        mongo:
-            image: mongo:4.0.12
-
-
-Persistence
-===========
-
-We don't have any data persistence with the previous configuration.
-Once we remove the containers, all the data will be lost.
-To keep it, we need to configure MongoDB volume and persistent triple store.
-
-
-MongoDB volume
---------------
-
-We use MongoDB to store information about user accounts and access permissions.
-We can configure a `volume <https://docs.docker.com/storage/volumes/>`__ so that the data keep on our disk even if we delete MongoDB container.
-
-We can also expose port ``27017`` so we can access MongoDB from our local computer using a client application like `Robo 3T <https://robomongo.org>`__.
-
-Here is the updated docker compose file:
-
-.. code-block:: yaml
-   :substitutions:
-
-    # compose.yml
-
-    services:
-
-        fdp:
-            image: fairdata/fairdatapoint:|compose_ver|
-
-        fdp-client:
-            image: fairdata/fairdatapoint-client:|compose_ver|
-            ports:
-                - 80:80
-            environment:
-                - FDP_HOST=fdp
-
-        mongo:
-            image: mongo:4.0.12
-            ports:
-                - 27017:27017
-            volumes:
-                - ./mongo/data:/data/db
-
-
-.. _persistent-repository:
-
-Persistent Repository
------------------------
-
-FAIR Data Point uses repositories to store the metadata.
-By default, it uses the in-memory store, which means that the data is lost after the FDP is stopped.
-
-In this example, we will configure GraphDB as a triple store.
-See :ref:`Triple Stores <triple-stores>` for other repository options.
-
-If we don't have it already, we need to create a new file ``application.yml``.
-We will use this file to configure the repository and mount it as a read-only volume to the ``fdp`` container.
-This file can be used for other configuration, see :ref:`Advanced Configuration <advanced-configuration>` for more details.
-
-
-.. code-block:: yaml
-
-    # application.yml
-
-    # ... other configuration
-
-    repository:
-        type: 4
-        graphDb:
-            url: http://graphdb:7200
-            repository: fdp
-
-We now need to update our ``compose.yml`` file, we add a new volume for the ``fdp`` and add ``graphdb`` service.
-We can also expose port ``7200`` for GraphDB so we can access its user interface.
-
-.. code-block:: yaml
-   :substitutions:
-
-    # compose.yml
-
-    services:
-
-        fdp:
-            image: fairdata/fairdatapoint:|compose_ver|
-            volumes:
-                - ./application.yml:/fdp/application.yml:ro
-
-        fdp-client:
-            image: fairdata/fairdatapoint-client:|compose_ver|
-            ports:
-                - 80:80
-            environment:
-                - FDP_HOST=fdp
-
-        mongo:
-            image: mongo:4.0.12
-            ports:
-                - 27017:27017
-            volumes:
-                - ./mongo/data:/data/db
-
-        graphdb:
-            image: ontotext/graphdb:10.7.6
-            ports:
-                - 7200:7200
-            volumes:
-                - ./graphdb:/opt/graphdb/home
-
-GraphDB needs to have a repository set up before the FDP can interact with it.
-This can be done manually through the user interface, following these steps:
-
-- Start only the GraphDB container: ``docker compose up -d graphdb``
-- Navigate to your `local GraphDB instance <http://localhost:7200>`__
-- Open the ``Setup`` menu on the left, and navigate to `Repositories <http://localhost:7200/repository>`__
-- Click the `Create new repository <http://localhost:7200/repository/create>`__ button
-- Select ``GraphDB Repository``
-- Enter ``fdp`` as the ``Repository ID`` value
-- You can leave all other values to their defaults
-- Click the ``Create`` button on the bottom of the form
-
-Alternatively, these steps can be automated with the following addition to the ``graphdb`` service in our ``compose.yml`` file.
-
-.. code-block:: yaml
-
-        fdp:
-            image: fairdata/fairdatapoint:|compose_ver|
-            volumes:
-                - ./application.yml:/fdp/application.yml:ro
-            depends_on:
-                graphdb:
-                    condition: service_healthy
-
-        # ...
-
-        graphdb:
-            image: ontotext/graphdb:10.7.6
-            ports:
-                - 7200:7200
-            volumes:
-                - ./graphdb:/opt/graphdb/home
-                - ./repo.json:/tmp/repo.json:ro
-            entrypoint:
-                - bash
-                - -c
-                - |
-                  # enable bash job control
-                  set -m
-
-                  # start graphdb and move it to the background
-                  /opt/graphdb/dist/bin/graphdb &
-            
-                  # wait for 10 sec
-                  sleep 10
-            
-                  # create the repository
-                  curl -X POST http://localhost:7200/rest/repositories -H "Content-Type: application/json" -d "@repo.json"
-
-                  # move graphdb job to foreground
-                  fg
-            healthcheck:
-                # https://graphdb.ontotext.com/documentation/11.1/database-health-checks.html
-                test: curl --fail-with-body http://localhost:7200/repositories/fdp/health || exit 1
-                interval: 5s
-
-The ``repo.json`` file contains the configuration for the newly created GraphDB repository.
-The following is a bare minimum example.
-
-.. code-block:: json
-
-    {
-        "id": "fdp",
-        "type": "graphdb",
-        "params": {
-            "title": {
-                "label": "Repository description",
-                "name": "",
-                "value": ""
-            },
-            "defaultNS": {
-                "label": "Default namespaces for imports(';' delimited)",
-                "name": "defaultNS",
-                "value": ""
-            },
-            "imports": {
-                "label": "Imported RDF files(';' delimited)",
-                "name": "imports",
-                "value": ""
-            }
-        }
-    }
+      fdp:
+          ...
+          volumes:
+            - ./application.yml:/fdp/application.yml:ro
+            ...
+
+
+.. _bind mounts: https://docs.docker.com/engine/storage/bind-mounts/
+.. _compose-file include: https://docs.docker.com/reference/compose-file/include/
+.. _compose-file merge docs: https://docs.docker.com/compose/how-tos/multiple-compose-files/merge/
+.. _compose specification: https://compose-spec.io/
+.. _config command: https://docs.docker.com/reference/cli/docker/compose/config/
+.. _Docker Compose: https://docs.docker.com/compose/
+.. _Docker installation instructions: https://docs.docker.com/engine/install/
+.. _externalized configuration: https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding
+.. _FAIRDataTeam/compose: https://github.com/FAIRDataTeam/compose
+.. _FAIRDataTeam/compose readme: https://github.com/FAIRDataTeam/compose/blob/master/readme.md
+.. _GraphDB API create: https://graphdb.ontotext.com/documentation/11.1/manage-repos-with-restapi.html#create-a-repository
+.. _GraphDB API docs: https://graphdb.ontotext.com/documentation/11.1/manage-repos-with-restapi.html#edit-a-repository-s-configuration
+.. _GraphDB instructions: https://graphdb.ontotext.com/documentation/11.1/creating-a-repository.html
+.. _images: https://docs.docker.com/reference/cli/docker/image/rm/
+.. _remove the containers: https://docs.docker.com/reference/cli/docker/container/rm/
+.. _Spring framework: https://docs.spring.io/spring-framework/reference/index.html
+.. _volumes: https://docs.docker.com/engine/storage/volumes/
