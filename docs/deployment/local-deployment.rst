@@ -221,7 +221,7 @@ To do this we need to mount our custom `application.yml` file as follows:
 .. _config command: https://docs.docker.com/reference/cli/docker/compose/config/
 .. _Docker Compose: https://docs.docker.com/compose/
 .. _Docker installation instructions: https://docs.docker.com/engine/install/
-.. _externalized configuration: https://docs.spring.io/spring-boot/reference/features/external-config.html
+.. _externalized configuration: https://docs.spring.io/spring-boot/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.relaxed-binding
 .. _FAIRDataTeam/compose: https://github.com/FAIRDataTeam/compose
 .. _FAIRDataTeam/compose readme: https://github.com/FAIRDataTeam/compose/blob/master/readme.md
 .. _GraphDB API create: https://graphdb.ontotext.com/documentation/11.1/manage-repos-with-restapi.html#create-a-repository
