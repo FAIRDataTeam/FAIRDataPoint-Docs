@@ -10,17 +10,17 @@ Disclaimer
 Running a FAIR Data Point in production is a bit more involved than running one offline on your development machine.
 The configuration details of a production deployments depend on many factors, such as available resources and security requirements.
 
-Whether you're setting up your own bare metal server or using a cloud provider that offers all kinds of managed services, you'll need to think about many of the same topics.
+Whether you're setting up your own bare metal server or using a cloud provider with lots of managed services, many of the same topics will need attention.
 Here's just a few that come to mind, in no particular order:
 
 - network security
 - secrets storage
 - identity and access management (IAM)
 - data management (security, privacy, replication, backups)
-- service availability (e.g. container orchestration)
+- service availability (container orchestration, monitoring)
 - performance
 - audit logging
-- infrastructure as code
+- deployment automation (infrastructure as code, CI/CD)
 - and so on and so forth...
 
 Obviously this list is far from exhaustive.
@@ -35,8 +35,8 @@ Assuming basic infrastructure hardening is already in place (see e.g. `OWASP che
 
 These topics are covered by extending the :ref:`local-deployment` examples with some additional configuration.
 
-Encrypted communication
-=======================
+HTTPS setup
+===========
 
 One of the first requirements for a production deployment is to set up Transport Layer Security (TLS) to provide encrypted communication, better known as HTTPS (HTTP over TLS).
 
@@ -50,7 +50,7 @@ TLS certificates
 ----------------
 
 In order to set up HTTPS, a valid TLS certificate is required (a.k.a. SSL certificate).
-For this example, we assume that a TLS certificate is already available, *on the Docker host*, for our domain ``fdp.example.com``.
+For this example, we assume a TLS certificate is already available, *on the Docker host*, for our domain ``fdp.example.com``.
 
 Certificate files can be obtained from various sources.
 Our example assumes that the `certbot`_ tool was used to obtain a certificate from `Let's Encrypt`_.
@@ -129,10 +129,13 @@ Both need to be secured.
 Secrets
 =======
 
+The best way to handle application secrets strongly depends on your use-case.
+In our minimal example we take one of the simplest approaches, viz. using environment variables.
+
 List of secrets:
 
 - jwt token secret key
-- default user accounts
+- default fdp user accounts
 - mongodb credentials
 - triple store credentials
 
