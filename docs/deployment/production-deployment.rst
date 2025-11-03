@@ -26,7 +26,7 @@ Here's just a few that come to mind, in no particular order:
 Obviously this list is far from exhaustive.
 
 Due to this complexity we cannot provide a generic solution for a production deployment.
-However, we can provide some pointers and suggestions to help you get started.
+However, we *can* provide some pointers and suggestions to help you get started.
 Assuming basic infrastructure hardening is already in place (see e.g. `OWASP cheat sheets`_), we'll look at a few things:
 
 - HTTPS (encrypted communication based on TLS)
@@ -39,6 +39,7 @@ HTTPS setup
 ===========
 
 One of the first requirements for a production deployment is to set up Transport Layer Security (TLS) to provide encrypted communication, better known as HTTPS (HTTP over TLS).
+This is very important, because, among many other things, it prevents unauthorized parties from intercepting and reading your login credentials.
 
 Https connections can be handled, for example, by configuring a load balancer or a reverse proxy.
 
@@ -130,7 +131,7 @@ Secrets
 =======
 
 The best way to handle application secrets strongly depends on your use-case.
-In our minimal example we take one of the simplest approaches, viz. using environment variables.
+In our minimal example we take one of the simplest approaches, which is using environment variables.
 
 List of secrets:
 
