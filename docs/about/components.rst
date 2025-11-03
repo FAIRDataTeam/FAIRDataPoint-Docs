@@ -10,6 +10,10 @@ The software stack for a typical FAIR Data Point deployment consists of five com
    :alt: Structure Overview
    :align: center
 
+.. IMPORTANT::
+   All FAIR Data Point components adhere to `Semantic Versioning <https://semver.org>`_, using the ``MAJOR.MINOR.PATCH`` format.
+   It is recommended to use matching ``MAJOR.MINOR`` versions of the ``FAIRDataPoint`` and ``FAIRDataPoint-client`` components.
+   The ``PATCH`` versions do not need to match.
 
 FAIRDataPoint
 =============
