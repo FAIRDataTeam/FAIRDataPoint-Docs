@@ -126,6 +126,7 @@ Both need to be secured.
 
 - `database security cheat sheet`_
 - `mongodb security cecklist`_
+- `graphdb security`_
 
 Secrets
 =======
@@ -152,6 +153,7 @@ Backups
 .. .. _: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
 .. .. _: https://ubuntu.com/blog/what-is-system-hardening-definition-and-best-practices
 .. _mongodb security cecklist: https://www.mongodb.com/docs/manual/administration/security-checklist/
+.. _graphdb security: https://graphdb.ontotext.com/documentation/11.1/enabling-security.html
 .. _embedded web server: https://docs.spring.io/spring-boot/how-to/webserver.html#howto.webserver.configure-ssl
 .. _certbot: https://certbot.eff.org/instructions
 .. _Let's Encrypt: https://letsencrypt.org
