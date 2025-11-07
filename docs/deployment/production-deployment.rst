@@ -132,7 +132,7 @@ Secrets
 =======
 
 The best way to handle application secrets strongly depends on your use-case.
-In our minimal example we take one of the simplest approaches, which is using environment variables.
+In our minimal example we take one of the simplest (and least secure) approaches, which is using environment variables.
 
 List of secrets:
 
