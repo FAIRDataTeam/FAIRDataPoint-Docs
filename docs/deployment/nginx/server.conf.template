@@ -1,0 +1,37 @@
+# redirect all traffic for fdp.example.com port 80 (http) to port 443 (https)
+server {
+    listen 80;
+    listen [::]:80;
+    server_name ${FDP_HOST};
+    return 301 https://$host$request_uri;
+}
+
+# pass traffic for fdp.example.com port 443 (https) to the upstream web server,
+# on the docker network
+server {
+    listen 443 ssl;
+    listen [::]:443 ssl;
+    server_name ${FDP_HOST};
+    ssl_certificate /etc/letsencrypt/live/${FDP_HOST}/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/${FDP_HOST}/privkey.pem;
+
+    location / {
+        proxy_pass http://fdp-client:80;
+        proxy_http_version  1.1;
+        proxy_set_header    Host                $host;
+        proxy_set_header    X-Real-IP           $remote_addr;
+        proxy_set_header    X-Forwarded-For     $proxy_add_x_forwarded_for;
+        proxy_set_header    X-Forwarded-Proto   $scheme;
+    }
+}
+
+# catch all remaining traffic
+server {
+    listen       80 default_server;
+    listen  [::]:80 default_server;
+    listen       443 ssl default_server;
+    listen  [::]:443 ssl default_server;
+    ssl_reject_handshake on;
+    server_name  _;  # match none
+    return       444;
+}
