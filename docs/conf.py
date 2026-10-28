@@ -18,16 +18,28 @@
 # -- Project information -----------------------------------------------------
 
 project = 'FAIR Data Point'
-copyright = '2025, FAIR Data Team'
+copyright = '2026, FAIR Data Team'
 author = 'FAIR Data Team'
 
+# The FAIRDataPoint (back-end) version described by these docs.
 # The full version, including alpha/beta/rc tags
-release = '1.16'
+release = '1.22.2'
+version = '1.22'
 
+# Docker image versions used in the examples.
+# Keep these in line with the defaults in the FAIRDataTeam/compose submodule
+# (docs/deployment/compose/fdp/components).
+fdp_version = release
+fdp_client_version = '1.18.1'
+mongo_version = '8.2.12'
+graphdb_version = '10.8.14'
 
 rst_prolog = f"""
 
-.. |compose_ver| replace:: {release}
+.. |fdp_ver| replace:: {fdp_version}
+.. |fdp_client_ver| replace:: {fdp_client_version}
+.. |mongo_ver| replace:: {mongo_version}
+.. |graphdb_ver| replace:: {graphdb_version}
 
 """
 
