@@ -179,7 +179,7 @@ For configuring the connection from FDP, add these lines to your ``application.y
 4. GraphDB
 ----------
 
-For running `GraphDB <https://www.ontotext.com/products/graphdb/>`_, you need to first set up your GraphDB instance and **create the repository**.
+For running `GraphDB <https://graphdb.ontotext.com>`_, you need to first set up your GraphDB instance and **create the repository**.
 For configuring the connection from FDP, add these lines to your ``application.yml`` file:
 
 .. code-block:: yaml
@@ -343,7 +343,7 @@ When an FDP pings the index, the index creates an entry for it and retrieves (ha
 Each entry has a *permit*: ``ACCEPTED``, ``PENDING``, or ``REJECTED``.
 Only accepted entries are listed publicly.
 
-If :guilabel:`Auto permit` is enabled, new entries are accepted automatically.
+If :guilabel:`Auto Permit` is enabled, new entries are accepted automatically.
 Otherwise new entries are ``PENDING`` until an admin accepts or rejects them in the client.
 Metadata of an entry is only harvested once the entry is accepted.
 
@@ -355,17 +355,17 @@ Index settings
 
 An admin can configure the index in the client under :guilabel:`Index Settings`, or via the ``/index/settings`` API endpoint:
 
-=========================== ============= ==========================================================================
-Setting                     Default       Description
-=========================== ============= ==========================================================================
-Auto permit                 ``true``      Accept new entries automatically
-Retrieval rate limit wait   10 minutes    Minimum time between two metadata retrievals for the same FDP
-Retrieval timeout           1 minute      Timeout for a metadata retrieval
-Ping valid duration         7 days        An entry without a ping during this period is considered inactive
-Ping rate limit duration    6 hours       Time window for the ping rate limit (per IP address)
-Ping rate limit hits        10            Maximum number of pings per time window
-Ping deny list              ``localhost`` Regular expressions for client URLs whose pings are rejected
-=========================== ============= ==========================================================================
+============================== ============= ==========================================================================
+Setting                        Default       Description
+============================== ============= ==========================================================================
+Auto Permit                    ``true``      Accept new entries automatically
+Retrieval, Rate Limit Wait     10 minutes    Minimum time between two metadata retrievals for the same FDP
+Retrieval, Timeout             1 minute      Timeout for a metadata retrieval
+Ping, Valid Duration           7 days        An entry without a ping during this period is considered inactive
+Ping, Rate Limit Duration      6 hours       Time window for the ping rate limit (per IP address)
+Ping, Rate Limit Hits          10            Maximum number of pings per time window
+Ping, Deny List                ``localhost`` Regular expressions for client URLs whose pings are rejected
+============================== ============= ==========================================================================
 
 The default deny list contains ``^(http|https)://localhost(:[0-9]+){0,1}.*$``, so pings from FDPs with a ``localhost`` client URL are rejected.
 Remove this entry if you want to test an index locally.

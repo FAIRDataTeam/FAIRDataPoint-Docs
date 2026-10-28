@@ -175,5 +175,5 @@ API endpoint listing
 ====================
 
 The available APIs are documented using `OpenAPI <https://www.openapis.org/>`_.
-In the ``/swagger-ui.html`` endpoint the APIs are visualized through `Swagger UI <https://swagger.io/tools/swagger-ui/>`_.
+In the ``/swagger-ui.html`` endpoint the APIs are visualized through `Swagger UI <https://swagger.io/open-source/swagger-ui/>`_.
 The machine-readable OpenAPI description is available at ``/v3/api-docs``.

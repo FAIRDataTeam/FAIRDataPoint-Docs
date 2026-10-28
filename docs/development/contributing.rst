@@ -10,7 +10,7 @@ The FAIR Data Point repositories are open source and you can contribute via GitH
 - https://github.com/FAIRDataTeam/compose (Docker compose files used for development, testing, and the examples in this documentation)
 - https://github.com/FAIRDataTeam/FAIRDataPoint-UI (the new user interface, under development)
 
-To contribute, fork the relevant repository, create a new branch, make your changes, and `open a pull request <https://docs.github.com/en/pull-requests/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-a-pull-request-from-a-fork>`_.
+To contribute, fork the relevant repository, create a new branch, make your changes, and `open a pull request <https://docs.github.com/en/pull-requests/how-tos/create-pull-requests/creating-a-pull-request-from-a-fork>`_.
 
 Developers with write access don't need to fork, but they do need to use a branch and pull-request workflow.
 

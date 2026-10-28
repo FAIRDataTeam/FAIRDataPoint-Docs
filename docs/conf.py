@@ -61,6 +61,13 @@ templates_path = []
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 
+# Example hosts and local URLs used in the documentation are not checked by `sphinx-build -b linkcheck`.
+linkcheck_ignore = [
+    r'https?://localhost.*',
+    r'https?://([a-z0-9-]+\.)*example\.(com|org).*',
+    r'https://w3id\.org/example/.*',
+]
+
 
 # -- Options for HTML output -------------------------------------------------
 
