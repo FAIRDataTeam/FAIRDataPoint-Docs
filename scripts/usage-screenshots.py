@@ -43,16 +43,51 @@ HIGHLIGHT_JS = """
 }
 """
 
-CATALOG_TTL = """
+# Example content, so that the screenshots resemble an FDP in use rather than a fresh deployment.
+PREFIXES = """
 @prefix dcat: <http://www.w3.org/ns/dcat#> .
 @prefix dct: <http://purl.org/dc/terms/> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
-<> a dcat:Catalog ;
-    dct:title "Example catalog" ;
-    dct:description "Catalog used for the screenshots in the documentation." ;
+@prefix fdp-o: <https://w3id.org/fdp/fdp-o#> .
+"""
+
+ROOT_TTL = PREFIXES + """
+<> a fdp-o:FAIRDataPoint, fdp-o:MetadataService, dcat:DataService, dcat:Resource ;
+    dct:title "Example University FAIR Data Point" ;
+    dct:description "Metadata of the research datasets and software published by the research groups of Example University. Each catalog belongs to an institute, which maintains its own entries." ;
     dcat:version "1.0" ;
-    dct:publisher [ a foaf:Agent ; foaf:name "Example Organisation" ] ;
+    dct:publisher [ a foaf:Agent ; foaf:name "Example University Library" ] ;
+    dcat:endpointURL <{api}> ;
+    dcat:endpointDescription <{api}/v3/api-docs>, <{api}/swagger-ui.html> .
+"""
+
+PUBLISHED_CATALOG_TTL = PREFIXES + """
+<> a dcat:Catalog ;
+    dct:title "Institute for Climate Studies" ;
+    dct:description "Observational and model data of the Institute for Climate Studies, including the long-term measurement series of the Example Valley field station." ;
+    dcat:version "2.3" ;
+    dct:publisher [ a foaf:Agent ; foaf:name "Institute for Climate Studies, Example University" ] ;
     dct:isPartOf <{api}> .
+"""
+
+DRAFT_CATALOG_TTL = PREFIXES + """
+<> a dcat:Catalog ;
+    dct:title "Materials Science Laboratory" ;
+    dct:description "Measurement data and analysis software of the Materials Science Laboratory, starting with the 2026 thin film experiments." ;
+    dcat:version "1.0" ;
+    dct:publisher [ a foaf:Agent ; foaf:name "Materials Science Laboratory, Example University" ] ;
+    dct:isPartOf <{api}> .
+"""
+
+DATASET_TTL = PREFIXES + """
+<> a dcat:Dataset ;
+    dct:title "Example Valley air temperature, 1996-2025" ;
+    dct:description "Hourly air temperature measured at the Example Valley field station." ;
+    dcat:version "1.2" ;
+    dct:publisher [ a foaf:Agent ; foaf:name "Institute for Climate Studies, Example University" ] ;
+    dcat:theme <http://www.wikidata.org/entity/Q11466> ;
+    dcat:keyword "temperature", "field station" ;
+    dct:isPartOf <{catalog}> .
 """
 
 SOFTWARE_SHAPE = """@prefix : <http://fairdatapoint.org/> .
@@ -105,6 +140,26 @@ class Api:
     def create_record(self, prefix, turtle):
         res = self.call("POST", f"/{prefix}", turtle, content_type="text/turtle", raw=True)
         return res.headers["Location"]
+
+    def publish(self, record):
+        path = record[len(self.base):] or "/"
+        self.call("PUT", path.rstrip("/") + "/meta/state", {"current": "PUBLISHED"})
+
+    def seed(self):
+        """Replace the default root record and add catalogs, so the screenshots show an FDP in use."""
+        self.call("PUT", "/", ROOT_TTL.format(api=self.base), content_type="text/turtle", raw=True)
+        settings = self.call("GET", "/settings")
+        self.call("PUT", "/settings", {
+            "appTitle": "Example University", "appSubtitle": "FAIR Data Point",
+            "metadataMetrics": settings["metadataMetrics"],
+            "ping": {"enabled": settings["ping"]["enabled"], "endpoints": settings["ping"]["endpoints"]},
+            "search": settings["search"], "forms": settings["forms"],
+        })
+        published = self.create_record("catalog", PUBLISHED_CATALOG_TTL.format(api=self.base))
+        dataset = self.create_record("dataset", DATASET_TTL.format(catalog=published))
+        self.publish(published)
+        self.publish(dataset)
+        return self.create_record("catalog", DRAFT_CATALOG_TTL.format(api=self.base))
 
     def schema_uuid(self, name):
         return next(s["uuid"] for s in self.call("GET", "/metadata-schemas") if s["name"] == name)
@@ -168,9 +223,9 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
 
     api = Api(args.api)
-    catalog = api.create_record("catalog", CATALOG_TTL.format(api=args.api))
+    catalog = api.seed()
     catalog_uuid = catalog.rsplit("/", 1)[1]
-    print("catalog", catalog)
+    print("draft catalog", catalog)
 
     with sync_playwright() as pw:
         browser = pw.chromium.launch()
