@@ -1,0 +1,11 @@
+services:
+  nginx:
+    environment:
+      FDP_HOST: fdp.example.com
+    image: nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - "/etc/letsencrypt:/etc/letsencrypt:ro"
+      - "./server.conf.template:/etc/nginx/templates/server.conf.template:ro"

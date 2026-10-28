@@ -4,137 +4,165 @@
 Production Deployment
 *********************
 
-If you want to run the FAIR Data Point in production it is recommended to use HTTPS protocol with valid certificates.
-You can easily configure FDP to run behind a reverse proxy which takes care of the certificates.
+Disclaimer
+==========
 
-In this example, we will configure FDP to run on ``https://fdp.example.com``.
-We will see how to configure the reverse proxy in the same Docker Compose file.
-However, it is not necessary, and the proxy can be configured elsewhere.
+Running a FAIR Data Point in production is a bit more involved than running one offline on your development machine.
+The configuration details of a production deployments depend on many factors, such as available resources and security requirements.
 
-First of all, we need to generate the certificates on the server where we want to run the FDP.
-You can use `Let's Encrypt <https://letsencrypt.org>`__ and create the certificates with `certbot <https://certbot.eff.org>`__.
-The certificates are generated in a standard location, e.g., ``/etc/letsencrypt/live/fdp.example.com`` for ``fdp.example.com`` domain.
-We will mount the whole ``letsencrypt`` folder to the reverse proxy container later so that it can use the certificates.
+Whether you're setting up your own bare metal server or using a cloud provider with lots of managed services, many of the same topics will need attention.
+Here's just a few that come to mind, in no particular order:
 
-As a reverse proxy, we will use `nginx <https://nginx.org/index.html>`__.
-We need to prepare some configuration, so create a new folder called ``nginx`` with the following structure and files:
+- network security
+- secrets storage
+- identity and access management (IAM)
+- data management (security, privacy, replication, backups)
+- service availability (container orchestration, monitoring)
+- performance
+- audit logging
+- deployment automation (infrastructure as code, CI/CD)
+- and so on and so forth...
 
-::
+Obviously this list is far from exhaustive.
 
-  nginx/
-  ├ nginx.conf
-  ├ sites-available
-  │  └ fdp.conf
-  └ sites-enabled
-     └ fdp.conf -> ../sites-available/fdp.conf
+Due to this complexity we cannot provide a generic solution for a production deployment.
+However, we *can* provide some pointers and suggestions to help you get started.
+Assuming basic infrastructure hardening is already in place (see e.g. `OWASP cheat sheets`_), we'll look at a few things:
 
-The file ``nginx.conf`` is the configuration of the whole nginx, and it includes all the files from ``sites-enabled`` which contains configuration for individual servers (we can use one nginx, for example, to handle multiple servers on different domains).
-All available configurations for different servers are in the ``sites-available``, but only those linked to ``sites-enabled`` are used.
+- HTTPS (encrypted communication based on TLS)
+- database security
+- database backups
 
-Let's see what should be the content of the configuration files.
+These topics are covered by extending the :ref:`local-deployment` examples with some additional configuration.
 
-.. code-block:: nginx
+HTTPS setup
+===========
 
-    # nginx/nginx.conf
-    
-    # Main nginx config
-    user www-data www-data;
-    worker_processes 5;
+One of the first requirements for a production deployment is to set up Transport Layer Security (TLS) to provide encrypted communication, better known as HTTPS (HTTP over TLS).
+This is very important, because, among many other things, it prevents unauthorized parties from intercepting and reading your login credentials.
 
-    events {
-        worker_connections 4096;
-    }
+Https connections can be handled, for example, by configuring a load balancer or a reverse proxy.
 
-    http {
-        # Docker DNS resolver
-        # We can then use docker container names as hostnames in other configurations
-        resolver 127.0.0.11 valid=10s; 
+As a minimal example, we'll describe how to use Docker compose to configure an ``nginx`` container as reverse proxy that terminates https, on the same host that runs the FDP containers.
+In this case, communication between the ``nginx`` container and the upstream web server (either ``fdp`` or ``fdp-client``) still uses plain http, but in our case that occurs on the private Docker network.
+It is also possible to configure the ``fdp``'s `embedded web server`_ and the ``fdp-client``'s embedded nginx instance to handle https connections, but that is outside the scope of this document.
 
-        # Include all the configurations files from sites-enabled
-        include /etc/nginx/sites-enabled/*.conf;
-    }
+TLS certificates
+----------------
 
-Then, we need to configure the FDP server.
+In order to set up HTTPS, a valid TLS certificate is required (a.k.a. SSL certificate).
+For this example, we assume a TLS certificate is already available, *on the Docker host*, for our domain ``fdp.example.com``.
 
-.. code-block:: nginx
+Certificate files can be obtained from various sources.
+Our example assumes that the `certbot`_ tool was used to obtain a certificate from `Let's Encrypt`_.
+The certificate file and corresponding key file can then be found in `certbot's default location`_ ``/etc/letsencrypt/live/fdp.example.com`` on the host.
 
-    # nginx/sites-available/fdp.conf
+Nginx compose service
+---------------------
 
-    server {
-        listen 443 ssl;
+A minimal compose service definition for nginx is described below.
+Bind mounts are used to make the nginx configuration files and certificates from the Docker host available in the ``nginx`` container.
+The ``FDP_HOST`` environment variable is used in the ``server.conf`` config file described in the next section.
 
-        # Generated certificates using certbot, we will mount these in compose.yml
-        ssl_certificate /etc/letsencrypt/live/fdp.example.com/fullchain.pem;
-        ssl_certificate_key /etc/letsencrypt/live/fdp.example.com/privkey.pem;
+..  literalinclude:: nginx/compose.yml
+    :name: nginx compose config
+    :caption: minimal nginx service
+    :language: yaml
+    :lines: 2-
 
-        server_name fdp.example.com;
+This is just a minimal example, so you may want to  specify an image version, adjust the paths, where necessary, and/or add some addional config.
+There is also an ``nginxinc/nginx-unprivileged`` image, but that will require a bit more configuration.
 
-        # We pass all the request to the fdp-client container, we can use HTTP in the internal network
-        # fdp-client_1 is the name of the client container in our configuration, we can use it as host
-        location / {
-            proxy_set_header Host $host;
-            proxy_set_header X-Forwarded-Proto $scheme;
-            proxy_pass_request_headers on;
-            proxy_pass http://fdp-client_1;
+..  note::
+
+    Here we assume that the ``nginx`` container shares a Docker network with the ``fdp-client`` container.
+    Only the ``nginx`` container ports (``80`` and ``443``) should be exposed to the public internet.
+    Make sure to remove any lines exposing ports from other components, such as the following for ``fdp-client``:
+
+    ..  literalinclude:: compose/fdp/components/v1/fdp-client.yml
+        :name: remove exposed ports
+        :language: yaml
+        :lines: 2,5-6
+
+Nginx server configuration
+--------------------------
+
+Here's a minimal example of an nginx server configuration that does the following:
+
+- redirect ``http`` to ``https``
+- pass ``https`` requests for ``fdp.example.com`` on to the upstream ``fdp-client`` container (over ``http``)
+- catch any other requests
+
+..  literalinclude:: nginx/server.conf.template
+    :name: nginx server config
+    :caption: server.conf template
+    :language: none
+
+..  note::
+
+    The `official nginx image`_ has the ability to render configuration file templates with environment variables.
+    Any ``*.template`` files from the ``/etc/nginx/templates`` directory are rendered into ``/etc/nginx/conf.d``.
+    The image's default ``/etc/nginx/nginx.conf`` then automatically includes ``*.conf`` files from ``/etc/nginx/conf.d`` in the ``http`` block.
+
+    ..  code-block::
+        :caption: default nginx.conf http block includes files from conf.d
+
+        ...
+        http {
+            ...
+            include /etc/nginx/conf.d/*.conf;
         }
-    }
 
-    # We redirect all request from HTTP to HTTPS
-    server {
-        listen 80;
-        server_name fdp.example.com;
-        return 301 https://$host$request_uri;
-    }
 
-Finally, we need to create a soft link from sites-enabled to sites-available for the FDP configuration.
+Database security
+=================
 
-::
+The FDP uses two types of database:
 
-    $ cd nginx/sites-enabled && ln -s ../sites-available/fdp.conf
+- MongoDB, for application data
+- A triple store, such as GraphDB, for the actual metadata
 
-We have certificates generated and configuration for proxy ready.
-Now we need to add the proxy to our ``compose.yml`` file so we can run the whole FDP behind the proxy.
+Both need to be secured.
 
-.. code-block:: yaml
-   :substitutions:
-    
-    # compose.yml
+- `database security cheat sheet`_
+- `mongodb security cecklist`_
+- `graphdb security`_
 
-    services:
-        proxy:
-            image: nginx:1.17.3
-            ports:
-                - 80:80
-                - 443:443
-            volumes:
-                # Mount the nginx folder with the configuration
-                - ./nginx:/etc/nginx:ro
-                # Mount the letsencrypt certificates
-                - /etc/letsencrypt:/etc/letsencrypt:ro
+Secrets
+=======
 
-        fdp:
-            image: fairdata/fairdatapoint:|compose_ver|
-            volumes:
-                - ./application.yml:/fdp/application.yml:ro
+The best way to handle application secrets strongly depends on your use-case.
+In our minimal example we take one of the simplest (and least secure) approaches, which is using environment variables.
 
-        fdp-client:
-            image: fairdata/fairdatapoint-client:|compose_ver|
-            environment:
-                - FDP_HOST=fdp
+List of secrets:
 
-        mongo:
-            image: mongo:4.0.12
-            ports:
-              - "127.0.0.1:27017:27017"
-            volumes:
-                - ./mongo/data:/data/db
+- jwt token secret key
+- default fdp user accounts
+- mongodb credentials
+- triple store credentials
 
-        graphdb:
-            image: ontotext/graphdb:10.7.6
-            volumes:
-                - ./graphdb:/opt/graphdb/home
+Backups
+=======
 
-Don't forget to create the GraphDB repository as described in the :ref:`Persistent Repository <persistent-repository>` section.
+(...)
+
+.. _OWASP cheat sheets: https://cheatsheetseries.owasp.org
+.. .. _: https://cheatsheetseries.owasp.org/cheatsheets/Web_Service_Security_Cheat_Sheet.html
+.. _database security cheat sheet: https://cheatsheetseries.owasp.org/cheatsheets/Database_Security_Cheat_Sheet.html
+.. .. _: https://cheatsheetseries.owasp.org/cheatsheets/Docker_Security_Cheat_Sheet.html
+.. .. _: https://cheatsheetseries.owasp.org/cheatsheets/Secrets_Management_Cheat_Sheet.html
+.. .. _: https://ubuntu.com/blog/what-is-system-hardening-definition-and-best-practices
+.. _mongodb security cecklist: https://www.mongodb.com/docs/manual/administration/security-checklist/
+.. _graphdb security: https://graphdb.ontotext.com/documentation/11.1/enabling-security.html
+.. _embedded web server: https://docs.spring.io/spring-boot/how-to/webserver.html#howto.webserver.configure-ssl
+.. _certbot: https://certbot.eff.org/instructions
+.. _Let's Encrypt: https://letsencrypt.org
+.. _certbot's default location: https://eff-certbot.readthedocs.io/en/stable/using.html#where-are-my-certificates
+.. _official nginx image: https://hub.docker.com/_/nginx
+
+TODO: update the text below
+
+
 
 The last thing to do is to update our ``application.yml`` file.
 We need to add ``clientUrl`` so that FDP knows the actual URL even if hidden behind the reverse proxy.
@@ -176,17 +204,14 @@ Of course, the domain you want to access the FDP on must be configured to the se
     Don't forget to change the default user accounts as soon as your FAIR Data Point becomes publicly available.
 
 
-.. DANGER::
 
-    Do not expose mongo port unless you secured the database with username and password.
-
-.. WARNING::
+.. warning::
 
     In order to improve findability of itself and its content, the FAIR Data Point has a built-in feature that registers its URL into our server and pings it once a week.
     This feature facilitates the indexing of the metadata of each registered and active FAIR Data Point.
     If you do not want your FAIR Data Point to be included in this registry, add these lines to your application configuration:
 
-    .. code-block:: yaml
+    ..  code-block:: yaml
 
         # application.yml
 
