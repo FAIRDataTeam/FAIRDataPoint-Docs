@@ -9,3 +9,5 @@ As of v1.17, changes to FAIR Data Point repositories are tracked via GitHub rele
 - `Client changelog <https://github.com/FAIRDataTeam/FAIRDataPoint-client/releases>`_
 
 For v1.16 and older, refer to the `v1.16 changelog <https://github.com/FAIRDataTeam/FAIRDataPoint-Docs/blob/03627e40621501ad3be50f69d2b4e326636bc53f/docs/development/changelog.rst>`_.
+
+Before upgrading an existing deployment, also read the :ref:`upgrade notes <upgrading>` in the production deployment section.

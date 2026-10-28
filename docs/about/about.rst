@@ -3,14 +3,19 @@ About FAIR Data Point
 *********************
 
 The **FAIRDataPoint** (**FDP**) consists of a REST API and a Web Client for creating, storing, and serving **FAIR metadata**.
-The metadata content is generated **semi-automatically** according to the `FAIR Data Point software specification <https://github.com/fdp-specs/fdp-specs.github.io>`__ document.
+The metadata content is generated **semi-automatically** according to the `FAIR Data Point specification <https://specs.fairdatapoint.org>`__.
+
+This documentation describes the reference implementation, version |release| of the ``fdp`` back-end, used together with version |fdp_client_ver| of the ``fdp-client``.
 
 Features
 --------
 
--  Store metadata resources, like catalogs, datasets, and distributions
--  Define custom metadata resources, based on schemas
--  Manage user accounts and access
+-  Store and serve metadata resources, like catalogs, datasets, and distributions, as RDF (Turtle, JSON-LD, RDF/XML, N3)
+-  Define custom metadata resources, based on versioned :ref:`metadata schemas <metadata-schemas>` (SHACL)
+-  Share metadata schemas between FAIR Data Points (publish and import)
+-  Search the metadata, with configurable search filters and saved queries
+-  Run as an :ref:`FDP Index <fdp-index>` that harvests metadata from other FAIR Data Points
+-  Manage user accounts, access per metadata record, and API keys
 
 Security
 --------
