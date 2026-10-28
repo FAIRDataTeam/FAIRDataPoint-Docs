@@ -31,3 +31,6 @@ To build the documentation locally:
     sphinx-build -M html ./docs ./docs/_build
 
 When a new FDP or client version is released, update the version numbers in ``docs/conf.py`` and the compose submodule.
+
+The screenshots on the :ref:`usage-examples` page are generated with ``scripts/usage-screenshots.py``, which drives the client with `Playwright <https://playwright.dev/python/>`_ against a fresh ``ephemeral/v1`` compose stack.
+Regenerate them when the client changes, see the instructions at the top of the script.
