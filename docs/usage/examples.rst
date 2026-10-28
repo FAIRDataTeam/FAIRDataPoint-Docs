@@ -21,9 +21,9 @@ Publishing a catalog, a dataset, and a distribution
 In the client
 -------------
 
-1. Log in as an admin.
+1. Log in.
 2. On the home page of the FDP, click :guilabel:`Create` next to the list of catalogs, fill in the form, and save.
-   Only admins can create catalogs (see :ref:`users-and-roles`).
+   Any logged-in user can create a catalog, and becomes its owner (see :ref:`users-and-roles`).
 3. On the page of the new catalog, click :guilabel:`Create` next to the list of datasets, and fill in the dataset form.
 4. On the page of the new dataset, create a distribution in the same way.
 5. New records are drafts.
@@ -105,7 +105,7 @@ The required properties come from the default metadata schemas.
 Every catalog, dataset, and distribution needs a ``dct:title``, a ``dcat:version``, and a ``dct:publisher`` with a ``foaf:name``.
 A dataset also needs at least one ``dcat:theme``, and a distribution needs a ``dcat:mediaType``.
 If a required property is missing, the FDP responds with ``400 Bad Request`` and a SHACL validation report.
-The FDP adds properties such as ``dct:issued``, ``dct:modified``, the default ``dct:language`` and ``dct:license``, and the identifier itself.
+The FDP completes the record with the ``rdf:type`` values of the resource definition, the identifier, timestamps, the default ``dct:language`` and ``dct:license``, an access rights statement, and ``dct:conformsTo`` pointing to the profile of the resource.
 
 
 .. _example-custom-type:
@@ -160,7 +160,7 @@ Only released versions are used by the FDP.
 Step 2. Create the resource definition
 --------------------------------------
 
-Go to :guilabel:`Resources definitions` and click :guilabel:`+ Create`.
+Go to :guilabel:`Resources definitions` and click :guilabel:`+ Create resource definition`.
 
 - **Name** ``Software`` and **URL Prefix** ``software`` (the suggestions from the schema can be clicked)
 - **Metadata Schemas** ``Software``
@@ -195,7 +195,7 @@ Creating a software record via the API
     @prefix dct: <http://purl.org/dc/terms/> .
     @prefix foaf: <http://xmlns.com/foaf/0.1/> .
     @prefix schema: <https://schema.org/> .
-    <> a schema:SoftwareSourceCode, dcat:Resource ;
+    <> a schema:SoftwareSourceCode ;
         dct:title "Example analysis pipeline" ;
         dcat:version "2.1.0" ;
         dct:publisher [ a foaf:Agent ; foaf:name "Example Organisation" ] ;
@@ -204,8 +204,8 @@ Creating a software record via the API
         dct:isPartOf <$CATALOG> .
     EOF
 
-Include ``dcat:Resource`` in the ``rdf:type`` of the posted record.
-The SHACL validation runs on the submitted RDF, and the shapes of the ``Resource`` schema only apply to resources typed as ``dcat:Resource``.
+The FDP adds the target classes of all schemas of the resource definition to the record before validation, so ``dcat:Resource`` does not need to be included in the posted ``rdf:type``.
+The constraints of the ``Resource`` schema, such as the required ``dct:title``, apply either way.
 
 Setting up the type via the API
 -------------------------------

@@ -216,7 +216,8 @@ The ``ephemeral/v1/index`` stack runs an :ref:`FDP Index <fdp-index>` (``fdp-ind
 
 Note that, by default, an FDP Index rejects pings from ``localhost`` URLs (see :ref:`fdp-index`).
 For local testing, log in to the index client as admin, remove that entry from the deny list under :guilabel:`Index Settings`, and restart the ``fdp`` service so it pings again.
-Also note that the ``fdp`` in this stack announces itself with the client URL ``http://localhost:8080``, which the ``fdp-index`` container cannot use to reach the ``fdp``, so harvesting its metadata does not work in this stack without further changes.
+Also note that the ``fdp`` in this stack announces itself with the client URL ``http://localhost:8080``.
+Inside the ``fdp-index`` container that URL points to the index itself, not to the ``fdp``, so the index does not harvest the metadata of the ``fdp`` in this stack without further changes.
 
 
 FDP configuration options
@@ -255,7 +256,7 @@ To do this we need to mount our custom `application.yml` file as follows:
 .. _FAIRDataTeam/compose: https://github.com/FAIRDataTeam/compose
 .. _FAIRDataTeam/compose readme: https://github.com/FAIRDataTeam/compose/blob/master/readme.md
 .. _GraphDB API create: https://graphdb.ontotext.com/documentation/10.8/manage-repos-with-restapi.html#create-a-repository
-.. _GraphDB API docs: https://graphdb.ontotext.com/documentation/10.8/manage-repos-with-restapi.html#edit-a-repository-s-configuration
+.. _GraphDB API docs: https://graphdb.ontotext.com/documentation/10.8/manage-repos-with-restapi.html#create-a-repository
 .. _GraphDB instructions: https://graphdb.ontotext.com/documentation/10.8/creating-a-repository.html
 .. _images: https://docs.docker.com/reference/cli/docker/image/rm/
 .. _remove the containers: https://docs.docker.com/reference/cli/docker/container/rm/
