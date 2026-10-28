@@ -25,6 +25,7 @@ FAIR Data Point Reference Implementation Documentation
    :numbered: 2
 
    usage/usage
+   usage/examples
    usage/api-usage
 
 .. toctree::

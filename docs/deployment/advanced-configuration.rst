@@ -267,8 +267,6 @@ The default values are listed below, too:
 
 The corresponding environment variables are ``FDP_METADATA_LANGUAGE``, ``FDP_METADATA_LICENSE``, and ``FDP_METADATA_ACCESS_RIGHTS``.
 
-The FAIR metrics attached to the metadata (``metadataMetrics``) are no longer configured in ``application.yml``.
-They are managed by an admin in the client, under :guilabel:`Settings` → :guilabel:`Metadata Metrics`, or via the ``/settings`` API endpoint.
 
 
 .. _settings:
@@ -280,7 +278,6 @@ Some configuration is stored in the database instead of in ``application.yml``.
 An admin can change it in the client under :guilabel:`Settings`, or via the ``/settings`` API endpoint:
 
 - App title and subtitle (overriding ``instance.title`` and ``instance.subtitle``)
-- Metadata metrics
 - FDP Index connection: enable or disable the ping, and add FDP Index endpoints (in addition to those from ``application.yml``)
 - Forms autocomplete: SPARQL endpoints and queries used to suggest IRIs in metadata forms
 - Search filters shown on the search page

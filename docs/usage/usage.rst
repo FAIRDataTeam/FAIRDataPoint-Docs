@@ -9,6 +9,8 @@ The structure of the metadata in a FAIR Data Point is defined by two concepts th
 - :ref:`Metadata schemas <metadata-schemas>` define *what* a metadata record must contain, using `SHACL <https://www.w3.org/TR/shacl>`_.
 - :ref:`Resource definitions <resource-definitions>` define *where* records live in the API and how they are related, for example that a catalog contains datasets.
 
+Step-by-step examples, including a custom resource type, are given in :ref:`usage-examples`.
+
 Out of the box, the FDP comes with metadata schemas and resource definitions for the FAIR Data Point itself, catalogs, datasets, and distributions, based on `DCAT <https://www.w3.org/TR/vocab-dcat-3/>`_ and the `FAIR Data Point specification <https://specs.fairdatapoint.org>`_.
 
 .. _metadata-schemas:

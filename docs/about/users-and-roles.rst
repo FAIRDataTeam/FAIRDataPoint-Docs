@@ -87,6 +87,10 @@ The user who creates a metadata record automatically becomes its owner.
 To create a child record, such as a dataset in a catalog, a user needs a membership on the parent record that allows this (owner or data provider).
 Admins can create, change, and delete any record.
 
+Catalogs are children of the root FAIR Data Point record, and memberships cannot be assigned on that root record.
+As a result, only admins can create catalogs.
+A typical workflow is that an admin creates a catalog and then makes a user its owner or data provider, after which that user can add datasets and distributions.
+
 Members can be managed by the owner, in the client via the record's :guilabel:`Settings` page, or via the ``/{prefix}/{uuid}/members`` API endpoints.
 
 Owner
